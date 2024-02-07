@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2023-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+<odoo>
+    <data>
+		<record id="view_model_tree_extend" model="ir.ui.view">
+    		<field name="name">model.tree</field>
+    		<field name="model">report.pos.order</field>
+			<field name="inherit_id" ref="point_of_sale.report_pos_order_view_tree"/>
+			<field name="arch" type="xml">
+				<!-- Volver a crear la vista con los campos que nosotros hemos considerado -->
+				<tree>
+					<!--  Campos que aparecen por default pero que no queremos en el reporte -->
+					<field name="product_categ_id" optional="hide"/>
+					<field name="config_id" optional="hide"/>
+					<field name="company_id" optional="hide" groups="base.group_multi_company"/>
+					<field name="state" optional="hide"/>
+					<!--  Campos para el reporte -->
+					<field name="session_id"/>
+					<field name="order_id"/>
+					<field name="product_id"/>
+					<field name="partner_id"/>
+					<field name="product_qty"/>
+				</tree>
+			</field>
+		</record>
+    </data>
+</odoo>

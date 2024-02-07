@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_ubicaciones,Ubicaciones (Administrador),model_res_ubicaciones,base.group_user,1,1,1,1
+access_smm_eventos_medicos,Eventos Médicos,model_smm_eventos_medicos,base.group_user,1,1,1,1
+access_dynamic.purchase.report,Reporte de compras,model_dynamic_purchase_report,base.group_user,1,1,1,1

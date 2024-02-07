@@ -1,0 +1,517 @@
+<!--
+
+    Copyright (c) 2023-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+<odoo>
+
+    <!--    ******* Nota importante: ******* -->
+    <!--    Este template se utiliza para generar los reportes en PDFs  -->
+
+    <template id="purchase_order_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="proveedor_anterior" t-value="''" />
+                <t t-set="compra_anterior" t-value="''" />
+                <t t-if="Filters.get('report_type')=='Por orden de compra'">
+                    <t t-call="smm_intecproof.report_order"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por orden de compra (Detalle)'">
+                    <t t-call="smm_intecproof.report_order_detail"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por producto'">
+                    <t t-call="smm_intecproof.report_product"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por categoría'">
+                    <t t-call="smm_intecproof.report_category"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por usuario'">
+                    <t t-call="smm_intecproof.report_purchase_representative"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por proveedor'">
+                    <t t-call="smm_intecproof.report_supplier"/>
+                </t>
+                <t t-if="Filters.get('report_type')=='Por estatus'">
+                    <t t-call="smm_intecproof.report_state"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_order">
+        <h3>Compras de medicamento por orden de compra</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde:</strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong>Hasta:</strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr >
+                            <th class="text-left">Orden de compra</th>
+                            <th colspan="6" class="text-center">Fecha</th>
+                            <th colspan="6" class="text-right">Proveedor</th>
+                            <th colspan="6" class="text-right">Usuario</th>
+                            <th colspan="6" class="text-center">Cantidad</th>
+                            <th colspan="6" class="text-left">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-left">
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <span t-esc="main['name']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['date_order']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['partner']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['salesman']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['sum']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['amount_total']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+
+    </template>
+
+    <template id="report_order_detail">
+        <h3>Compras de medicamento por orden de compra con detalle</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde:</strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong>Hasta:</strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr class="text-right">
+                            <th>Order</th>
+                            <th colspan="6">Orden de compra</th>
+                            <th colspan="6">Proveedor</th>
+                            <th colspan="6">Usuario</th>
+                            <th colspan="6">Producto</th>
+                            <th colspan="6">Descripción</th>
+                            <th colspan="6">P.U.</th>
+                            <th colspan="6">Cantidad</th>
+                            <th colspan="6">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <span t-esc="main['name']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['date_order']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['partner']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['salesman']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['default_code']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['product']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['price_unit']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['sum']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['amount_total']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+    <template id="report_product">
+        <h3>Compras de medicamento por producto</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde:</strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong>Hasta:</strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Category</th>
+                            <th colspan="6" class="text-center">Producto</th>
+                            <th colspan="6" class="text-center">Descripción</th>
+                            <th colspan="6" class="text-center">Cantidad</th>
+                            <th colspan="6">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <span t-esc="main['name']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['default_code']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['product']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['qty']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['amount_total']"/>
+                                </td>
+                            </tr>
+
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+    <template id="report_category">
+        <h3>Compras de medicamento por categoría</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde:</strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong>Hasta:</strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr>
+                            <th colspan="6">Categoría</th>
+                            <th colspan="6">Cantidad</th>
+                            <th colspan="6">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="purchase_category">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <span t-esc="purchase_category['name']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="purchase_category['qty']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="purchase_category['amount_total']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+    <template id="report_purchase_representative">
+        <h3>Compras de medicamento por usuario</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde:</strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong>Hasta:</strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th colspan="6">Total de ordenes</th>
+                            <th colspan="6">Total de cantidades</th>
+                            <th colspan="6">Total en importe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <tr style="font-weight: bold;">
+                                <td>
+                                    <span t-esc="main['name']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['order']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['qty']"/>
+                                </td>
+                                <td colspan="6">
+                                    <span t-esc="main['amount']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+    <template id="report_supplier">
+        <h3>Compras de medicamento por proveedor</h3>
+        <div class="page">
+            <div class="oe_structure"/>
+            <span t-if="desde">
+                <strong>Desde: </strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong> al </strong>
+                <t t-esc="hasta"/>
+            </span>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr class="text-right">
+                            <th colspan="12">Proveedor</th>
+                            <th colspan="6"> Orden </th>
+                            <th colspan="6">Fecha</th>
+                            <th colspan="8">Usuario</th>
+                            <th colspan="10">Descripción</th>
+                            <th colspan="6">Cantidad</th>
+                            <th colspan="6">P.U.</th>
+                            <th colspan="10" style="text-align: right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <!-- Se agregan campos para imprimir o no el proveedor -->
+                            <t t-set="imprimir_proveedor" t-value="1"/>
+                            <t t-if="main['partner'] == proveedor_anterior">
+                                <t t-set="imprimir_proveedor" t-value="0"/>
+                            </t>
+                            <t t-set="proveedor_anterior" t-value="main['partner']"/>
+
+                            <!-- Se agregan campos para imprimir o no datos de la orden de compra -->
+                            <t t-set="imprimir_compra" t-value="1"/>
+                            <t t-if="main['name'] == compra_anterior">
+                                <t t-set="imprimir_compra" t-value="0"/>
+                            </t>
+                            <t t-set="compra_anterior" t-value="main['name']"/>
+
+                            <tr style="font-size: 10px;">
+                                <td colspan="12">
+                                    <t t-if="imprimir_proveedor == 1">
+                                        <span t-esc="main['partner']"/>
+                                    </t>
+                                </td>
+                                <td colspan="6">
+                                    <t t-if="imprimir_compra == 1">
+                                        <span t-esc="main['name']"/>
+                                    </t>
+                                </td>
+                                <td colspan="6">
+                                    <t t-if="imprimir_compra == 1">
+                                        <span t-esc="main['date_order']"/>
+                                    </t>
+                                </td>
+                                <td colspan="8">
+                                    <t t-if="imprimir_compra == 1">
+                                        <span t-esc="main['salesman']"/>
+                                    </t>
+                                </td>
+                                <td colspan="10">
+                                    <span t-esc="main['product']"/>
+                                </td>
+                                <td colspan="6" style="text-align: center;">
+                                    <span t-esc="main['sum']"/>
+                                </td>
+                                <td colspan="6" style="text-align: right;">
+                                    <span class="text-end" t-esc="main['price_unit']"/>
+                                </td>
+                                <td colspan="10" style="text-align: right;">
+                                    <span class="text-end" style="text-align: right;"
+                                          t-esc="main['price_subtotal']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+    <template id="report_state">
+        <h3>Compras de medicamento por Estatus</h3>
+        <div class="page">
+            <div class="oe_structure">
+            <span t-if="desde">
+                <strong>Desde: </strong>
+                <t t-esc="desde"/>
+            </span>
+            <span t-if="hasta">
+                <strong> al </strong>
+                <t t-esc="hasta"/>
+            </span>
+            </div>
+            <div>
+                <div style="width:100%;">
+                    <div style="text-align:centre;" class="row">
+                        <div class="col-7">
+                            <strong>Tipo de reporte:</strong>
+                            <t t-esc="Filters.get('report_type')"/>
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <table class="table table-sm table-reports">
+                    <thead>
+                        <tr class="text-left">
+                            <th>State</th>
+                            <th colspan="6">Total de ordenes</th>
+                            <th colspan="6">Cantidad</th>
+                            <th colspan="6">Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="report_main_line_data" t-as="main">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <t t-if="main['state'] == 'draft'">
+                                        <span>Borrador</span>
+                                    </t>
+                                    <t t-if="main['state'] == 'sent'">
+                                        <span>Enviada</span>
+                                    </t>
+                                    <t t-if="main['state'] == 'purchase'">
+                                        <span>Orden de compra</span>
+                                    </t>
+                                </td>
+                                <td colspan="6" class="text-left">
+                                    <span t-esc="main['order']"/>
+                                </td>
+                                <td colspan="6" class="text-left">
+                                    <span t-esc="main['qty']"/>
+                                </td>
+                                <td colspan="6" class="text-left">
+                                    <span t-esc="main['amount']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <br></br>
+        </div>
+    </template>
+
+
+    <record id="action_report_purchase_all_in_one" model="ir.actions.report">
+        <field name="name">Reporte de compras todo en uno</field>
+        <field name="model">dynamic.purchase.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">smm_intecproof.purchase_order_report</field>
+        <field name="report_file">smm_intecproof.purchase_order_report</field>
+    </record>
+
+</odoo>
