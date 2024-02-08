@@ -14,11 +14,13 @@
                 <div class="card text-white bg-danger mb-3" style="max-width: 22rem; font-size:6rem;" >
                     <div class="card-header" style="text-align:center;"><i class="fa fa-hand-paper-o"/></div>
                     <div class="card-body" style="font-size:2rem; text-align:center;">Vencidos
-                        <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_vencidos"/></h5>
-                        <a class="stock.view_production_lot_tree" tabindex="-1">
-                            <div id="medicamentos_vencidos"/>
-                        </a>
-                        <button type="object" name="open_expiring_lots_view" String="Ver vencidos"/>
+                        <h5 class="card-title" style="font-size:2rem; text-align:center">
+                            <button  class="btn btn-link medicamentos_vencidos">
+                                <div id="medicamentos_vencidos">
+                                    <t t-esc="widget.total_medicamentos_vencidos"/>
+                                </div>
+                            </button>
+                        </h5>
                     </div>
                </div>
            </div>
@@ -27,7 +29,9 @@
                   <div class="card-header" style="text-align:center;"><i class="fa fa-exclamation-triangle"/></div>
                   <div class="card-body" style="font-size:2rem; text-align:center;">Hoy vencen
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_hoy_vencen"/></h5>
-                      <div id="medicamentos_vencen_hoy"/>
+                      <button  class="btn btn-link medicamentos_vencen_hoy">
+                          <div id="medicamentos_vencen_hoy"/>
+                      </button>
                   </div>
                </div>
            </div>

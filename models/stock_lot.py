@@ -35,6 +35,7 @@ class ExtendStock_lot(models.Model):
 			'total_medicamentos_ok': len(total_medicamentos_ok)
 		}
 
+	@api.model
 	def get_lots_expiring(self):
 		expiring_lots = self.env['stock.lot'].search([
 			('product_id.categ_id.name', '=', 'Medicamentos'), ('quant_ids.quantity', '>', '0'),
@@ -61,6 +62,7 @@ class ExtendStock_lot(models.Model):
 		])
 		return expiring_lots_today
 	
+	@api.model
 	def open_expiring_lots_today_view(self):
 		expiring_lots_today = self.get_lots_expiring_today()
 		action = {
@@ -80,6 +82,7 @@ class ExtendStock_lot(models.Model):
 		])
 		return expiring_lots_soon
 	
+	@api.model
 	def open_expiring_lots_soon_view(self):
 		expiring_lots_soon = self.get_lots_expiring_soon()
 		action = {
@@ -98,6 +101,7 @@ class ExtendStock_lot(models.Model):
 		])
 		return expiring_lots_ok
 	
+	@api.model
 	def open_expiring_lots_ok_view(self):
 		expiring_lots_ok = self.get_lots_expiring_ok()
 		action = {
