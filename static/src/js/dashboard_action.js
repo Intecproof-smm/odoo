@@ -44,7 +44,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
         },
 
         _onClic_vencen_hoy: function () {
-            console.log('*********** Para ver si entra al botón vencen hoy' )
+            console.log('*********** Entré al botón vencen hoy' )
             var hoy = new Date();
             var action = {
     			'name': 'Lotes expirados/vencidos',
@@ -58,6 +58,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
         },
 
         _onClic_proximos_a_vencer: async function () {
+            console.log('*********** Entré al botón Próximos a Vencer' )
             var hoy = new Date();
             var proximos30dias =  (60 * 60 * 24 * 1000 * 30);
             var hasta = new Date(hoy.getTime() + proximos30dias)
