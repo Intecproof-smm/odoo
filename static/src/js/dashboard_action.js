@@ -7,10 +7,12 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
     var rpc = require('web.rpc');
     var ajax = require('web.ajax');
     var _t = core._t;
+    const session = require('web.session');
     var CustomDashBoard = AbstractAction.extend({
         events: {
             'click .medicamentos_vencidos': '_onClic_vencidos',
             'click .medicamentos_vencen_hoy': '_onClic_vencen_hoy',
+            'click .medicamentos_proximos_a_vencer': '_onClic_proximos_a_vencer'
         },
 
         template: 'CustomDashBoard',
@@ -28,12 +30,14 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
         },
 
         _onClic_vencidos: function () {
-            console.log('*********** Para ver si entra al botón vencidos' )
+            console.log('*********** Entré al botón vencidos' )
+            var hoy = new Date();
             var action = {
     			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
+			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'], ['expiration_date','<', hoy]],
                 'target': 'current'
             };
             return this.do_action(action);
@@ -41,15 +45,35 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 
         _onClic_vencen_hoy: function () {
             console.log('*********** Para ver si entra al botón vencen hoy' )
+            var hoy = new Date();
+            var action = {
+    			'name': 'Lotes expirados/vencidos',
+	    		'type': 'ir.actions.act_window',
+		    	'res_model': 'stock.lot',
+			    'views': [[false, 'tree']],
+			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'], ['expiration_date','=', hoy]],
+                'target': 'current'
+            };
+            return this.do_action(action);
+        },
 
-            return this.do_action({
-                title: 'Send SMS Text Message',
-                type: 'ir.actions.act_window',
-                res_model: 'sms.composer',
-                target: 'new',
-                views: [[false, 'form']],
-                context: context,
-            });
+        _onClic_proximos_a_vencer: async function () {
+            var hoy = new Date();
+            var proximos30dias =  (60 * 60 * 24 * 1000 * 30);
+            var hasta = new Date(hoy.getTime() + proximos30dias)
+
+            var action = {
+    			'name': 'Lotes expirados/vencidos',
+	    		'type': 'ir.actions.act_window',
+		    	'res_model': 'stock.lot',
+			    'views': [[false, 'tree']],
+			    'domain': [
+			            ['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'],
+			            ['expiration_date','>', hoy], ['expiration_date','<', hasta]
+			        ],
+                'target': 'current'
+            };
+            return this.do_action(action);
         },
 
         willStart: function() {
@@ -74,10 +98,10 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
                 model: 'stock.lot',
                 method: 'get_medicamentos_data'
             }).then(function(result){
-                $('#medicamentos_vencidos').append('<span>' + result.total_medicamentos_vencidos + '</span>');
-                $('#medicamentos_vencen_hoy').append('<span>' + result.total_medicamentos_hoy_vencen + '</span>');
-                $('#medicamentos_proximos_a_vencer').append('<span>' + result.total_medicamentos_proximos_a_vencer + '</span>');
-                $('#medicamentos_ok').append('<span>' + result.total_medicamentos_ok + '</span>');
+                $('#medicamentos_vencidos').append('<span style="font-size:2rem; text-align:center">' + result.total_medicamentos_vencidos + '</span>');
+                $('#medicamentos_vencen_hoy').append('<span style="font-size:2rem; text-align:center">' + result.total_medicamentos_hoy_vencen + '</span>');
+                $('#medicamentos_proximos_a_vencer').append('<span style="font-size:2rem; text-align:center">' + result.total_medicamentos_proximos_a_vencer + '</span>');
+                $('#medicamentos_ok').append('<span style="font-size:2rem; text-align:center">' + result.total_medicamentos_ok + '</span>');
             });
             return $.when(def1);
         },

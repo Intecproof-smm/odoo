@@ -40,7 +40,9 @@
                   <div class="card-header" style="text-align:center;"><i class="fa fa-check-circle-o"/></div>
                   <div class="card-body" style="font-size:2rem; text-align:center;">Próximos a vencer
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_proximos_a_vencer"/></h5>
-                      <div id="medicamentos_proximos_a_vencer"/>
+                      <button class="btn btn-link medicamentos_proximos_a_vencer">
+                          <div id="medicamentos_proximos_a_vencer"/>
+                      </button>
                   </div>
                </div>
            </div>
@@ -49,7 +51,9 @@
                   <div class="card-header" style="text-align:center;"><i class="fa fa-thumbs-o-up"/></div>
                   <div class="card-body" style="font-size:2rem; text-align:center;">Vigentes
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_ok"/></h5>
-                      <div id="medicamentos_ok"/>
+                      <button class="btn btn-link medicamentos_ok">
+                          <div id="medicamentos_ok"/>
+                      </button>
                   </div>
                </div>
            </div>
