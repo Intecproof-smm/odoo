@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-name="SolicitanteButton" owl="1">
+       <div class="control-button" t-att-class="{'decentered': isLongName}">
+            <t t-if="!env.isMobile"><i class="fa fa-user" role="img" aria-label="Solicitante" title="Solicitante" /></t>
+            <t t-if="solicitante">
+                <t t-esc="solicitante.name" />
+            </t>
+            <t t-else="">
+                Solicitante
+            </t>
+       </div>
+   </t>
+</templates>

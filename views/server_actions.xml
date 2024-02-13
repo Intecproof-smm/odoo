@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2023-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+  -->
+
+
+<odoo>
+    <data>
+        <!-- Vamos a crear la acción del servidor para el envío de notificaciones por caducidades -->
+        <record id="smm_intecproof_notificaciones_medicamentos_caducos_action" model="ir.cron">
+            <field name="name">Notificaciones de medicamentos caducos</field>
+            <field name="model_id" ref="model_stock_lot"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>minutes</field>
+            <field name="active">True</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <!-- <field name="nextcall" eval="(DateTime.now().replace(hour=3, minute=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" /> -->
+            <field name="nextcall" eval="(DateTime.now() + timedelta(minutes=1)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="code">
+Lotes = []
+Lotes = env['stock.lot'].sudo().search([('expiration_date', '>', '2020-01-01')])
+NotificacionCaducos = 0
+NotificacionVencenHoy = 0
+
+for prodsLotes in Lotes:
+  if prodsLotes.product_expiry_alert:
+    if NotificacionCaducos == 0:
+      usuarios = env['res.users'].sudo().search([])
+      for usuario in usuarios:
+        # env.user.notify_danger("Tienes lotes caducos, por favor verifica tu Tablero")
+        usuario.notify_danger("Tienes lotes caducos, por favor verifica tu Tablero")
+      NotificacionCaducos = 1
+
+  if prodsLotes.expiration_date.date() == datetime.datetime.now().date():
+    if NotificacionVencenHoy == 0:
+      usuarios = env['res.users'].sudo().search([])
+      for usuario in usuarios:
+        usuario.notify_warning("Tienes lotes que caducan el día de hoy, por favor verifica tu Tablero")
+      NotificacionVencenHoy = 1
+            </field>
+        </record>
+
+        <!-- Vamos a crear/actualizar el filtro de usuario para los medicamentos que caducan HOY -->
+        <record id="smm_intecproof_gestion_de_filtros_vencimiento_hoy_action" model="ir.cron">
+            <field name="name">Actualiza el filtro de vencimientos hoy</field>
+            <field name="model_id" ref="model_stock_lot"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="active">True</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() + relativedelta(days=1)).strftime('%Y-%m-%d 06:00:01')" />
+            <field name="state">code</field>
+            <field name="code">
+Filtros = []
+Filtros = env['ir.filters'].sudo().search([('name','=','Medicamentos que vencen hoy')])
+
+if len(Filtros) == 0:
+  env['ir.filters'].create({
+    'name': 'Medicamentos que vencen hoy',
+    'active': True,
+    'model_id': 'stock.lot',
+    'domain': "['&amp;','&amp;','&amp;',['product_id.categ_id.name','=','Medicamentos'],['quant_ids.quantity','&gt;','0'],['expiration_date','&gt;=',datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')],['expiration_date','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59')]]"
+  })
+else:
+  env['ir.filters'].write({
+    'domain': "['&amp;','&amp;','&amp;',['product_id.categ_id.name','=','Medicamentos'],['quant_ids.quantity','&gt;','0'],['expiration_date','&gt;=',datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')],['expiration_date','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59')]]"
+  })
+            </field>
+        </record>
+
+        <!-- Vamos a crear/actualizar el filtro de usuario para los medicamentos que caducan los próximos 30 días -->
+        <record id="smm_intecproof_gestion_de_filtros_vencimiento_proximo_action" model="ir.cron">
+            <field name="name">Actualiza el filtro de vencimientos próximos</field>
+            <field name="model_id" ref="model_stock_lot"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="active">True</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() + relativedelta(days=1)).strftime('%Y-%m-%d 06:00:01')" />
+            <field name="state">code</field>
+            <field name="code">
+Filtros = []
+Filtros = env['ir.filters'].sudo().search([('name','=','Medicamentos que vencen próximamente')])
+
+if len(Filtros) == 0:
+  env['ir.filters'].create({
+    'name': 'Medicamentos que vencen próximamente',
+    'active': True,
+    'model_id': 'stock.lot',
+    'domain': "['&amp;','&amp;','&amp;',['product_id.categ_id.name','=','Medicamentos'],['quant_ids.quantity','&gt;','0'],['expiration_date','&gt;=',datetime.datetime.now()+relativedelta(days=2)],['expiration_date','&lt;=',datetime.datetime.now()+relativedelta(months=1)]]"
+  })
+else:
+  env['ir.filters'].write({
+    'domain': "['&amp;','&amp;','&amp;',['product_id.categ_id.name','=','Medicamentos'],['quant_ids.quantity','&gt;','0'],['expiration_date','&gt;=',datetime.datetime.now()+relativedelta(days=2)],['expiration_date','&lt;=',datetime.datetime.now()+relativedelta(months=1)]]"
+  })
+            </field>
+        </record>
+
+        <!-- Vamos a crear la acción del servidor para actualizar el dashboard de los usuarios -->
+        <record id="smm_intecproof_gestion_dashboard_usuarios" model="ir.cron">
+            <field name="name">Creación/Actualización de dashboards</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>minutes</field>
+            <field name="active">True</field>
+            <field name="numbercall">-1</field>
+            <field name="state">code</field>
+            <field name="code">
+usuarios = []
+usuarios = env['res.users'].sudo().search([('evitar_cambios_dashboard','=',False)])
+
+for usuario in usuarios:
+  tablero = []
+  tablero = env['ir.ui.view.custom'].sudo().search([])
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

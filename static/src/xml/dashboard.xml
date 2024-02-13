@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<template>
+   <t t-name="CustomDashBoard">
+       <div class="smm_dashboards" style="margin-top: 30px; margin-left: 40px;">
+           <div class="container-fluid o_pj_dashboard">
+               <h1><a style="margin-left: 50px;">Tablero de control de vencimiento de Lotes de medicamentos</a></h1>
+           </div>
+       </div>
+   </t>
+
+   <t t-name="DashboardProject">
+       <div class="row main-section" style="margin-left: 40px;">
+           <div class="col-md-2" >
+                <div class="card text-white bg-danger mb-3" style="max-width: 22rem; font-size:6rem;" >
+                    <div class="card-header" style="text-align:center;"><i class="fa fa-hand-paper-o"/></div>
+                    <div class="card-body" style="font-size:2rem; text-align:center;">Vencidos
+                        <h5 class="card-title" style="font-size:2rem; text-align:center">
+                            <button  class="btn btn-link medicamentos_vencidos">
+                                <div id="medicamentos_vencidos">
+                                    <t t-esc="widget.total_medicamentos_vencidos"/>
+                                </div>
+                            </button>
+                        </h5>
+                    </div>
+               </div>
+           </div>
+           <div class="col-md-2" >
+               <div class="card text-white bg-warning mb-3" style="max-width: 22rem; font-size:6rem;">
+                  <div class="card-header" style="text-align:center;"><i class="fa fa-exclamation-triangle"/></div>
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Hoy vencen
+                    <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_hoy_vencen"/></h5>
+                      <button  class="btn btn-link medicamentos_vencen_hoy">
+                          <div id="medicamentos_vencen_hoy"/>
+                      </button>
+                  </div>
+               </div>
+           </div>
+           <div class="col-md-2" >
+               <div class="card text-white bg-success mb-3" style="max-width: 22rem; font-size:6rem;">
+                  <div class="card-header" style="text-align:center;"><i class="fa fa-check-circle-o"/></div>
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Próximos a vencer
+                    <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_proximos_a_vencer"/></h5>
+                      <button class="btn btn-link medicamentos_proximos_a_vencer">
+                          <div id="medicamentos_proximos_a_vencer"/>
+                      </button>
+                  </div>
+               </div>
+           </div>
+           <div class="col-md-2" >
+               <div class="card text-white bg-info mb-3" style="max-width: 22rem; font-size:6rem;">
+                  <div class="card-header" style="text-align:center;"><i class="fa fa-thumbs-o-up"/></div>
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Vigentes
+                    <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_ok"/></h5>
+                      <button class="btn btn-link medicamentos_ok">
+                          <div id="medicamentos_ok"/>
+                      </button>
+                  </div>
+               </div>
+           </div>
+       </div>
+   </t>
+</template>
