@@ -1,0 +1,23 @@
+name: Deployment
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - uses: actions/checkout@main
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      with:
+          SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "/"
+          REMOTE_HOST: 5.78.84.35
+          REMOTE_USER: root
+          TARGET: /opt/odoo16/extra-addons/smm/smm_intecproof
+          EXCLUDE: ""
