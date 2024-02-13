@@ -18,7 +18,6 @@ odoo.define('smm_pos.DatosSalidaPopup', function(require) {
                 { 
                     c_cama: this.props.ds_cama
                     , c_ambulancia: this.props.ds_no_ambulancia
-                    , c_turno: this.props.ds_turno
                     , c_area: this.props.ds_area 
                     , c_expediente: this.props.ds_expediente
                     , c_diagnostico: this.props.ds_diagnostico

@@ -27,16 +27,8 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                         body: "No se ha capturado el paciente.",
                     });
                     continuar = false;
-                } else {
-                    if (!this.currentOrder().x_solicitante) {
-                        this.showPopup("ErrorPopup", {
-                            title: "Acción No Válida",
-                            body: "No se ha capturado el solicitante.",
-                        });
-                        continuar = false;
-                    }                    
                 }
-
+                
                 if (continuar) {
                     // Desplegamos el pop-up que va a capturar los datos para dar salida
                     // del inventario
@@ -73,7 +65,7 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                 this.currentOrder().save_datos_adicionales(payload.ds_area
                     , payload.ds_cama
                     , payload.ds_no_ambulancia
-                    , payload.ds_turno
+                    , this.env.pos.pos_session.x_turno
                     , payload.ds_expediente
                     , payload.ds_diagnostico
                     , payload.ds_dosis_aplicada

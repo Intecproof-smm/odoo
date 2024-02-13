@@ -18,18 +18,6 @@
                         <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_no_ambulancia" placeholder="No. de Ambulancia" />
                     </div>
                     <div>
-                        <label>Turno:</label>
-                        <br />
-                        <select required="1" class="popup-input list-line-input" t-model="state.ds_turno">
-                            <option value="m">M</option>
-                            <option value="v">V</option>
-                            <option value="n1">N1</option>
-                            <option value="n2">N2</option>
-                            <option value="ja">JA</option>
-                            <option value="jf">JF</option>
-                        </select>
-                    </div>
-                    <div>
                         <label>Area:</label>
                         <br />
                         <select required="1" class="popup-input list-line-input" t-model="state.ds_area">

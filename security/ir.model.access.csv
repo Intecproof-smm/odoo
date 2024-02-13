@@ -3,3 +3,4 @@ access_res_ubicaciones,Ubicaciones (Administrador),model_res_ubicaciones,base.gr
 access_smm_eventos_medicos,Eventos Médicos,model_smm_eventos_medicos,base.group_user,1,1,1,1
 access_dynamic.purchase.report,Reporte de compras,model_dynamic_purchase_report,base.group_user,1,1,1,1
 pos_vevent_message,pos.vevent.message,model_pos_vevent_message,base.group_user,1,1,1,1
+access_smm_pos_dialogbox,Acceso a Dialogbox,model_pos_dialogbox,base.group_user,1,1,1,1
