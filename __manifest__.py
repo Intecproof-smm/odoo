@@ -16,7 +16,7 @@
     "license": "OPL-1",
     "summary": "Agrega funcionalidades extras al módulo de Inventarios para el proyecto SMMG",
     "description": """Este módulo agrega diferentes funcionalidades a Odoo para cumplir con el proyecto de SMMG""",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "sequence": 1,
     "depends": ["base", "stock", "pos_sale", "sale", "contacts", 'point_of_sale', "smm_odoo"],
     "application": True,
@@ -37,7 +37,8 @@
         "report/report_historicos_template.xml",
         "report/report_conteos_firmas_template.xml",
         "report/purchase_order_report.xml",
-        "security/ir.model.access.csv"
+        "security/ir.model.access.csv",
+        "views/pos_payment_method.xml"
     ],
     'assets': {
         'web.assets_backend': [
@@ -60,7 +61,12 @@
             'smm_intecproof/static/src/xml/SolicitanteButton.xml',
             'smm_intecproof/static/src/js/SolicitanteButton.js',
             'smm_intecproof/static/src/js/ExtendedProductScreen.js',
-            'smm_intecproof/static/src/css/styles.css'
+            'smm_intecproof/static/src/css/styles.css',
+            "smm_intecproof/static/src/js/payment_terminal.js",
+            "smm_intecproof/static/src/xml/OrderReceipt.xml",
+            "smm_intecproof/static/src/xml/ProductScreen.xml",
+            "smm_intecproof/static/src/xml/PaymentScreen.xml",
+            "smm_intecproof/static/src/xml/Chrome.xml"
         ],
     },
 }
