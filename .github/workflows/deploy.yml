@@ -19,5 +19,5 @@ jobs:
           SOURCE: "/"
           REMOTE_HOST: 5.78.84.35
           REMOTE_USER: root
-          TARGET: /home/smm_intecproof
-          EXCLUDE: "/dist/, /node_modules/"
+          TARGET: /opt/odoo16/extra-addons/smm/smm_intecproof
+          EXCLUDE: ""
