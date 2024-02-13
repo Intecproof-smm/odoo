@@ -16,7 +16,7 @@ jobs:
       with:
           SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "dist/"
+          SOURCE: "/"
           REMOTE_HOST: 5.78.84.35
           REMOTE_USER: root
           TARGET: /home/smm_intecproof
