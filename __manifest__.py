@@ -5,7 +5,7 @@
 #
 #    This file is part of SMM_intecproof Module
 #
-#    This program is NOT a free software
+#    This program is NOT a free software Prueba para Jimmy
 #
 ###################################################################################
 {
