@@ -1,0 +1,19 @@
+<!-- Plantilla que agrega los campos adicionales a la lista de búsqueda de pos.order (Punto de Venta / Órdenes) -->
+<odoo>
+    <data>
+        <record id="smm_pos_order_list_tree_inherit" model="ir.ui.view">
+            <field name="name">smm.pos.order.list.tree.inherit</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="x_area_solicitud" />
+                    <field name="x_cama" />
+                    <field name="x_fecha_nacimiento" />
+                    <field name="x_no_ambulancia" />
+                    <field name="x_turno" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

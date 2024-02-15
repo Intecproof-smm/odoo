@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2024-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+
+<odoo>
+    <data>
+    <record id="smm_eventos_medicos_tree" model="ir.ui.view">
+        <field name="name">smm_eventos_medicos_tree</field>
+        <field name="model">smm_eventos_medicos</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="evento_medico"/>
+                <field name="fam_responsable"/>
+                <field name="fam_responsable_tel"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="smm_evento_medico_form" model="ir.ui.view" >
+        <field name="name">smm_evento_medico_form</field>
+        <field name="model">smm_eventos_medicos</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <h1>
+                        <field name="evento_medico" string="Número de evento médico"/>
+                    </h1>
+                </header>
+                <sheet>
+                    <!-- Datos generales de la alta -->
+                    <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE" > 
+                        <group> 
+                            <field name="fecha_inicio" required="1" style= "width: 100%%"/>
+                        </group>                     
+                        <group>
+                            <field name="estudio_socioeconomico" />
+                        </group>  
+                    </group>
+                    <!-- Motivos de la alta -->
+                    <group name="motivos_para_alta" string="MOTIVOS DE ALTA DEL PACIENTE" > 
+                        <group col="3" > 
+                            <field name="mot_alta_1" required="1" style= "width: 400%%"/>
+                            <field name="mot_alta_2"  style= "width: 400%%"/>
+                            <field name="mot_alta_3"  style= "width: 400%%"/>
+                        </group>                     
+                    </group>
+                    <!-- Responsable del paciente -->
+                    <group name="responsbale_paciente" col="2" string="FAMILIAR RESPONSABLE DEL PACIENTE" > 
+                        <group> 
+                            <field name="fam_responsable" required="1" style= "width: 80%%"/>
+                        </group> 
+                        <group> 
+                            <field name="fam_responsable_tel"  style= "width: 40%%"/>
+                        </group>                     
+                    </group>
+                    <notebook>
+                        <!-- Exploración Física -->
+                        <page name="exploracion_fisica" string="Exploración Física">
+                            <!-- Talla, peso, pulso -->
+                            <group name="ginecoobstétricos_5" col="4">
+                                <group>
+                                    <field name="explora_peso" style="width: 30%%"/>
+                                </group>
+                                <group>
+                                    <field name="explora_talla" style="width: 30%%"/>
+                                </group>
+                                <group>
+                                    <field name="explora_ta" style="width: 30%%"/>
+                                </group>
+                                <group>
+                                    <field name="explora_fc_pulso" style="width: 30%%"/>
+                                </group>
+                            </group>
+                            <!-- Temperatura -->
+                            <group name="ginecoobstétricos_4" col="3">
+                                <group>
+                                    <field name="explora_fr" style="width: 30%%"/>
+                                </group>
+                                <group>
+                                    <field name="explora_temp" style="width: 30%%"/>
+                                </group>
+                            </group>
+                            <!-- Exploración ginecoobtétricos -->
+                            <group name="ginecoobstétricos_3">
+                                <field name="explora_habitus"/>
+                                <field name="explora_piel_anexos"/>
+                                <field name="explora_cabeza_cuello"/>
+                                <field name="explora_torax"/>
+                                <field name="explora_abdomen"/>
+                                <field name="explora_genitales"/>
+                                <field name="explora_extremidades"/>
+                                <field name="explora_sis_nervioso"/>
+                                <field name="explora_examen_previo"/>
+                            </group>
+                        </page>
+                        <!-- Integración diagnostica -->
+                        <page name="integracion_didagnostica" string="Integración Diagnostica">
+                            <group name="integraciondiagnostica" string="DIAGNOSTICOS">
+                                <group name="disgnosticos">
+                                    <field name="integra_diag_1"/>
+                                    <field name="integra_diag_2"/>
+                                    <field name="integra_diag_3"/>
+                                    <field name="integra_diag_4"/>
+                                </group>
+                            </group>
+                            <!-- Plan de estudio -->
+                            <group name="plandeestudio" string="PLAN DE ESTUDIO">
+                                <group name="planestudio">
+                                    <field name="integra_plan_estudio_1"/>
+                                    <field name="integra_plan_estudio_2"/>
+                                    <field name="integra_plan_estudio_3"/>
+                                    <field name="integra_plan_estudio_4"/>
+                                </group>
+                            </group>
+                            <!-- Plan de manejo -->
+                            <group name="plandemanejo" string="PLAN DE MANEJO">
+                                <group name="plandemanejo">
+                                    <field name="integra_plan_manejo_1"/>
+                                    <field name="integra_plan_manejo_2"/>
+                                    <field name="integra_plan_manejo_3"/>
+                                    <field name="integra_plan_manejo_4"/>
+                                </group>
+                            </group>
+                            <!-- Integración Diagnóstica -->
+                            <group name="separador">
+                                <group name="plandemanejo"> </group>
+                            </group>
+                            <group name="integraciondiagnostica_2">
+                                <field name="integra_pronostico"/>
+                            </group>
+                            <group name="integraciondiagnostica_3" col="2">
+                                <group>
+                                    <field name="integra_nombre_elaboro_historia"/>
+                                </group>
+                                <group>
+                                    <field name="integra_nombre_avala_historia"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!-- Observaciones finales -->
+                        <page name="observaciones_finales" string="Observa. Finales">
+                            <group name="gobservafinales">
+                                <field name="observa_observa_comenta"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="smm_intecproof.smm_eventos_medicos_action_window">
+        <field name="name">smm_eventos_medicos_action</field>
+        <field name="res_model">smm_eventos_medicos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Sin eventos médicos, Vamos a dar uno de alta
+            </p>
+        </field>
+    </record>
+
+    </data>
+</odoo>

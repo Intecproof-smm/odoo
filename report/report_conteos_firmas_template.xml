@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="smm_stock_report_inventory" inherit_id="stock.report_inventory">
+        <xpath expr="//tbody" position="after">
+            <tfooter>
+                <table class="table table-sm" border="0" cellpadding="0" style="padding-top: 25px; background-color: white; color: black; width: 100%; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 30%" scope="col">Responsable del conteo</th>
+                            <th class="text-center" style="width: 25%" scope="col"> </th>
+                            <th class="text-center" style="width: 30%" scope="col">VoBo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="col" style="width: 30%">
+                                <hr /><p> </p></th>
+                            <th scope="col" style="width: 25%"> </th>
+                            <th scope="col" style="width: 30%">
+                                <hr /><p> </p></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </tfooter>
+        </xpath>
+    </template>
+
+</odoo>

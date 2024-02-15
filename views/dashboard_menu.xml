@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<!-- Template del dashboard de Lotes -->
+        <!--
+        <template id="assets_dashboard" name="Dashboard assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/smm_intecproof/static/src/js/dashboard_action.js"/>
+            </xpath>
+        </template>
+        -->
+		<!-- Menú principal del dashboard -->
+        <record id="custom_dashboard_action" model="ir.actions.client">
+           <field name="name">Tablero de control</field>
+           <field name="tag">custom_dashboard_tag</field>
+        </record>
+
+        <menuitem name="Tablero de Control" id="custom_dashboard_menu" sequence="0" action="custom_dashboard_action"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<templates id="template" xml:space="preserve">
+  <t t-inherit="point_of_sale.Chrome" t-inherit-mode="extension" owl="1">
+    <xpath expr="." position="inside">
+      <style>
+            .pos .pos-topheader {
+                  background: #DA3192;
+            }
+      </style>
+    </xpath>
+    <xpath expr="//img[hasclass('pos-logo')]" position="attributes">
+      <attribute name="src" position="replace">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAYCAYAAABQiBvKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASzSURBVFhH7dhbiFVVHMfxPaOOtzEv2VWzKcupEXtKCEqKesiHCCrMspIkfUgqyiySyCISi3qocIhudL9AdtEoyoSg60swSWhOxkyZFUUXqSlpmpn6fvdZa9hnzzmjxZxtOP3gw9lnzex9Zq2z1n8tTf4amiyFz0oO9NSH1/+zj6npgMVZF/X19aWqzcT872fF+6L9lZoNWKVO1dXVpcxeOj4So7xoa2uLv9eAEV6YeH9ra+tgzxn68GFDkQE1LL7HSKzGZiwIbXuzEMtybT5jXq6tX1GpNMO+xf3BdzaQPryMNXjPhmqp0IEWLMNrGItGXIvzMAWXYwEuwWTY7mz6HjNwO+bBv+s3nBLajsGxuBlzUUjq6Fy2d9txLnak75JkNhyoVtxnQ3d3d11DQ8O9XF7j+xAH5JHS5YBMxNM4BHfBDp+G8XgUd8Bn2+k3cQ7ex0GYhdGwfQ4+gwP6E3rwK47DWpb6C7zWPPkZdiPiYJmtmE/BdcDSMFgOsN/qtrShPHbOwZuevitlDJ7EK1gLB+x3fAKftQWr8RJuwbtwNk2Cz7kTz8BZPg3doc2fvQ0H7QoUkuyAdeIdL3JLqqO+vt5vM5suvFG6LIvPs9NPIBZoZ9IKLMJzuBvjYBysXT096eM34RtshEvPL+t5PIXr8QMcoHb4BTwLP89l7vItJi7JkC0YjaSzs7O/Fg1iJWJi0R+D7ehGU2hTI2Zk3h+GqbAkjA9tGhdeG5D+LZgersdiBEaFNn9me1Nvb6+7aiHJzjAL8AQvmpqazuDF2pLNWbDox8wMr/m4BJ0p1pkYZ+TO0mUaNxNnjFPZ2RTjUk3a29tddn94TXbB6z3oxZ+hzdj+RYUVULNkB8yacHbpMl2eF8PlZd04Ew/D2mKmYn7pckAs2MvxS/ouSY6EO26sa7ci3rsK7nYx1rfFzc3N1rQT05b/WpjS2WzDFNg+Fx+gAzuwArZrDbKJS9Ilpvh7aoG5B56jzHU4AuswCy61i/AgHsISuKRPxZWYjDm4GofCe5fDZ6efU1TsXP7THseS0mV64j4Ku/GzDcRt3x0tPYmHDHas8GjyOlxuLilnp8cIZ5Mbgp/vzrgQ7rJuJh4p3BDc/Vze67EU3v8VXIoeMzymuIP2/wui1skuyRgPkreVLtOzjsszDpadfAzZwTJ2JOnqslQN+OMddOvXi7DzG+CX4ED67C9xOh6Au6iD5iB64P0cF8JSYNtVOB4fweOE9xUzUiEOWDzNZ2Od8TSdjadtZ5YzJB8LeNLY2Fjpm04LNRPZs9ylsMh34FXEQVmHlVgMvxwL+2a4ETk4nskcNI8cb8FnOrC2Fxs6ssllWSXWFLfzC7DbhgrZg9koqyXxPTwixGOArEET4fHgJBwM22fi6PD+cPhzr09APSaghUO09W4SvNfjSvrcwsKH3YTBshUOSrV8jHhmCk8tG7BU/r9nhlpRcUlaU6wH1eKy8WxVLf4bLp6Z+pNfmrUsykUV/DThG2rFv8lOuMUX+i3v14TOWlc+xT/NIsRnhCce4Ml0+GQ4Y/Y1qzC8BstkO41mDLZrmq9xGcruHTbJdxz+l/L5WI8fYXrwIW7ANJTdM3ySJH8DUyzUNdYpmUgAAAAASUVORK5CYII=</attribute>
+    </xpath>
+</templates>

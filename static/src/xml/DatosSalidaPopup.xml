@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="DatosSalidaPopup" owl="1">
+        <div class="popup popup-confirm">
+            <header class="title drag-handle">
+                <t t-esc="props.title" />
+            </header>
+            <main class="body">
+                <div t-attf-class="#{ (props.es_controlado===true) ? 'izquierda' : '' }">
+                    <div>
+                        <label>Cama:</label>
+                        <br />
+                        <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_cama" placeholder="No. de Cama" />
+                    </div>
+                    <div>
+                        <label>No. Ambulancia:</label>
+                        <br />
+                        <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_no_ambulancia" placeholder="No. de Ambulancia" />
+                    </div>
+                    <div>
+                        <label>Area:</label>
+                        <br />
+                        <select required="1" class="popup-input list-line-input" t-model="state.ds_area">
+                            <option value="urg">Urgencias</option>
+                            <option value="hp">Hospital</option>
+                            <option value="cons">Consulta</option>
+                            <option value="uci">UCI</option>
+                            <option value="quir">Quirofano</option>
+                            <option value="tyo">T y O</option>
+                            <option value="ane">Anestesio</option>
+                        </select>
+                    </div>
+                </div>
+                <t t-if="props.es_controlado===true">
+                    <div class="derecha">
+                        <div>
+                            <label>Expediente:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_expediente" placeholder="Expediente" />
+                        </div>
+                        <div>
+                            <label>Diagnóstico:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_diagnostico" placeholder="Diagnóstico" />
+                        </div>
+                        <div>
+                            <label>Dosis aplicada:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_dosis_aplicada" placeholder="Dosis aplicada" />
+                        </div>
+                        <div>
+                            <label>Vía de aplicación:</label>
+                            <br />
+                            <select required="1" class="popup-input list-line-input" t-model="state.ds_via_aplicacion">
+                                <option value="iv">IV</option>
+                                <option value="sc">SC</option>
+                                <option value="im">IM</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Indicación:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_indicacion" placeholder="Indicación" />
+                        </div>
+                    </div>
+                </t>
+            </main>
+            <footer class="footer">
+                <!-- Aprendizaje: para que los botones funcionen tienen que llevar la propiedad "t-on-click" -->
+                <div class="button confirm" t-on-click="confirm">
+                    <t t-esc="props.confirmText" /> 
+                </div>
+                <div class="button cancel" t-on-click="cancel">
+                    <t t-esc="props.cancelText" /> 
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

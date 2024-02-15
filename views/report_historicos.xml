@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2023-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+<odoo>
+    <!-- Creamos la acción para cuando se seleccionan movimientos -->
+    <record id="action_report_conteos" model="ir.actions.report">
+            <field name="name">Historial de movimientos a PDF</field>
+            <field name="model">stock.move.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">smm_intecproof.conteos_report</field>
+            <field name="report_file">smm_intecproof.conteos_report</field>
+            <field name="print_report_name">"report_conteos"</field>
+            <field name="binding_model_id" ref="stock.model_stock_move_line"/>
+            <field name="binding_type">report</field>
+    </record>
+
+    <!-- Creamos el botón para imprimir la vista tal cual su contenido -->
+    <record id="view_move_line_tree_inherit_report" model="ir.ui.view">
+        <field name="name">stock_historial</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <tree>
+                <header>
+                  <button name="%(smm_intecproof.action_report_conteos)d" string="Generar Historial en PDF" type="action" class="btn btn-primary oe_highlight"/>
+                </header>
+            </tree>
+        </field>
+    </record>
+
+ </odoo>
