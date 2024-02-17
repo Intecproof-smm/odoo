@@ -37,7 +37,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['product_qty', '>', '0'], ['expiration_date','<', hoy]],
+			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'], ['expiration_date','<', hoy]],
                 'target': 'current'
             };
             return this.do_action(action);
@@ -69,7 +69,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
 			    'domain': [
-			            ['product_id.categ_id.name', '=', 'Medicamentos'], ['product_qty', '>', '0'],
+			            ['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'],
 			            ['expiration_date','>', hoy], ['expiration_date','<', hasta]
 			        ],
                 'target': 'current'
