@@ -467,7 +467,7 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr class="text-left">
-                            <th>State</th>
+                            <th colspan="4" style="vertical-align:middle;" class="text-center">State</th>
                             <th colspan="4" style="vertical-align:middle;" class="text-center">Total de ordenes</th>
                             <th colspan="4" style="vertical-align:middle;" class="text-center">Cantidad</th>
                             <th colspan="4" style="vertical-align:middle;" class="text-center">Importe</th>
@@ -476,7 +476,7 @@
                     <tbody>
                         <t t-foreach="report_main_line_data" t-as="main">
                             <tr style="font-weight: bold;">
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="4">
                                     <t t-if="main['state'] == 'draft'">
                                         <span>Borrador</span>
                                     </t>
@@ -487,13 +487,13 @@
                                         <span>Orden de compra</span>
                                     </t>
                                 </td>
-                                <td style="text-align: center;" colspan="8">
+                                <td style="text-align: center;" colspan="4">
                                     <span t-esc="main['order']"/>
                                 </td>
-                                <td style="text-align: center;" colspan="8">
+                                <td style="text-align: center;" colspan="4">
                                     <span t-esc="main['qty']"/>
                                 </td>
-                                <td style="text-align: center;" colspan="8">
+                                <td style="text-align: center;" colspan="4">
                                     <span t-esc="main['amount']"/>
                                 </td>
                             </tr>
