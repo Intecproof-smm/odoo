@@ -205,7 +205,7 @@ class DynamicPurchaseReport(models.Model):
             report_sub_lines.append(report_by_supplier)
         elif data.get('report_type') == 'report_by_categories':
             query = '''
-            select product_category.name,sum(l.product_qty) as qty,sum(l.price_subtotal) as amount_total
+            select product_category.name,sum(l.product_qty) as qty,sum(l.price_subtotal) as amount_total, l.date_order
                      from purchase_order_line as l
                      left join product_template on l.product_id = product_template.id
                      left join product_category on product_category.id = product_template.categ_id
@@ -213,12 +213,10 @@ class DynamicPurchaseReport(models.Model):
             '''
             term = 'Where '
             if data.get('date_from'):
-                query += "Where l.date_order >= '%s' " % data.get(
-                    'date_from')
+                query += "Where l.date_order >= '%s' " % data.get('date_from')
                 term = 'AND '
             if data.get('date_to'):
-                query += term + "l.date_order <= '%s' " % data.get(
-                    'date_to')
+                query += term + "l.date_order <= '%s' " % data.get('date_to')
             query += "group by product_category.name"
             self._cr.execute(query)
             report_by_categories = self._cr.dictfetchall()
