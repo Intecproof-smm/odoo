@@ -213,11 +213,11 @@ class DynamicPurchaseReport(models.Model):
             '''
             term = 'Where '
             if data.get('date_from'):
-                query += "Where pos_order.date_order >= '%s' " % data.get(
+                query += "Where l.date_order >= '%s' " % data.get(
                     'date_from')
                 term = 'AND '
             if data.get('date_to'):
-                query += term + "pos_order.date_order <= '%s' " % data.get(
+                query += term + "l.date_order <= '%s' " % data.get(
                     'date_to')
             query += "group by product_category.name"
             self._cr.execute(query)
@@ -252,10 +252,10 @@ class DynamicPurchaseReport(models.Model):
                     '''
             term = 'Where '
             if data.get('date_from'):
-                query += "Where so.date_order >= '%s' " % data.get('date_from')
+                query += "Where l.date_order >= '%s' " % data.get('date_from')
                 term = 'AND '
             if data.get('date_to'):
-                query += term + "so.date_order <= '%s' " % data.get('date_to')
+                query += term + "l.date_order <= '%s' " % data.get('date_to')
             query += "group by l.state"
             self._cr.execute(query)
             report_by_state = self._cr.dictfetchall()
