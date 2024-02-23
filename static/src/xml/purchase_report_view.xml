@@ -127,7 +127,6 @@
         <div t-if="order.report_type == 'report_by_order'">
             <div class="table_main_view">
                 <table cellspacing="0" width="100%">
-
                     <thead>
                         <tr class="table_pr_head">
                             <th>Orden de compra</th>

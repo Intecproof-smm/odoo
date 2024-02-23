@@ -14,7 +14,7 @@
     "support": "jcflores@intecproof.com",
     "category": "Extra Tools",
     "license": "OPL-1",
-    "summary": "Agrega funcionalidades extras al módulo de Inventarios para el proyecto SMMG",
+    "summary": "Agrega funcionalidades extras al módulo de Inventarios para el proyecto SMMG DOS",
     "description": """Este módulo agrega diferentes funcionalidades a Odoo para cumplir con el proyecto de SMMG""",
     "version": "1.2.1",
     "sequence": 1,

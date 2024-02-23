@@ -67,33 +67,33 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr >
-                            <th class="text-left">Orden de compra</th>
-                            <th colspan="6" class="text-center">Fecha</th>
-                            <th colspan="6" class="text-right">Proveedor</th>
-                            <th colspan="6" class="text-right">Usuario</th>
-                            <th colspan="6" class="text-center">Cantidad</th>
-                            <th colspan="6" class="text-left">Total</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Orden de compra</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Fecha</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Proveedor</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Usuario</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="6" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody class="text-left">
                         <t t-foreach="report_main_line_data" t-as="main">
                             <tr style="font-weight: bold;">
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['name']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['date_order']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['partner']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['salesman']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['sum']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="6">
                                     <span t-esc="main['amount_total']"/>
                                 </td>
                             </tr>
@@ -131,45 +131,45 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr class="text-right">
-                            <th>Order</th>
-                            <th colspan="6">Orden de compra</th>
-                            <th colspan="6">Proveedor</th>
-                            <th colspan="6">Usuario</th>
-                            <th colspan="6">Producto</th>
-                            <th colspan="6">Descripción</th>
-                            <th colspan="6">P.U.</th>
-                            <th colspan="6">Cantidad</th>
-                            <th colspan="6">Total</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Orden de compra</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Fecha</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Proveedor</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Usuario</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Producto</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Descripción</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">P.U.</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="9" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="report_main_line_data" t-as="main">
                             <tr style="font-weight: bold;">
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['name']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['date_order']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['partner']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['salesman']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['default_code']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['product']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['price_unit']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['sum']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="9">
                                     <span t-esc="main['amount_total']"/>
                                 </td>
                             </tr>
@@ -206,29 +206,29 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr>
-                            <th class="text-left">Category</th>
-                            <th colspan="6" class="text-center">Producto</th>
-                            <th colspan="6" class="text-center">Descripción</th>
-                            <th colspan="6" class="text-center">Cantidad</th>
-                            <th colspan="6">Total</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">Category</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">Producto</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">Descripción</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="report_main_line_data" t-as="main">
                             <tr style="font-weight: bold;">
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['name']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['default_code']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['product']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['qty']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['amount_total']"/>
                                 </td>
                             </tr>
@@ -266,21 +266,21 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr>
-                            <th colspan="6">Categoría</th>
-                            <th colspan="6">Cantidad</th>
-                            <th colspan="6">Total</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Categoría</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="report_main_line_data" t-as="purchase_category">
                             <tr style="font-weight: bold;">
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="purchase_category['name']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="purchase_category['qty']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="purchase_category['amount_total']"/>
                                 </td>
                             </tr>
@@ -318,9 +318,9 @@
                     <thead>
                         <tr>
                             <th>Usuario</th>
-                            <th colspan="6">Total de ordenes</th>
-                            <th colspan="6">Total de cantidades</th>
-                            <th colspan="6">Total en importe</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Total de ordenes</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Total de cantidades</th>
+                            <th colspan="3" style="vertical-align:middle;" class="text-center">Total en importe</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -329,13 +329,13 @@
                                 <td>
                                     <span t-esc="main['name']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="main['order']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="main['qty']"/>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="3">
                                     <span t-esc="main['amount']"/>
                                 </td>
                             </tr>
@@ -372,14 +372,14 @@
                 <table class="table table-sm table-reports">
                     <thead>
                         <tr class="text-right">
-                            <th colspan="12">Proveedor</th>
-                            <th colspan="6"> Orden </th>
-                            <th colspan="6">Fecha</th>
-                            <th colspan="8">Usuario</th>
-                            <th colspan="10">Descripción</th>
-                            <th colspan="6">Cantidad</th>
-                            <th colspan="6">P.U.</th>
-                            <th colspan="10" style="text-align: right;">Total</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Proveedor</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Orden </th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Fecha</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Usuario</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Descripción</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">P.U.</th>
+                            <th colspan="8" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -399,36 +399,36 @@
                             <t t-set="compra_anterior" t-value="main['name']"/>
 
                             <tr style="font-size: 10px;">
-                                <td colspan="12">
+                                <td style="text-align: center;" colspan="8">
                                     <t t-if="imprimir_proveedor == 1">
                                         <span t-esc="main['partner']"/>
                                     </t>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="8">
                                     <t t-if="imprimir_compra == 1">
                                         <span t-esc="main['name']"/>
                                     </t>
                                 </td>
-                                <td colspan="6">
+                                <td style="text-align: center;" colspan="8">
                                     <t t-if="imprimir_compra == 1">
                                         <span t-esc="main['date_order']"/>
                                     </t>
                                 </td>
-                                <td colspan="8">
+                                <td style="text-align: center;" colspan="8">
                                     <t t-if="imprimir_compra == 1">
                                         <span t-esc="main['salesman']"/>
                                     </t>
                                 </td>
-                                <td colspan="10">
+                                <td style="text-align: center;" colspan="8">
                                     <span t-esc="main['product']"/>
                                 </td>
-                                <td colspan="6" style="text-align: center;">
+                                <td style="text-align: center;" colspan="8" >
                                     <span t-esc="main['sum']"/>
                                 </td>
-                                <td colspan="6" style="text-align: right;">
+                                <td style="text-align: center;" colspan="8" >
                                     <span class="text-end" t-esc="main['price_unit']"/>
                                 </td>
-                                <td colspan="10" style="text-align: right;">
+                                <td style="text-align: center;" colspan="8" >
                                     <span class="text-end" style="text-align: right;"
                                           t-esc="main['price_subtotal']"/>
                                 </td>
@@ -468,9 +468,9 @@
                     <thead>
                         <tr class="text-left">
                             <th>State</th>
-                            <th colspan="6">Total de ordenes</th>
-                            <th colspan="6">Cantidad</th>
-                            <th colspan="6">Importe</th>
+                            <th colspan="4" style="vertical-align:middle;" class="text-center">Total de ordenes</th>
+                            <th colspan="4" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="4" style="vertical-align:middle;" class="text-center">Importe</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -487,13 +487,13 @@
                                         <span>Orden de compra</span>
                                     </t>
                                 </td>
-                                <td colspan="6" class="text-left">
+                                <td style="text-align: center;" colspan="8">
                                     <span t-esc="main['order']"/>
                                 </td>
-                                <td colspan="6" class="text-left">
+                                <td style="text-align: center;" colspan="8">
                                     <span t-esc="main['qty']"/>
                                 </td>
-                                <td colspan="6" class="text-left">
+                                <td style="text-align: center;" colspan="8">
                                     <span t-esc="main['amount']"/>
                                 </td>
                             </tr>

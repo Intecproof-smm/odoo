@@ -29,29 +29,48 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
             });
         },
 
-        _onClic_vencidos: function () {
+        _onClic_vencidos: async function () {
             console.log('*********** Entré al botón vencidos' )
             var hoy = new Date();
+            var location_id = 0;
+            var location = await this._rpc({
+                model: 'stock.lot',
+                method: 'traer_location_data'
+            });
             var action = {
     			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'], ['expiration_date','<', hoy]],
+			    'domain': [
+			            ['product_id.categ_id.name', '=', 'Medicamentos'],
+			            ['expiration_date','<', hoy],
+			            ['quant_ids.quantity','>',0],
+			            ['quant_ids.location_id', '=', location]
+                ],
                 'target': 'current'
             };
             return this.do_action(action);
         },
 
-        _onClic_vencen_hoy: function () {
+        _onClic_vencen_hoy: async function () {
             console.log('*********** Entré al botón vencen hoy' )
             var hoy = new Date();
+            var location = await this._rpc({
+                model: 'stock.lot',
+                method: 'traer_location_data'
+            });
             var action = {
     			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'domain': [['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'], ['expiration_date','=', hoy]],
+			    'domain': [
+			            ['product_id.categ_id.name', '=', 'Medicamentos'],
+			            ['quant_ids.quantity', '>', '0'],
+			            ['expiration_date','=', hoy],
+			            ['quant_ids.location_id', '=', location]
+			    ],
                 'target': 'current'
             };
             return this.do_action(action);
@@ -62,16 +81,22 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
             var hoy = new Date();
             var proximos30dias =  (60 * 60 * 24 * 1000 * 30);
             var hasta = new Date(hoy.getTime() + proximos30dias)
-
+            var location = await this._rpc({
+                model: 'stock.lot',
+                method: 'traer_location_data'
+            });
             var action = {
     			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
 			    'domain': [
-			            ['product_id.categ_id.name', '=', 'Medicamentos'], ['quant_ids.quantity', '>', '0'],
-			            ['expiration_date','>', hoy], ['expiration_date','<', hasta]
-			        ],
+			            ['product_id.categ_id.name', '=', 'Medicamentos'],
+			            ['quant_ids.quantity', '>', '0'],
+			            ['expiration_date','>', hoy],
+			            ['expiration_date','<', hasta],
+			            ['quant_ids.location_id', '=', location]
+                ],
                 'target': 'current'
             };
             return this.do_action(action);
