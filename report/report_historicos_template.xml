@@ -13,16 +13,18 @@
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <div class="page">
-                    <div class="Hola">
+                    <div class="Reporte de conteos">
                         <div class="text-center">
                             <h1>Histórico de movimientos</h1>
                         </div>
                     </div>
-                    <t t-set="lineas" t-value="docs.mapped(lambda z: (z.location_dest_id.complete_name, z.product_id.name, z.lot_id.name_get()[0][1], z.qty_done))"/>
+                    <t t-set="lineas" t-value="docs.mapped(lambda z: (z.location_id.complete_name, z.date, z.location_dest_id.complete_name, z.product_id.name, z.lot_id.name_get()[0][1], z.qty_done))"/>
                     <div class="body">
                         <table class="table" style="border-spacing:10px">
                             <thead>
                                 <tr class="o_report_header">
+                                    <th class="o_report_line_header">Desde</th>
+                                    <th class="o_report_line_header">Fecha</th>
                                     <th class="o_report_line_header">Ubicación</th>
                                     <th class="o_report_line_header">Producto</th>
                                     <th class="o_report_line_header">Lote</th>
@@ -35,6 +37,8 @@
                                     <td><span t-esc="linea[1]"/></td>
                                     <td><span t-esc="linea[2]"/></td>
                                     <td><span t-esc="linea[3]"/></td>
+                                    <td><span t-esc="linea[4]"/></td>
+                                    <td><span t-esc="linea[5]"/></td>
                                 </tr>
                             </tbody>
                         </table>
