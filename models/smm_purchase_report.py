@@ -170,7 +170,10 @@ class DynamicPurchaseReport(models.Model):
                 term = 'AND '
             if data.get('date_to'):
                 query += term + "l.date_order <= '%s' " % data.get('date_to')
-            query += "group by l.amount_total,purchase_order_line.name,purchase_order_line.price_unit,purchase_order_line.product_id,product_product.default_code,product_template.categ_id,product_category.name"
+                term = 'AND '
+            query += term + "product_category.name = 'Medicamentos' "
+            query += "group by l.amount_total,purchase_order_line.name,purchase_order_line.price_unit,purchase_order_line.product_id,product_product.default_code,product_template.categ_id,product_category.name "
+            query += "order by purchase_order_line.name"
             self._cr.execute(query)
             report_by_product = self._cr.dictfetchall()
             report_sub_lines.append(report_by_product)

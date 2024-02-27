@@ -210,11 +210,13 @@
                             <th colspan="5" style="vertical-align:middle;" class="text-center">Producto</th>
                             <th colspan="5" style="vertical-align:middle;" class="text-center">Descripción</th>
                             <th colspan="5" style="vertical-align:middle;" class="text-center">Cantidad</th>
+                            <th colspan="5" style="vertical-align:middle;" class="text-center">P.Unitario</th>
                             <th colspan="5" style="vertical-align:middle;" class="text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="report_main_line_data" t-as="main">
+                            <t t-set="total_partida" t-value="main['qty'] * main['price_unit']"/>
                             <tr style="font-weight: bold;">
                                 <td style="text-align: center;" colspan="5">
                                     <span t-esc="main['name']"/>
@@ -229,7 +231,10 @@
                                     <span t-esc="main['qty']"/>
                                 </td>
                                 <td style="text-align: center;" colspan="5">
-                                    <span t-esc="main['amount_total']"/>
+                                    <span t-esc="main['price_unit']"/>
+                                </td>
+                                <td style="text-align: center;" colspan="5">
+                                    <span t-esc="total_partida" t-options="{'widget': 'float', 'precision': 2}"/>
                                 </td>
                             </tr>
 
@@ -336,7 +341,7 @@
                                     <span t-esc="main['qty']"/>
                                 </td>
                                 <td style="text-align: center;" colspan="3">
-                                    <span t-esc="main['amount']"/>
+                                    <span t-esc="main['amount']" t-options="{'widget': 'float', 'precision': 2}"/>
                                 </td>
                             </tr>
                         </t>
@@ -426,11 +431,11 @@
                                     <span t-esc="main['sum']"/>
                                 </td>
                                 <td style="text-align: center;" colspan="8" >
-                                    <span class="text-end" t-esc="main['price_unit']"/>
+                                    <span class="text-end" t-esc="main['price_unit']" t-options="{'widget': 'float', 'precision': 2}"/>
                                 </td>
                                 <td style="text-align: center;" colspan="8" >
                                     <span class="text-end" style="text-align: right;"
-                                          t-esc="main['price_subtotal']"/>
+                                          t-esc="main['price_subtotal']" t-options="{'widget': 'float', 'precision': 2}"/>
                                 </td>
                             </tr>
                         </t>
