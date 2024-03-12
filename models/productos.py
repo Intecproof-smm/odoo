@@ -15,13 +15,14 @@ class ExtendProducts(models.Model):
 	_inherit = 'product.template'
 
 	# ----------------------------------------------------------
-	# Base de datos
+	# Definiciones previas
 	# ----------------------------------------------------------
-
 	def _branch_id_domain(self):
 		"""Creamos el filtro para las ubicaciones por el branch del usuario."""
-		# ('branch_id', '=', self.env['res.users'].search([('id', '=', self.env.user.id)]).branch_id.id)
-		# ('branch_id', '=', self.env.user.branch_id.id)
 		return [('branch_id', '=', self.env.user.branch_id.id)]
+	
+	# ----------------------------------------------------------
+	# Base de datos
+	# ----------------------------------------------------------
 	ubicacion_ids = fields.Many2many('res.ubicaciones', string='Ubicaciones', default=False, domain=_branch_id_domain)
-
+	rubro = fields.Many2one('smm_rubros', string='Rubro')
