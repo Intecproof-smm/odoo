@@ -21,7 +21,7 @@
 				<!-- Añadir el campo de ubicación del producto -->
 				<xpath expr="//field[@name='barcode']" position="before">
 					<field name="ubicacion_ids" widget="many2many_tags" string="Ubicaciones físicas" context="{'product_id': active_id}"/>
-					<field name="name"/>
+					<field name="rubro"/>
 				</xpath>
 			</field>
 		</record>
