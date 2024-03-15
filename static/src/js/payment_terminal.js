@@ -107,10 +107,11 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
                         if(data.Success){
                             order.x_solicitante = { "id" : data.Contact.id }
                             pay_line.set_receipt_info(
-                                "Recibido por: " + data.Contact.name + 
-                                "\nPaciente: " + order.partner.name + 
+                                "Paciente: " + order.partner.name + 
+                                "\nÁrea: " + order.x_area_solicitud + 
                                 "\nCama: " + order.x_cama + 
-                                "\nAmbulancia: " + order.x_no_ambulancia + 
+                                " Ambulancia: " + order.x_no_ambulancia + 
+                                "\nRecibe: " + data.Contact.name + 
                                 "\nTurno: " + order.x_turno)
                             pay_line.cardholder_name = data.Contact.name;
                             pay_line.set_payment_status("done");
