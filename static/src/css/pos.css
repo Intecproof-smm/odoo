@@ -1,0 +1,94 @@
+.pos .pos-topheader {
+      background: #DA3192;
+}
+.pos .product .price-tag {
+      color: #fff !important;
+}
+.orderline .price,
+.pos .close-pos-popup .total-orders .amount,
+.pos .close-pos-popup .payment-methods-overview,
+.receipt-screen.screen .top-content,
+.pos-receipt .orderlines + div + br + div,
+.pos-receipt-right-align,
+.pos-receipt .orderlines ~ br,
+.pos-receipt-left-padding li
+{
+      display: none;
+}
+button.input-button.number-char,
+button.input-buttonnumpad-minus,
+button.mode-button {
+      visibility: hidden;
+}
+.orderline .info-list li.info {
+      color: #00000000;
+}
+.pos .order .summary {
+      display: none;
+}
+.pos .order .orderline .product-name {
+      width: 100%;
+}
+.popup.popup-selection.datos {
+	height: 90%;
+	width: 90%;
+	overflow-y: hidden;
+	max-height: 100%;
+}
+.order-container .orderline .info-list:last-child {
+      display: none;
+}
+
+.pos.popup.popup-selection.selection.datos {
+	max-height: 100%;
+}
+
+.header-row .col:nth-child(6),
+.order-row .col:nth-child(6)
+{
+      display: none;
+}
+
+.selection.scrollable-y.touch-scrollable.datos {
+	max-height: 100%;
+}
+
+.selection.datos {
+	padding-bottom: 125px;
+	max-height: 100%;
+}
+
+.pos-receipt .after-footer .pos-payment-terminal-receipt {
+      text-align: left !important;
+      font-size: 16px !important;
+}
+
+/* .pos-receipt .pos-receipt-left-padding {
+      display: none;
+} */
+
+.etiqueta.datos {
+	font-size: small;
+}
+
+.footer.datos {
+	background-color: #F0EEEE;
+}
+
+.items-lista {
+	font-family: "Lato";
+}
+
+.container {
+	margin: auto;
+	padding: 10px;
+  }
+  
+  .izquierda {
+	width: 50%;
+	float: left;
+  }
+  
+  .derecha {
+	margin-left: 50%;
+  }

@@ -62,10 +62,9 @@
             # 'smm_intecproof/static/src/xml/SolicitanteButton.xml',
             # 'smm_intecproof/static/src/js/SolicitanteButton.js',
             'smm_intecproof/static/src/js/ExtendedProductScreen.js',
-            'smm_intecproof/static/src/css/styles.css',
+            'smm_intecproof/static/src/css/pos.css',
             "smm_intecproof/static/src/js/payment_terminal.js",
             "smm_intecproof/static/src/xml/OrderReceipt.xml",
-            "smm_intecproof/static/src/xml/ProductScreen.xml",
             "smm_intecproof/static/src/xml/PaymentScreen.xml",
             "smm_intecproof/static/src/xml/Chrome.xml"
         ],
