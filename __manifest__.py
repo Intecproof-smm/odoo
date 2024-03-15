@@ -34,6 +34,7 @@
         'views/pos_dialogbox.xml',
         "views/eventos_medicos.xml",
         "views/purchase_report.xml",
+        'views/servicios.xml',
         "data/eventos_medicos.xml",
         "report/report_historicos_template.xml",
         "report/report_conteos_firmas_template.xml",

@@ -9,8 +9,12 @@
 #
 ###################################################################################
 import datetime
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 # Añade los campos para la selección de la categoría
 
@@ -244,6 +248,9 @@ class ExtendResPartner(models.Model):
     x_integra_nombre_elaboro_historia = fields.Char(string='Nombre del médico que elaboró la historia', tracking=True)
     x_integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia', tracking=True)
 
+    # Verificar si tiene un evento abierto
+    x_eventos_abiertos = fields.Integer(compute='_compute_eventos_abiertos', store=True)
+    
     # ----------------------------------------------------------
     # Funciones e iniciación y cálculo de valores
     # ----------------------------------------------------------
@@ -253,3 +260,18 @@ class ExtendResPartner(models.Model):
             nacimiento = self.x_fecha_nacimiento
             hoy = datetime.date.today()
             self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
+
+    @api.depends('x_eventos_medicos_ids')
+    @api.onchange('x_eventos_medicos_ids')
+    def _compute_eventos_abiertos(self):
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', self.id),
+                ('estatus', '=', 'abierto')
+        ])
+        self.x_eventos_abiertos = len(eventos_abiertos)
+
+    @api.constrains('x_eventos_medicos_ids')
+    def _check_eventos_medicos_ids(self):
+        if self.x_eventos_abiertos > 1:
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+        

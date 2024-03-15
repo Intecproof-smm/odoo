@@ -36,6 +36,15 @@ class SMMEventosMedicos(models.Model):
     )
     fecha_inicio = fields.Date(string='Fecha de ingreso', default=datetime.today(), tracking=True, readonly=True)
     fecha_termino = fields.Date(string='Fecha de la alta', tracking=True, readonly=True)
+    estatus = fields.Selection(
+        [
+            ('abierto', 'Abierto'),
+            ('cerrado', 'Cerrado')
+        ],
+        string='Estado',
+        default='abierto',
+    )
+    servicios_ids = fields.One2many('smm_servicios', 'evento_id', 'Servicios', readonly=True)
     estudio_socioeconomico = fields.Boolean('Se realizó estudio socioeconómico', tracking=True)
     
     # Motivos de la alta
