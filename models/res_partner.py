@@ -261,17 +261,17 @@ class ExtendResPartner(models.Model):
             hoy = datetime.date.today()
             self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
 
-    # @api.depends('x_eventos_medicos_ids')
-    # @api.onchange('x_eventos_medicos_ids')
-    # def _compute_eventos_abiertos(self):
-    #     eventos_abiertos = self.env['smm_eventos_medicos'].search([
-    #             ('paciente_id', '=', self.id),
-    #             ('estatus', '=', 'abierto')
-    #     ])
-    #     self.x_eventos_abiertos = len(eventos_abiertos)
-    #
-    # @api.constrains('x_eventos_medicos_ids')
-    # def _check_eventos_medicos_ids(self):
-    #     if self.x_eventos_abiertos > 1:
-    #         raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+    @api.depends('x_eventos_medicos_ids')
+    @api.onchange('x_eventos_medicos_ids')
+    def _compute_eventos_abiertos(self):
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', self.id),
+                ('estatus', '=', 'abierto')
+        ])
+        self.x_eventos_abiertos = len(eventos_abiertos)
+
+    @api.constrains('x_eventos_medicos_ids')
+    def _check_eventos_medicos_ids(self):
+        if self.x_eventos_abiertos > 1:
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
         
