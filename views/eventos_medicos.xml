@@ -158,7 +158,7 @@
                             </page>
                             <!-- Cálculo de costos -->
                             <page name="calculo_costos" string="Cálculo de costos">
-
+                                <field name="pos_order_line_ids" />
                             </page>
                         </notebook>
                     </sheet>
