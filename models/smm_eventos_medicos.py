@@ -24,12 +24,11 @@ class SMMEventosMedicos(models.Model):
 
     @api.model
     def default_get(self, fields):
-        eventos_abiertos = self._context.get('eventos_abiertos')
+        res = super(SMMEventosMedicos, self).default_get(fields)
+        eventos_abiertos = self._context.get('eventos_abiertos') or 0
         _logger.info("********* eventos_abiertos : "+str(eventos_abiertos))
         if eventos_abiertos > 0:
             raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
-        else:
-            res = super(SMMEventosMedicos, self).default_get(fields)
         return res
     
     # ----------------------------------------------------------

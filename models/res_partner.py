@@ -263,10 +263,11 @@ class ExtendResPartner(models.Model):
     # ----------------------------------------------------------
     @api.onchange('x_fecha_nacimiento')
     def _calcular_edad(self):
-        if self.x_fecha_nacimiento:
-            nacimiento = self.x_fecha_nacimiento
-            hoy = datetime.date.today()
-            self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
+        self.x_edad_cumplida = 'N/A'
+        for contacto in self:
+            if contacto.x_fecha_nacimiento:
+                hoy = fields.date.today()
+                contacto.x_edad_cumplida = str(int((hoy - contacto.x_fecha_nacimiento).days / 365))
 
     @api.depends('x_eventos_medicos_ids', 'x_eventos_abiertos', 'x_eventos_medicos_ids.estatus')
     def _compute_eventos_abiertos(self):
