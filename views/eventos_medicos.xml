@@ -32,101 +32,102 @@
                         <h1>
                             <field name="evento_medico" string="Número de evento médico"/>
                         </h1>
-                        <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado" on_change="1" modifiers="{&quot;readonly&quot;: true, &quot;required&quot;: true}"/>
+                        <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado"
+                               options="{'clickable': '1'}" force_save="True"/>
                     </header>
                     <sheet>
                         <!-- Datos generales de la alta -->
-                        <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE" >
+                        <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE">
                             <group>
                                 <field name="fecha_inicio" required="1" style= "width: 100%%"/>
                             </group>
                             <group>
-                                <field name="estudio_socioeconomico" />
+                                <field name="estudio_socioeconomico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
                             </group>
                         </group>
                         <!-- Motivos de la alta -->
                         <group name="motivos_para_alta" string="MOTIVOS DE ALTA DEL PACIENTE" >
                             <group col="3" >
-                                <field name="mot_alta_1" required="1" style= "width: 400%%"/>
-                                <field name="mot_alta_2"  style= "width: 400%%"/>
-                                <field name="mot_alta_3"  style= "width: 400%%"/>
+                                <field name="mot_alta_1" required="1" style= "width: 400%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                <field name="mot_alta_2"  style= "width: 400%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                <field name="mot_alta_3"  style= "width: 400%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                             </group>
                         </group>
                         <!-- Responsable del paciente -->
-                        <group name="responsbale_paciente" col="2" string="FAMILIAR RESPONSABLE DEL PACIENTE" >
+                        <group name="responsable_paciente" col="2" string="FAMILIAR RESPONSABLE DEL PACIENTE" >
                             <group>
-                                <field name="fam_responsable" required="1" style= "width: 80%%"/>
+                                <field name="fam_responsable" required="1" style= "width: 80%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                             </group>
                             <group>
-                                <field name="fam_responsable_tel"  style= "width: 40%%"/>
+                                <field name="fam_responsable_tel"  style= "width: 40%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                             </group>
                         </group>
                         <notebook>
                             <!-- Exploración Física -->
-                            <page name="exploracion_fisica" string="Exploración Física">
+                            <page name="exploracion_fisica" string="Exploración Física" attrs="{'readonly': [('estatus', '!=', 'abierto')]}">
                                 <!-- Talla, peso, pulso -->
                                 <group name="ginecoobstétricos_5" col="4">
                                     <group>
-                                        <field name="explora_peso" style="width: 30%%"/>
+                                        <field name="explora_peso" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                     <group>
-                                        <field name="explora_talla" style="width: 30%%"/>
+                                        <field name="explora_talla" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                     <group>
-                                        <field name="explora_ta" style="width: 30%%"/>
+                                        <field name="explora_ta" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                     <group>
-                                        <field name="explora_fc_pulso" style="width: 30%%"/>
+                                        <field name="explora_fc_pulso" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                                 <!-- Temperatura -->
                                 <group name="ginecoobstétricos_4" col="3">
                                     <group>
-                                        <field name="explora_fr" style="width: 30%%"/>
+                                        <field name="explora_fr" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                     <group>
-                                        <field name="explora_temp" style="width: 30%%"/>
+                                        <field name="explora_temp" style="width: 30%%" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                                 <!-- Exploración ginecoobtétricos -->
                                 <group name="ginecoobstétricos_3">
-                                    <field name="explora_habitus"/>
-                                    <field name="explora_piel_anexos"/>
-                                    <field name="explora_cabeza_cuello"/>
-                                    <field name="explora_torax"/>
-                                    <field name="explora_abdomen"/>
-                                    <field name="explora_genitales"/>
-                                    <field name="explora_extremidades"/>
-                                    <field name="explora_sis_nervioso"/>
-                                    <field name="explora_examen_previo"/>
+                                    <field name="explora_habitus" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_piel_anexos" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_cabeza_cuello" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_torax" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_abdomen" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_genitales" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_extremidades" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_sis_nervioso" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                    <field name="explora_examen_previo" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                 </group>
                             </page>
                             <!-- Integración diagnostica -->
                             <page name="integracion_didagnostica" string="Integración Diagnostica">
                                 <group name="integraciondiagnostica" string="DIAGNOSTICOS">
                                     <group name="disgnosticos">
-                                        <field name="integra_diag_1"/>
-                                        <field name="integra_diag_2"/>
-                                        <field name="integra_diag_3"/>
-                                        <field name="integra_diag_4"/>
+                                        <field name="integra_diag_1" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_diag_2" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_diag_3" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_diag_4" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                                 <!-- Plan de estudio -->
                                 <group name="plandeestudio" string="PLAN DE ESTUDIO">
                                     <group name="planestudio">
-                                        <field name="integra_plan_estudio_1"/>
-                                        <field name="integra_plan_estudio_2"/>
-                                        <field name="integra_plan_estudio_3"/>
-                                        <field name="integra_plan_estudio_4"/>
+                                        <field name="integra_plan_estudio_1" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_estudio_2" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_estudio_3" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_estudio_4" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                                 <!-- Plan de manejo -->
                                 <group name="plandemanejo" string="PLAN DE MANEJO">
                                     <group name="plandemanejo">
-                                        <field name="integra_plan_manejo_1"/>
-                                        <field name="integra_plan_manejo_2"/>
-                                        <field name="integra_plan_manejo_3"/>
-                                        <field name="integra_plan_manejo_4"/>
+                                        <field name="integra_plan_manejo_1" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_manejo_2" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_manejo_3" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
+                                        <field name="integra_plan_manejo_4" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                                 <!-- Integración Diagnóstica -->
@@ -134,26 +135,26 @@
                                     <group name="plandemanejo"> </group>
                                 </group>
                                 <group name="integraciondiagnostica_2">
-                                    <field name="integra_pronostico"/>
+                                    <field name="integra_pronostico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                 </group>
                                 <group name="integraciondiagnostica_3" col="2">
                                     <group>
-                                        <field name="integra_nombre_elaboro_historia"/>
+                                        <field name="integra_nombre_elaboro_historia" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                     <group>
-                                        <field name="integra_nombre_avala_historia"/>
+                                        <field name="integra_nombre_avala_historia" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                     </group>
                                 </group>
                             </page>
                             <!-- Observaciones finales -->
                             <page name="observaciones_finales" string="Observa. Finales">
                                 <group name="gobservafinales">
-                                    <field name="observa_observa_comenta"/>
+                                    <field name="observa_observa_comenta" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                 </group>
                             </page>
                             <!-- Servicios / Procedimientos -->
                             <page name="servicios_procedimientos" string="Servicios/Procedimientos">
-                                <field name="servicios_ids" widget="one2many" mode="tree" readonly="0"/>
+                                <field name="servicios_ids" widget="one2many" mode="tree" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
                             </page>
                             <!-- Cálculo de costos -->
                             <page name="calculo_costos" string="Cálculo de costos">

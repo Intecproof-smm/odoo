@@ -8,7 +8,8 @@
 #    This program is NOT a free software
 #
 ###################################################################################
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 from datetime import datetime
 import logging
 
@@ -19,7 +20,18 @@ _logger = logging.getLogger(__name__)
 class SMMEventosMedicos(models.Model):
     _name = 'smm_eventos_medicos'
     _description = 'Eventos médicos del paciente'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    @api.model
+    def default_get(self, fields):
+        eventos_abiertos = self._context.get('eventos_abiertos')
+        _logger.info("********* eventos_abiertos : "+str(eventos_abiertos))
+        if eventos_abiertos > 0:
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+        else:
+            res = super(SMMEventosMedicos, self).default_get(fields)
+        return res
+    
     # ----------------------------------------------------------
     # Base de datos
     # ----------------------------------------------------------
@@ -95,4 +107,15 @@ class SMMEventosMedicos(models.Model):
 
     # Observaciones / comentarios finales
     observa_observa_comenta = fields.Text(string='Observaciones/Comentarios finales')
+    
+    @api.onchange('estatus', 'fecha_termino')
+    def _calcula_fecha_cierre(self):
+        if self.estatus == 'cerrado':
+            self.fecha_termino = fields.Date.today()
+        else:
+            self.fecha_termino = None
+
+        res = self.env['res.partner'].actualiza_eventos_abiertos
+        
+   
 

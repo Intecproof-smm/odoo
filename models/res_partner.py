@@ -16,18 +16,25 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-# Añade los campos para la selección de la categoría
-
 
 class ExtendResPartner(models.Model):
     _inherit = 'res.partner'
+
+    # ----------------------------------------------------------
+    # Modificaciones al modelo / funciones
+    # ----------------------------------------------------------
+    @api.model
+    def get_view(self, view_id=None, view_type='form', **options):
+        res = super().get_view(view_id, view_type, **options)
+        self.x_eventos_abiertos = self.verificar_eventos_abiertos()
+        return res
 
     # ----------------------------------------------------------
     # Base de datos
     # ----------------------------------------------------------
     x_paciente_medico = fields.Selection([
         ('Medico', 'Medico'), ('Paciente', 'Paciente'), ('Otro', 'Otro')
-    ], string='Categoría', defaul='Paciente', tracking=True)
+    ], string='Categoría', default='Paciente', tracking=True)
     x_medico_cedula = fields.Char(string='Cédula', tracking=True)
     x_medico_universidad = fields.Char(string='Universidad', tracking=True)
     x_medico_adscrito_residente = fields.Selection([
@@ -51,7 +58,7 @@ class ExtendResPartner(models.Model):
     ], string='Tipo de ID', default='Sin especificar', tracking=True)
     x_identificacion_oficial = fields.Char(string='Identificación', tracking=True)
     x_fecha_nacimiento = fields.Date(string='Fecha de nacimiento', tracking=True)
-    x_edad_cumplida = fields.Char(string='Edad', computer='_calcular_edad', readonly=True)
+    x_edad_cumplida = fields.Char(string='Edad', compute='_calcular_edad', readonly=True)
     x_escolaridad = fields.Selection([
         ('Primaria', 'Primaria'), ('Secundaria', 'Secundaria'), ('Tecnólogo', 'Tecnólogo'),
         ('Bachillerato', 'Bachillerato'), ('Profesional técnico', 'Profesional técnico'),
@@ -261,8 +268,7 @@ class ExtendResPartner(models.Model):
             hoy = datetime.date.today()
             self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
 
-    @api.depends('x_eventos_medicos_ids')
-    @api.onchange('x_eventos_medicos_ids')
+    @api.depends('x_eventos_medicos_ids', 'x_eventos_abiertos', 'x_eventos_medicos_ids.estatus')
     def _compute_eventos_abiertos(self):
         eventos_abiertos = self.env['smm_eventos_medicos'].search([
                 ('paciente_id', '=', self.id),
@@ -275,3 +281,18 @@ class ExtendResPartner(models.Model):
         if self.x_eventos_abiertos > 1:
             raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
         
+    def verificar_eventos_abiertos(self):
+        id_contacto = self.id
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', id_contacto),
+                ('estatus', '=', 'abierto')
+        ])
+        return len(eventos_abiertos)
+
+    def actualiza_eventos_abiertos(self):
+        id_contacto = self.id
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', id_contacto),
+                ('estatus', '=', 'abierto')
+        ])
+        self.x_eventos_abiertos = len(eventos_abiertos)

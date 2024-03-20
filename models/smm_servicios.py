@@ -32,7 +32,7 @@ class SMMServicios(models.Model):
 		comodel_name='product.template',
 		auto_join=True,
 		string='Servicio/procedimiento',
-		domain=[('detailed_type','=','service')],
+		domain=[('detailed_type', '=', 'service')],
 		readonly=False
 	)
 	cantidad = fields.Float(

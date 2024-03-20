@@ -32,7 +32,7 @@
             <field name="name">smm_servicios_tree</field>
             <field name="model">smm_servicios</field>
             <field name="arch" type="xml">
-                <tree editable="bottom">
+                <tree editable="bottom" >
                     <control>
                         <create name="agregar_servicio_control" string="Agregar línea"/>
                     </control>
