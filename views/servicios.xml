@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2024-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+
+<odoo>
+    <data>
+        <record id="smm_servicios_form" model="ir.ui.view">
+            <field name="name">smm_servicios_form</field>
+            <field name="model">smm_servicios</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="cantidad" string="Cantidad"/>
+                        <field name="fecha_servicio" string="Fecha"/>
+                        <field name="producto_id" string="Servicio/Procedimiento"
+                               options="{'no_create': True}"
+                               attrs="{'readonly': 0}"
+                               required="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="smm_servicios_tree" model="ir.ui.view">
+            <field name="name">smm_servicios_tree</field>
+            <field name="model">smm_servicios</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" >
+                    <control>
+                        <create name="agregar_servicio_control" string="Agregar línea"/>
+                    </control>
+                    <field name="cantidad" string="Cantidad"/>
+                    <field name="fecha_servicio" string="Fecha"/>
+                    <field name="producto_id" string="Servicio / Procedimiento"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="smm_intecproof.smm_servicios_action_window">
+            <field name="name">smm_servicios_action</field>
+            <field name="res_model">smm_servicios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Sin servicios / Procedimientos, Vamos a dar uno de alta
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

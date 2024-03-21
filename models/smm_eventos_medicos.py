@@ -8,7 +8,8 @@
 #    This program is NOT a free software
 #
 ###################################################################################
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 from datetime import datetime
 import logging
 
@@ -19,6 +20,26 @@ _logger = logging.getLogger(__name__)
 class SMMEventosMedicos(models.Model):
     _name = 'smm_eventos_medicos'
     _description = 'Eventos médicos del paciente'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    @api.model
+    def default_get(self, fields):
+        res = super(SMMEventosMedicos, self).default_get(fields)
+        eventos_abiertos = self._context.get('eventos_abiertos') or 0
+        _logger.info("********* eventos_abiertos : "+str(eventos_abiertos))
+        if eventos_abiertos > 0:
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+        return res
+    
+    def write(self, vals):
+        # Verificar si se cambió el estatus, entonces poblar la fecha de cierre
+        if vals.get('estatus'):
+            if vals['estatus'] == 'cerrado':
+                vals['fecha_termino'] = fields.date.today()
+            else:
+                vals['fecha_termino'] = None
+        res = super(SMMEventosMedicos, self).write(vals)
+        return res
 
     # ----------------------------------------------------------
     # Base de datos
@@ -29,6 +50,11 @@ class SMMEventosMedicos(models.Model):
         string='Paciente',
         readonly=True
     )
+    pos_order_line_ids = fields.One2many(
+        comodel_name='pos.order.line',
+        string='Ordenes',
+        compute='_traer_datos_pos_order'
+    )
     evento_medico = fields.Char(
         string='Número de evento', index=True,
         default=lambda self: self.env['ir.sequence'].next_by_code('evento_medico'),
@@ -36,6 +62,15 @@ class SMMEventosMedicos(models.Model):
     )
     fecha_inicio = fields.Date(string='Fecha de ingreso', default=datetime.today(), tracking=True, readonly=True)
     fecha_termino = fields.Date(string='Fecha de la alta', tracking=True, readonly=True)
+    estatus = fields.Selection(
+        [
+            ('abierto', 'Abierto'),
+            ('cerrado', 'Cerrado')
+        ],
+        string='Estado',
+        default='abierto',
+    )
+    servicios_ids = fields.One2many('smm_servicios', 'evento_id', 'Servicios', readonly=True)
     estudio_socioeconomico = fields.Boolean('Se realizó estudio socioeconómico', tracking=True)
     
     # Motivos de la alta
@@ -86,4 +121,34 @@ class SMMEventosMedicos(models.Model):
 
     # Observaciones / comentarios finales
     observa_observa_comenta = fields.Text(string='Observaciones/Comentarios finales')
+    
+    @api.onchange('estatus', 'fecha_termino')
+    def _calcula_fecha_cierre(self):
+        if self.estatus == 'Cerrado':
+            self.fecha_termino = fields.Date.today()
+        else:
+            self.fecha_termino = None
 
+        res = self.env['res.partner'].actualiza_eventos_abiertos
+        
+    def _traer_datos_pos_order(self):
+        for rec in self:
+            fecha_inicial = rec.fecha_inicio
+            if rec.fecha_termino:
+                fecha_final = rec.fecha_termino
+            else:
+                fecha_final = fields.date.today()
+            # Traer los datos de lad órdenes del punto de venta que estén asignadas al paciente y dentro de las fechas
+            pos_ordenes = self.env['pos.order'].search(
+                [
+                    ('id', 'in', rec.paciente_id.pos_order_ids.ids),
+                    ('date_order', '>=', fecha_inicial),
+                    ('date_order', '<=', fecha_final)
+                ]
+            )
+            # Traer los datos de las líneas de las órdenes del punto de venta que estén dentro de las fechas
+            rec.pos_order_line_ids = self.env['pos.order.line'].search(
+                [
+                    ('order_id', 'in', pos_ordenes.ids)
+                ]
+            )

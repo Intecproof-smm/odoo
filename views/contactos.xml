@@ -2,7 +2,7 @@
 <odoo>
     <data>
 		<record id="res_partner_form_extend" model="ir.ui.view">
-            <field name="name">res_partner_sexo_medico</field>
+            <field name="name">res_partner_form_extend</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
@@ -10,33 +10,46 @@
 					<field name="x_fecha_nacimiento"/>
 					<field name="x_edad_cumplida"/>
                     <field name="x_paciente_medico" string="Categoría"/>
-                    <field name="x_medico_cedula" visible="1" string="No. de Cédula" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_medico_universidad" visible="1" string="Universidad" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_medico_adscrito_residente" visible="1" widget="radio" string="Adscrito/Residente" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_contacto_sexo" visible="1" widget="radio" string="Sexo" attrs="{'invisible':[('x_paciente_medico', '!=', 'Paciente')]}"/>
+                    <field name="x_medico_cedula" string="No. de Cédula" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+                    <field name="x_medico_universidad" string="Universidad" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+                    <field name="x_medico_adscrito_residente" widget="radio" string="Adscrito/Residente" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+                    <field name="x_contacto_sexo" widget="radio" string="Sexo" attrs="{'invisible':[('x_paciente_medico', '!=', 'Paciente')]}"/>
+					<field name="x_eventos_abiertos" invisible="1" />
                 </field>
 				<!-- Crear la ceja para ver los eventos médicos -->
 				<xpath expr="//page[@name='contact_addresses']" position="after">
-					<page name="Eventos Médicos" string="Eventos Médicos" attrs="{'invisible': [('is_company','=', True)]}">
-						<field name="x_eventos_medicos_ids" mode="kanban">
+					<page name="x_eventos_medicos_ids" string="Eventos Médicos" attrs="{'invisible': [('is_company','=', True)]}">
+						<field name="x_eventos_medicos_ids" mode="kanban" context="{'eventos_abiertos': x_eventos_abiertos}">
 							<kanban>
+								<control>
+									<create name="agregar_evento_control" string="Agregar evento"/>
+								</control>
 								<field name="evento_medico"/>
+								<field name="estatus"/>
+								<field name="fecha_inicio" />
 								<templates>
 									<t t-name="kanban-box">
-										<div t-att-class="color + ' oe_kanban_color_alert' + ' oe_kanban_global_click'">
+										<t t-set="color" t-value="kanban_color(9)"/>
+										<t t-if="record.estatus.raw_value=='abierto'">
+											<t t-set="color" t-value="kanban_color(10)"/>
+										</t>
+										<div t-att-class="color + ' oe_kanban_color_alert oe_kanban_card oe_kanban_global_click'">
 											<h2>
 												<div class="oe_kanban_details">
 													<field name="evento_medico"/>
 												</div>
 											</h2>
 											<div class="oe_kanban_details">
-												<field name="fecha_inicio" string="Fecha de entrada"/>
+												<field name="fecha_inicio" />
 											</div>
 											<div class="oe_kanban_details">
-												<field name="fecha_termino" string="Fecha de alta"/>
+												<field name="fecha_termino" />
 											</div>
 											<div class="oe_kanban_details">
 												<field name="fam_responsable"/>
+											</div>
+											<div class="oe_kanban_details">
+												<field name="estatus"/>
 											</div>
 										</div>
 									</t>

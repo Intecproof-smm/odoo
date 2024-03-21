@@ -244,6 +244,9 @@ class ExtendResPartner(models.Model):
     x_integra_nombre_elaboro_historia = fields.Char(string='Nombre del médico que elaboró la historia', tracking=True)
     x_integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia', tracking=True)
 
+    # Verificar si tiene un evento abierto
+    x_eventos_abiertos = fields.Integer(compute='_compute_eventos_abiertos', store=True)
+    
     has_events = fields.Boolean(string='has events', compute='_compute_has_events')
 
 
@@ -255,15 +258,46 @@ class ExtendResPartner(models.Model):
 
     @api.onchange('x_fecha_nacimiento')
     def _calcular_edad(self):
-        if self.x_fecha_nacimiento:
-            nacimiento = self.x_fecha_nacimiento
-            hoy = datetime.date.today()
-            self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
+        self.x_edad_cumplida = 'N/A'
+        for contacto in self:
+            if contacto.x_fecha_nacimiento:
+                hoy = fields.date.today()
+                contacto.x_edad_cumplida = str(int((hoy - contacto.x_fecha_nacimiento).days / 365))
+
+    @api.depends('x_eventos_medicos_ids', 'x_eventos_abiertos', 'x_eventos_medicos_ids.estatus')
+    def _compute_eventos_abiertos(self):
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', self.id),
+                ('estatus', '=', 'abierto')
+        ])
+        self.x_eventos_abiertos = len(eventos_abiertos)
+
+    @api.constrains('x_eventos_medicos_ids')
+    def _check_eventos_medicos_ids(self):
+        if self.x_eventos_abiertos > 1:
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+        
+    def verificar_eventos_abiertos(self):
+        id_contacto = self.id
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', id_contacto),
+                ('estatus', '=', 'abierto')
+        ])
+        return len(eventos_abiertos)
+
+    def actualiza_eventos_abiertos(self):
+        id_contacto = self.id
+        eventos_abiertos = self.env['smm_eventos_medicos'].search([
+                ('paciente_id', '=', id_contacto),
+                ('estatus', '=', 'abierto')
+        ])
+        self.x_eventos_abiertos = len(eventos_abiertos)
 
     @api.depends('x_eventos_medicos_ids')
     def _compute_has_events(self):
         for partner in self:
             if partner.x_eventos_medicos_ids:
+                partner.x_eventos_medicos_ids.search([()])
                 partner.has_events = True
             else:
                 partner.has_events = False
