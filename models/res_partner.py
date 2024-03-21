@@ -244,12 +244,26 @@ class ExtendResPartner(models.Model):
     x_integra_nombre_elaboro_historia = fields.Char(string='Nombre del médico que elaboró la historia', tracking=True)
     x_integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia', tracking=True)
 
+    has_events = fields.Boolean(string='has events', compute='_compute_has_events')
+
+
+
+
     # ----------------------------------------------------------
     # Funciones e iniciación y cálculo de valores
     # ----------------------------------------------------------
+
     @api.onchange('x_fecha_nacimiento')
     def _calcular_edad(self):
         if self.x_fecha_nacimiento:
             nacimiento = self.x_fecha_nacimiento
             hoy = datetime.date.today()
             self.x_edad_cumplida = relativedelta(hoy, nacimiento).years
+
+    @api.depends('x_eventos_medicos_ids')
+    def _compute_has_events(self):
+        for partner in self:
+            if partner.x_eventos_medicos_ids:
+                partner.has_events = True
+            else:
+                partner.has_events = False
