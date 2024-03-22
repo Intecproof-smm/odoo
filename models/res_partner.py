@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 ###################################################################################
 #
-#    Copyright (c) 2023-today Juan Carlos Flores.
+#    Copyright (c) 2023-today Juan Carlos Flores / e-Maanu SAS ( Federico Manuel Echeverri Choux )
 #
-#    This file is part of SMM_intecproof Module
+#    This file is part of SMM_intecproof Module and e-Maanu SAS
 #
 #    This program is NOT a free software
 #
@@ -267,7 +267,7 @@ class ExtendResPartner(models.Model):
     @api.depends('x_eventos_medicos_ids', 'x_eventos_abiertos', 'x_eventos_medicos_ids.estatus')
     def _compute_eventos_abiertos(self):
         eventos_abiertos = self.env['smm_eventos_medicos'].search([
-                ('paciente_id', '=', self.id),
+                # ('paciente_id', '=', self.id),
                 ('estatus', '=', 'abierto')
         ])
         self.x_eventos_abiertos = len(eventos_abiertos)
