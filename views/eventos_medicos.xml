@@ -28,12 +28,16 @@
             <field name="model">smm_eventos_medicos</field>
             <field name="arch" type="xml">
                 <form>
+                    <h1>
+                        <field name="evento_medico" string="Número de evento médico"/>
+                    </h1>
                     <header>
-                        <h1>
-                            <field name="evento_medico" string="Número de evento médico"/>
-                        </h1>
+                        <button id="cerrar_evento" name="action_cerrar_evento" string="Cerrar evento" class="btn-danger"
+                                type="object" attrs="{'invisible': [('estatus', '=', 'cerrado')]}" />
+                        <button id="abrir_evento" name="action_abrir_evento" string="Abrir evento" class="btn-primary"
+                                type="object" attrs="{'invisible': [('estatus', '=', 'abierto')]}"/>
                         <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado"
-                               options="{'clickable': '1'}" force_save="True"/>
+                               attrs="{'readonly': [('estatus' ,'=', 'cerrado')]}" />
                     </header>
                     <sheet>
                         <!-- Datos generales de la alta -->
@@ -158,7 +162,15 @@
                             </page>
                             <!-- Cálculo de costos -->
                             <page name="calculo_costos" string="Cálculo de costos">
-                                <field name="pos_order_line_ids" />
+                                <field name="pos_order_line_ids" nolabel="1">
+                                    <tree>
+                                        <field name="order_id"/>
+                                        <field name="create_date"/>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="x_rubro"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
                     </sheet>

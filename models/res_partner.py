@@ -283,7 +283,7 @@ class ExtendResPartner(models.Model):
             raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
         
     def verificar_eventos_abiertos(self):
-        id_contacto = self.id
+        id_contacto = self._context.get('id_contacto') or self.id
         eventos_abiertos = self.env['smm_eventos_medicos'].search([
                 ('paciente_id', '=', id_contacto),
                 ('estatus', '=', 'abierto')
