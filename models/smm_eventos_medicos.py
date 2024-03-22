@@ -26,12 +26,20 @@ class SMMEventosMedicos(models.Model):
     def default_get(self, fields):
         res = super(SMMEventosMedicos, self).default_get(fields)
         eventos_abiertos = self._context.get('eventos_abiertos') or 0
-        _logger.info("********* eventos_abiertos : "+str(eventos_abiertos))
         if eventos_abiertos > 0:
             raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
         return res
     
     def write(self, vals):
+        # Validar que no exista más de un evento abierto si se está cambiando el estatus
+        if vals.get('estatus') == 'abierto' and self.estatus == 'cerrado':
+            # Actualizar el context de manera manual
+            eventos_abiertos = self.env.context.get('eventos_abiertos')
+            if eventos_abiertos:
+                if eventos_abiertos > 0:
+                    vals['estatus'] = self.estatus
+                    super(SMMEventosMedicos, self).write({'estatus': self.estatus})
+                    raise ValidationError(_('No se puede tener más de un evento abierto de manera simultánea'))
         # Verificar si se cambió el estatus, entonces poblar la fecha de cierre
         if vals.get('estatus'):
             if vals['estatus'] == 'cerrado':
@@ -152,3 +160,10 @@ class SMMEventosMedicos(models.Model):
                     ('order_id', 'in', pos_ordenes.ids)
                 ]
             )
+
+    def action_cerrar_evento(self):
+        self.estatus = 'cerrado'
+        
+    def action_abrir_evento(self):
+        self.estatus = 'abierto'
+    
