@@ -131,6 +131,9 @@ class SMMEventosMedicos(models.Model):
     observa_observa_comenta = fields.Text(string='Observaciones/Comentarios finales')
     
     # Resultados del estudio socioeconómico
+    res_se_folio = fields.Char(string="Folio")
+    res_se_fecha = fields.Char(string="Fecha", default=fields.date.today())
+    res_se_observaciones = fields.Text(string="Observaciones")
     res_se_ocupacion = fields.Float(string="Ocupación")
     res_se_vivienda = fields.Float(string="Vivienda")
     res_se_salud_familiar = fields.Float(string="Salud familiar")
