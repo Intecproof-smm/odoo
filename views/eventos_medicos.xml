@@ -165,6 +165,7 @@
                                 <field name="pos_order_line_ids" nolabel="1">
                                     <tree>
                                         <field name="order_id"/>
+                                        <field name="x_sesion"/>
                                         <field name="create_date"/>
                                         <field name="product_id"/>
                                         <field name="qty"/>
