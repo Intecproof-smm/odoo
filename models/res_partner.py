@@ -10,7 +10,6 @@
 ###################################################################################
 import datetime
 from odoo import models, fields, api, _
-from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
 import logging
 
@@ -103,7 +102,6 @@ class ExtendResPartner(models.Model):
         tracking=True,
         string='Familiar Responsable'
     )
-
     # antececentes heredados de familiares
     # --- To do ---
     # Se deberá de crear una tabla para los parientes con diabetes, cancer, cardiopatias, malformaciones, etc.
@@ -256,7 +254,7 @@ class ExtendResPartner(models.Model):
     x_integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia', tracking=True)
 
     # Verificar si tiene un evento abierto
-    x_eventos_abiertos = fields.Integer(compute='_compute_eventos_abiertos', store=True)
+    x_eventos_abiertos = fields.Integer(compute='_compute_eventos_abiertos')
     
     # ----------------------------------------------------------
     # Funciones e iniciación y cálculo de valores
@@ -280,7 +278,8 @@ class ExtendResPartner(models.Model):
     @api.constrains('x_eventos_medicos_ids')
     def _check_eventos_medicos_ids(self):
         if self.x_eventos_abiertos > 1:
-            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, cierra el evento anterior para continuar'))
+            raise ValidationError(_('Existe un evento abierto y no se puede tener más de un evento abierto, '
+                                    'cierra el evento anterior para continuar'))
         
     def verificar_eventos_abiertos(self):
         id_contacto = self._context.get('id_contacto') or self.id
