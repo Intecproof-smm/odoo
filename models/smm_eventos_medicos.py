@@ -130,6 +130,29 @@ class SMMEventosMedicos(models.Model):
     # Observaciones / comentarios finales
     observa_observa_comenta = fields.Text(string='Observaciones/Comentarios finales')
     
+    # Resultados del estudio socioeconómico
+    res_se_ocupacion = fields.Float(string="Ocupación")
+    res_se_vivienda = fields.Float(string="Vivienda")
+    res_se_salud_familiar = fields.Float(string="Salud familiar")
+    res_se_ingreso_familiar = fields.Float(string="Ingreso familiar")
+    res_se_egreso_familiar = fields.Float(string="Egreso familiar")
+    res_se_sumatoria_resultado = fields.Float(
+        string="Sumatoria",
+        readonly=True,
+        store=False,
+        compute='_calcular_resultado'
+    )
+
+    @api.onchange(
+        'res_se_ocupacion', 'res_se_vivienda', 'res_se_salud_familiar',
+        'res_se_ingreso_familiar', 'res_se_egreso_familiar'
+    )
+    def _calcular_resultado(self):
+        for res in self:
+            res.res_se_sumatoria_resultado = \
+                res.res_se_ocupacion + res.res_se_vivienda + res.res_se_salud_familiar + res.res_se_ingreso_familiar \
+                + res.res_se_egreso_familiar
+
     @api.onchange('estatus', 'fecha_termino')
     def _calcula_fecha_cierre(self):
         if self.estatus == 'Cerrado':

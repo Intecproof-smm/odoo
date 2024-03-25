@@ -44,6 +44,8 @@
                         <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE">
                             <group>
                                 <field name="fecha_inicio" required="1" style= "width: 100%%"/>
+                                <field name="fecha_termino" style="width:100%%"
+                                       attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
                             </group>
                             <group>
                                 <field name="estudio_socioeconomico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
@@ -172,6 +174,18 @@
                                         <field name="x_rubro"/>
                                     </tree>
                                 </field>
+                            </page>
+                            <!-- Resultado del estudio socio-económico -->
+                            <page name="resultado_estudio_se" string="Estudio Socioeconómico"
+                                  attrs="{'invisible':[('estudio_socioeconomico','=',False)]}">
+                                <group col="12" >
+                                    <field name="res_se_ocupacion" />
+                                    <field name="res_se_vivienda" />
+                                    <field name="res_se_salud_familiar" />
+                                    <field name="res_se_ingreso_familiar" />
+                                    <field name="res_se_egreso_familiar" />
+                                    <field name="res_se_sumatoria_resultado" />
+                                </group>
                             </page>
                         </notebook>
                     </sheet>
