@@ -296,3 +296,4 @@ class ExtendResPartner(models.Model):
                 ('estatus', '=', 'abierto')
         ])
         self.x_eventos_abiertos = len(eventos_abiertos)
+
