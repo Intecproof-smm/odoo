@@ -68,8 +68,8 @@ class SMMEventosMedicos(models.Model):
         default=lambda self: self.env['ir.sequence'].next_by_code('evento_medico'),
         required=True, copy=False, readonly=True
     )
-    fecha_inicio = fields.Date(string='Fecha de ingreso', default=datetime.today(), tracking=True, readonly=True)
-    fecha_termino = fields.Date(string='Fecha de la alta', tracking=True, readonly=True)
+    fecha_inicio = fields.Date(string='Fecha de ingreso', default=datetime.today(), tracking=True)
+    fecha_termino = fields.Date(string='Fecha de salida/alta', tracking=True)
     estatus = fields.Selection(
         [
             ('abierto', 'Abierto'),
@@ -156,14 +156,12 @@ class SMMEventosMedicos(models.Model):
                 res.res_se_ocupacion + res.res_se_vivienda + res.res_se_salud_familiar + res.res_se_ingreso_familiar \
                 + res.res_se_egreso_familiar
 
-    @api.onchange('estatus', 'fecha_termino')
+    @api.onchange('estatus')
     def _calcula_fecha_cierre(self):
         if self.estatus == 'Cerrado':
             self.fecha_termino = fields.Date.today()
         else:
             self.fecha_termino = None
-
-        res = self.env['res.partner'].actualiza_eventos_abiertos
         
     def _traer_datos_pos_order(self):
         for rec in self:

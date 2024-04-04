@@ -20,3 +20,5 @@ from . import pos_payment_method, pos_vevent_message
 from . import smm_rubros
 from . import smm_servicios
 from . import pos_order_line
+from . import smm_presupuestos
+from . import smm_presupuestos_line
