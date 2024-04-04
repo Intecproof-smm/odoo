@@ -110,24 +110,10 @@ class ConsultaPresupuestos(models.TransientModel):
 			('location_id', '=', ubicacion.id),
 			('location_dest_id', '=', self.ubicacion_id.id)
 		]
-		# agrupador = 'product_id'
-		# campos = ['product_id']
-		# orden = 'product_id'
+		# Traer el contexto para actualizar los agrupadores
 		ctx = dict(self.env.context or {})
 		ctx['inventory_report_mode'] = True
 		ctx['group_by'] = ['product_id', 'date:month']
-		_logger.info("******** Los datos del contexto son : " + str(ctx))
-		_logger.info("******** Traeré los datos con el siguiente dominio : " + str(filtro))
-		# Ejecutar la consulta en stock.move.line con el dominio que necesito
-		# consulta = self.env['stock.move.line'].search(domain)
-		# consulta = self.env['stock.move.line'].read_group(
-		#       domain=filtro, fields=campos, groupby=agrupador, orderby=orden, lazy=True
-		# )
-		# consulta = self.env['stock.move.line'].read_group(
-		#   	domain=filtro, fields=['product_id', 'date'], groupby=['product_id', 'date:month'],
-		#       orderby='product_id ASC', lazy=False
-		# )
-
 		# Obtener el identificador de la vista de lista que necesito para mostrar el resultado
 		tree_view_id = self.env.ref('stock.view_move_line_tree').id
 		# Mandar llamar la list del modelo stock_move_line ya existente
