@@ -43,6 +43,7 @@
         "views/pos_payment_method.xml",
         "wizards/consulta_presupuestos.xml",
         "views/presupuestos.xml",
+        "views/stock_move_line.xml",
     ],
     'assets': {
         'web.assets_backend': [

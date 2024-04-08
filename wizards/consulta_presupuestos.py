@@ -36,6 +36,53 @@ class ConsultaPresupuestos(models.TransientModel):
 	_name = 'smm_consulta_presupuestos'
 	_description = 'Consulta presupuestos Wizard'
 	
+	# ----------------------------------------------------------
+	# Definiciones de funciones
+	# ----------------------------------------------------------
+	@api.model
+	def _generar_presupuesto(self):
+		# Traer el contexto para obtener los valores de los datos
+		ctx = dict(self.env.context or {})
+		ubicacion = ctx['location_dest_id']
+		categoria = ctx['categoria_id']
+		fecha_inicial = datetime.strptime(ctx['fecha_inicial'], "%Y-%m-%d")
+		mes_inicial = fecha_inicial.month
+		ano_inicial = fecha_inicial.year
+		fecha_final = datetime.strptime(ctx['fecha_final'], "%Y-%m-%d")
+		mes_final = fecha_final.month
+		ano_final = fecha_final.year
+		# Crear el filtro para traer las partidas
+		filtro = [
+			('date', '>=', fecha_inicial),
+			('date', '<=', fecha_final),
+			('product_category_name', '=', ctx['nombre_categoria']),
+			('state', '=', 'done'),
+			('location_id', '=', ctx['location_id']),
+			('location_dest_id', '=', ubicacion)
+		]
+		# Crear el registro de Presupuestos
+		nuevo_presupuesto = self.env['smm_presupuestos'].create({
+			'name': "Se calculará automáticamente",
+			'ubicacion_id': ubicacion,
+			'categoria': categoria,
+			'mes_inicial': str(mes_inicial),
+			'ano_inicial': str(ano_inicial),
+			'mes_final': str(mes_final),
+			'ano_final': str(ano_final),
+		})
+		# Traer las lineas de Stock_move que pasen el filtro
+		partidas = self.env['stock.move.line'].search(filtro)
+		# Crear cada una de las partidas que pasaron el filtro
+		for p in partidas:
+			self.env['smm_presupuestos_line'].create({
+				'presupuesto_id': nuevo_presupuesto.id,
+				'product_id': str(p.product_id.id),
+				'cantidad': p.qty_done,
+			})
+
+	# ----------------------------------------------------------
+	# Campos de la base de datos
+	# ----------------------------------------------------------
 	ubicacion_id = fields.Many2one(
 		comodel_name='stock.location',
 		string='Ubicación',
@@ -96,7 +143,6 @@ class ConsultaPresupuestos(models.TransientModel):
 				days=-1)
 	
 	def traer_datos_consulta(self):
-		_logger.info("******** Entré a traer_datos_consulta ********")
 		# Obtener el id de la ubicación SMM-G/Existencias
 		ubicacion = self.env['stock.location'].search([('complete_name', '=', 'SMM-G/Existencias')], limit=1)
 		# Cambiar las fechas de Date a Datetime para poder hacer el filtro de manera completa
@@ -114,8 +160,17 @@ class ConsultaPresupuestos(models.TransientModel):
 		ctx = dict(self.env.context or {})
 		ctx['inventory_report_mode'] = True
 		ctx['group_by'] = ['product_id', 'date:month']
+		ctx['fecha_inicial'] = self.fecha_inicial
+		ctx['fecha_final'] = self.fecha_final
+		ctx['consulta_presupuesto'] = True
+		ctx['categoria_id'] = self.categoria.id
+		ctx['nombre_categoria'] = self.categoria.complete_name
+		ctx['location_dest_id'] = self.ubicacion_id.id
+		ctx['location_id'] = ubicacion.id
+
+		_logger.info("********** Contenido del contexto : " + str(ctx))
 		# Obtener el identificador de la vista de lista que necesito para mostrar el resultado
-		tree_view_id = self.env.ref('stock.view_move_line_tree').id
+		tree_view_id = self.env.ref('smm_intecproof.view_move_line_tree_presupuestos').id
 		# Mandar llamar la list del modelo stock_move_line ya existente
 		return {
 			'type': 'ir.actions.act_window',
@@ -128,4 +183,6 @@ class ConsultaPresupuestos(models.TransientModel):
 			'res_model': 'stock.move.line',
 			'domain': filtro,
 		}
+	
+		
 	

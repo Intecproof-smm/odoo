@@ -43,7 +43,6 @@ class Presupuestos(models.Model):
 	name = fields.Char(
 		string='Nombre del presupuesto',
 		readonly=True,
-		required=True,
 		compute='_compute_nombre_presupuesto',
 		tracking=True,
 		store=True,

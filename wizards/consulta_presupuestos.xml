@@ -54,7 +54,7 @@
         <!-- Crear la acción del wizard para ser llamado desde el menú -->
         <record id="smm_consulta_presupuestos_action" model="ir.actions.act_window" >
             <field name="name">Consulta Presupuesto</field>
-            <field name="type">ir.actions.act_window</field>
+<!--            <field name="type">ir.actions.act_window</field>-->
             <field name="res_model">smm_consulta_presupuestos</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="crear_consulta_form"/>
