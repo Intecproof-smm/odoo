@@ -40,7 +40,10 @@
         "report/report_conteos_firmas_template.xml",
         "report/purchase_order_report.xml",
         "security/ir.model.access.csv",
-        "views/pos_payment_method.xml"
+        "views/pos_payment_method.xml",
+        "wizards/consulta_presupuestos.xml",
+        "views/presupuestos.xml",
+        "views/stock_move_line.xml",
     ],
     'assets': {
         'web.assets_backend': [
