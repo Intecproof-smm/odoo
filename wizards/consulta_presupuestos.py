@@ -60,6 +60,9 @@ class ConsultaPresupuestos(models.TransientModel):
 			('location_id', '=', ctx['location_id']),
 			('location_dest_id', '=', ubicacion)
 		]
+		campos = ['product_id', 'date', 'qty_done:sum', 'product_id.id']
+		agrupador = ['product_id']
+		orden = 'product_id'
 		# Crear el registro de Presupuestos
 		nuevo_presupuesto = self.env['smm_presupuestos'].create({
 			'name': "Se calculará automáticamente",
@@ -71,13 +74,15 @@ class ConsultaPresupuestos(models.TransientModel):
 			'ano_final': str(ano_final),
 		})
 		# Traer las lineas de Stock_move que pasen el filtro
-		partidas = self.env['stock.move.line'].search(filtro)
+		partidas = self.env['stock.move.line'].read_group(
+			domain=filtro, fields=campos, groupby=agrupador, orderby=orden, offset=0, limit=None, lazy=False
+		)
 		# Crear cada una de las partidas que pasaron el filtro
 		for p in partidas:
 			self.env['smm_presupuestos_line'].create({
 				'presupuesto_id': nuevo_presupuesto.id,
-				'product_id': str(p.product_id.id),
-				'cantidad': p.qty_done,
+				'product_id': str(p['product_id'][0]),
+				'cantidad': p['qty_done'],
 			})
 
 	# ----------------------------------------------------------
@@ -133,7 +138,10 @@ class ConsultaPresupuestos(models.TransientModel):
 	
 	@api.depends('mes_inicial', 'ano_inicial')
 	def _compute_fecha_inicial(self):
-		self.fecha_inicial = datetime.strptime("1/" + str(self.mes_inicial) + "/" + str(self.ano_inicial), "%d/%m/%Y")
+		_logger.info("************* Valores de mes_inicial %s y año_inicial %s", str(self.mes_inicial), str(self.ano_inicial))
+		if self.mes_inicial and self.ano_inicial:
+			for rec in self:
+				rec.fecha_inicial = datetime.strptime("1/" + str(rec.mes_inicial) + "/" + str(rec.ano_inicial), "%d/%m/%Y")
 	
 	@api.depends('mes_final', 'ano_final')
 	def _compute_fecha_final(self):
@@ -184,5 +192,23 @@ class ConsultaPresupuestos(models.TransientModel):
 			'domain': filtro,
 		}
 	
-		
-	
+	def _traer_cantidades_consumidas(self, product_id):
+		ubicacion = self.env['stock.location'].search([('complete_name', '=', 'SMM-G/Existencias')], limit=1)
+		filtro = [
+			('date', '>=', self.fecha_inicial),
+			('date', '<=', self.fecha_final),
+			('product_category_name', '=', self.categoria.complete_name),
+			('product_id', '=', product_id),
+			('state', '=', 'done'),
+			('location_id', '=', ubicacion.id),
+			('location_dest_id', '=', self.ubicacion_id.id)
+		]
+		campos = ['product_id', 'date', 'qty_done:sum', 'product_id.id']
+		agrupador = ['product_id']
+		orden = 'product_id'
+		partidas = self.env['stock.move.line'].read_group(
+			domain=filtro, fields=campos, groupby=agrupador, orderby=orden, offset=0, limit=None, lazy=False
+		)
+		# Traer los datos de la partida para regresar el consumo
+		for p in partidas:
+			return p['qty_done']
