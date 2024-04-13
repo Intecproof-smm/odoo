@@ -58,10 +58,16 @@ class SMMEventosMedicos(models.Model):
         string='Paciente',
         readonly=True
     )
-    pos_order_line_ids = fields.One2many(
-        comodel_name='pos.order.line',
+    pos_order_ids = fields.One2many(
+        comodel_name='pos.order',
         string='Ordenes',
         compute='_traer_datos_pos_order'
+    )
+    pos_order_line_ids = fields.One2many(related='pos_order_ids.lines', readonly=True, store=False)
+    stock_move_line_ids = fields.One2many(
+        comodel_name='stock.move.line',
+        string='Movimientos',
+        compute='_traer_datos_stock_move_line'
     )
     evento_medico = fields.Char(
         string='Número de evento', index=True,
@@ -178,10 +184,20 @@ class SMMEventosMedicos(models.Model):
                     ('date_order', '<=', fecha_final)
                 ]
             )
-            # Traer los datos de las líneas de las órdenes del punto de venta que estén dentro de las fechas
-            rec.pos_order_line_ids = self.env['pos.order.line'].search(
+            rec.pos_order_ids = pos_ordenes
+
+    def _traer_datos_stock_move_line(self):
+        for rec in self:
+            stock_picking = self.env['stock.picking'].search(
                 [
-                    ('order_id', 'in', pos_ordenes.ids)
+                    ('pos_order_id', 'in', rec.pos_order_ids.ids)
+                ]
+            )
+            # Traer las partidas de stock.move.line
+            rec.stock_move_line_ids = self.env['stock.move.line'].search(
+                [
+                    ('picking_id', 'in', stock_picking.ids),
+                    ('qty_done', '>', 0)
                 ]
             )
 
@@ -190,4 +206,9 @@ class SMMEventosMedicos(models.Model):
         
     def action_abrir_evento(self):
         self.estatus = 'abierto'
+        
+    def action_generar_reporte_costos(self):
+        _logger.info("************ Generando el reporter de consumos del paciente ")
+        x = self
+        
     
