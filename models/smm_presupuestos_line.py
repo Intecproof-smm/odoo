@@ -84,6 +84,10 @@ class PresupuestosDetalle(models.Model):
 				# Calcular el lapso de tiempo que hay entre las 2 fechas en meses y años
 				lapso_meses = (int(rec.presupuesto_id.mes_final) - int(rec.presupuesto_id.mes_inicial)) + 1
 				lapso_anos = rec.presupuesto_id.ano_final - rec.presupuesto_id.ano_inicial
+				# Validar que los lapsos no sean negativos.
+				if lapso_meses < 0 or lapso_anos < 0:
+					rec.cantidad_consumida_periodo_anterior = 0
+					return
 				# Calcular la fecha inicial del periodo anterior
 				if int(rec.presupuesto_id.mes_inicial) <= lapso_meses:
 					lm = lapso_meses - (int(rec.presupuesto_id.mes_inicial) - 1)

@@ -10,3 +10,5 @@
 ###################################################################################
 
 from . import purchase_order_report
+from . import consumos_paciente_report
+

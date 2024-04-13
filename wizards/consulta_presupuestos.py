@@ -138,7 +138,6 @@ class ConsultaPresupuestos(models.TransientModel):
 	
 	@api.depends('mes_inicial', 'ano_inicial')
 	def _compute_fecha_inicial(self):
-		_logger.info("************* Valores de mes_inicial %s y año_inicial %s", str(self.mes_inicial), str(self.ano_inicial))
 		if self.mes_inicial and self.ano_inicial:
 			for rec in self:
 				rec.fecha_inicial = datetime.strptime("1/" + str(rec.mes_inicial) + "/" + str(rec.ano_inicial), "%d/%m/%Y")
@@ -176,7 +175,6 @@ class ConsultaPresupuestos(models.TransientModel):
 		ctx['location_dest_id'] = self.ubicacion_id.id
 		ctx['location_id'] = ubicacion.id
 
-		_logger.info("********** Contenido del contexto : " + str(ctx))
 		# Obtener el identificador de la vista de lista que necesito para mostrar el resultado
 		tree_view_id = self.env.ref('smm_intecproof.view_move_line_tree_presupuestos').id
 		# Mandar llamar la list del modelo stock_move_line ya existente

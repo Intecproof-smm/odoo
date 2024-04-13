@@ -12,13 +12,11 @@
 <odoo>
     <data>
         <!--Creamos el Wizard y llamamos el botón con los filtros necesarios-->
-        <!--How To Call Wizard From Menu Item Odoo-->
-        <!--  https://www.youtube.com/watch?v=qpkVKy9JzEw&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=37 -->
          <record id="crear_consulta_form" model="ir.ui.view">
              <field name="name">crear.consulta.form</field>
              <field name="model">smm_consulta_presupuestos</field>
              <field name="arch" type="xml">
-                <form string="Presupuestos">
+                <form string="Presupuestos" create="0">
                     <sheet>
                         <div class="oe_title">
                             <h1>
