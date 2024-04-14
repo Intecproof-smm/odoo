@@ -64,7 +64,8 @@
 				</xpath>
 				<!-- Crear la ceja para ver su expediente médico -->
 				<xpath expr="//page[@name='contact_addresses']" position="after">
-					<page name="Expediente Médico" string="Expediente Médico" attrs="{'invisible': [('x_paciente_medico','!=', 'Paciente')]}">
+					<!-- <page name="Expediente Médico" string="Expediente Médico" attrs="{'invisible': [('x_paciente_medico','!=', 'Paciente')]}"> -->
+					<page name="Expediente Médico" string="Expediente Médico" attrs="{'invisible': True}">
 						<group name="datos_generales_adicionales">
 							<group col="2" string="IDENTIFICACIÓN" >
 								<field name="x_identificacion_oficial_tipo"/>

@@ -70,7 +70,7 @@
                         </group>
                         <notebook>
                             <!-- Exploración Física -->
-                            <page name="exploracion_fisica" string="Exploración Física" attrs="{'readonly': [('estatus', '!=', 'abierto')]}">
+                            <page name="exploracion_fisica" string="Exploración Física" attrs="{'invisible' : True, 'readonly': [('estatus', '!=', 'abierto')]}">
                                 <!-- Talla, peso, pulso -->
                                 <group name="ginecoobstétricos_5" col="4">
                                     <group>
@@ -109,7 +109,7 @@
                                 </group>
                             </page>
                             <!-- Integración diagnostica -->
-                            <page name="integracion_didagnostica" string="Integración Diagnostica">
+                            <page name="integracion_didagnostica" string="Integración Diagnostica" attrs="{'invisible' : True}">
                                 <group name="integraciondiagnostica" string="DIAGNOSTICOS">
                                     <group name="disgnosticos">
                                         <field name="integra_diag_1" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
@@ -153,7 +153,7 @@
                                 </group>
                             </page>
                             <!-- Observaciones finales -->
-                            <page name="observaciones_finales" string="Observa. Finales">
+                            <page name="observaciones_finales" string="Observa. Finales" attrs="{'invisible' : True}">
                                 <group name="gobservafinales">
                                     <field name="observa_observa_comenta" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                                 </group>
