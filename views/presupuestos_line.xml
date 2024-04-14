@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2024-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+
+<odoo>
+    <data>
+        <!-- Crear la lista para los presupuestos -->
+        <record id="presupuestos_line_tree_view" model="ir.ui.view">
+            <field name="name">presupuestos.tree.view</field>
+            <field name="model">smm_presupuestos_line</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="product_id" context="{'producto_id': product_id}"/>
+                    <field name="cantidad"/>
+                    <field name="cantidad_consumida_periodo"/>
+                    <field name="cantidad_consumida_periodo_anterior"/>
+                    <field name="cantidad_consumida_ano_anterior"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

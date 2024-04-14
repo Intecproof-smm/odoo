@@ -103,11 +103,15 @@ class Presupuestos(models.Model):
 	
 	@api.depends('mes_inicial', 'ano_inicial')
 	def _compute_fecha_inicial(self):
-		self.fecha_inicial = datetime.strptime("1/" + str(self.mes_inicial) + "/" + str(self.ano_inicial), "%d/%m/%Y")
+		if self.mes_inicial and self.ano_inicial:
+			for rec in self:
+				rec.fecha_inicial = datetime.strptime("1/" + str(rec.mes_inicial) + "/" + str(rec.ano_inicial), "%d/%m/%Y")
 	
 	@api.depends('mes_final', 'ano_final')
 	def _compute_fecha_final(self):
-		fecha_temporal = datetime.strptime("1/" + str(self.mes_final) + "/" + str(self.ano_final), "%d/%m/%Y")
-		self.fecha_final = \
-			fecha_temporal + dateutil.relativedelta.relativedelta(months=1) + dateutil.relativedelta.relativedelta(days=-1)
+		if self.mes_final and self.ano_final:
+			for rec in self:
+				fecha_temporal = datetime.strptime("1/" + str(rec.mes_final) + "/" + str(rec.ano_final), "%d/%m/%Y")
+				self.fecha_final = \
+					fecha_temporal + dateutil.relativedelta.relativedelta(months=1) + dateutil.relativedelta.relativedelta(days=-1)
 

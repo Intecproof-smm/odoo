@@ -36,16 +36,20 @@
                                 type="object" attrs="{'invisible': [('estatus', '=', 'cerrado')]}" />
                         <button id="abrir_evento" name="action_abrir_evento" string="Abrir evento" class="btn-primary"
                                 type="object" attrs="{'invisible': [('estatus', '=', 'abierto')]}"/>
+                        <button id="generar_reporte_costos" name="action_generar_reporte_costos"
+                                string="Generar reporte de costos" type="object"
+                                class="print btn-primary o_mail_send"/>
                         <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado"
                                attrs="{'readonly': [('estatus' ,'=', 'cerrado')]}" />
                     </header>
                     <sheet>
                         <!-- Datos generales de la alta -->
                         <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE">
+                            <field name="fecha_inicio" required="1"/>
+                            <field name="fecha_termino" attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
                             <group>
-                                <field name="fecha_inicio" required="1" style= "width: 100%%"/>
-                                <field name="fecha_termino" style="width:100%%"
-                                       attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
+                                <field name="fecha_inicio" required="1"/>
+                                <field name="fecha_termino" attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
                             </group>
                             <group>
                                 <field name="estudio_socioeconomico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
@@ -160,18 +164,20 @@
                             </page>
                             <!-- Servicios / Procedimientos -->
                             <page name="servicios_procedimientos" string="Servicios/Procedimientos">
-                                <field name="servicios_ids" widget="one2many" mode="tree" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
+                                <field name="servicios_ids" widget="one2many" mode="tree" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                             </page>
                             <!-- Cálculo de costos -->
                             <page name="calculo_costos" string="Cálculo de costos">
-                                <field name="pos_order_line_ids" nolabel="1">
+                                <field name="stock_move_line_ids" widget="one2many" mode="tree" attrs="{'readonly': 1}">
                                     <tree>
-                                        <field name="order_id"/>
-                                        <field name="x_sesion"/>
-                                        <field name="create_date"/>
+                                        <field name="location_id" string="Ubicación"/>
+                                        <field name="reference"/>
+                                        <field name="date" widget="date" string="Fecha"/>
                                         <field name="product_id"/>
-                                        <field name="qty"/>
                                         <field name="x_rubro"/>
+                                        <field name="qty_done" string="Cantidad"/>
+                                        <field name="x_price_unit" widget="monetary" string="P.U."/>
+                                        <field name="x_subtotal" sum="SubTotal" widget="monetary" string="Total"/>
                                     </tree>
                                 </field>
                             </page>
