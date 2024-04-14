@@ -16,7 +16,7 @@
     "license": "OPL-1",
     "summary": "Agrega funcionalidades extras al módulo de Inventarios para el proyecto SMMG DOS",
     "description": """Este módulo agrega diferentes funcionalidades a Odoo para cumplir con el proyecto de SMMG""",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "sequence": 1,
     "depends": ["base", "stock", "pos_sale", "sale", "contacts", 'point_of_sale', "smm_odoo"],
     "application": True,
@@ -44,6 +44,8 @@
         "wizards/consulta_presupuestos.xml",
         "views/presupuestos.xml",
         "views/stock_move_line.xml",
+        "views/patient_sync_view.xml",
+        "views/patient_sync_menu.xml",
     ],
     'assets': {
         'web.assets_backend': [

@@ -252,6 +252,17 @@ class ExtendResPartner(models.Model):
     x_integra_pronostico = fields.Text(string='Pronóstico', tracking=True)
     x_integra_nombre_elaboro_historia = fields.Char(string='Nombre del médico que elaboró la historia', tracking=True)
     x_integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia', tracking=True)
+    
+    # Campos de SIREXE
+    curp = fields.Char(string='CURP', tracking=True)
+    url_expediente = fields.Char(string='URL del expediente médico', tracking=True)
+    matricula_expediente = fields.Char(string='Matricula del expediente', tracking=True)
+    link_expediente = fields.Char('Link expediente', compute='_compute_link_expediente')
+
+    @api.depends('url_expediente', 'matricula_expediente')
+    def _compute_link_expediente(self):
+        for record in self:
+            record.link_expediente = f'<a href="{record.url_expediente}" target="_blank">{record.matricula_expediente}</a>'
 
     # Verificar si tiene un evento abierto
     x_eventos_abiertos = fields.Integer(compute='_compute_eventos_abiertos')
