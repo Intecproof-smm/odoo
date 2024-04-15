@@ -86,55 +86,9 @@ class SMMEventosMedicos(models.Model):
     )
     servicios_ids = fields.One2many('smm_servicios', 'evento_id', 'Servicios', readonly=True)
     estudio_socioeconomico = fields.Boolean('Se realizó estudio socioeconómico', tracking=True)
-    
-    # Motivos de la alta
-    mot_alta_1 = fields.Char(string='Motivo de alta 1')
-    mot_alta_2 = fields.Char(string='Motivo de alta 2')
-    mot_alta_3 = fields.Char(string='Motivo de alta 3')
-    fam_responsable = fields.Many2one(
-        comodel_name='res.partner',
-        auto_join=True,
-        tracking=True,
-        string='Familiar Responsable'
-    )
-    fam_responsable_tel = fields.Char(string='Teléfono del familiar responsable')
-    
-    # Exploración
-    explora_peso = fields.Integer(string='Peso (kgm)')
-    explora_talla = fields.Integer(string='Talla (mts)')
-    explora_ta = fields.Char(string='TA (mmHg)')
-    explora_fc_pulso = fields.Integer(string='FC/Pulso (x min)')
-    explora_fr = fields.Char(string='FR (x min)')
-    explora_temp = fields.Integer(string='°C')
-    explora_habitus = fields.Char(string='Habitus exterior')
-    explora_piel_anexos = fields.Char(string='Piel y anexos')
-    explora_cabeza_cuello = fields.Char(string='Cabeza y cuello')
-    explora_torax = fields.Char(string='Tórax')
-    explora_abdomen = fields.Char(string='Abdomen')
-    explora_genitales = fields.Char(string='Genitales')
-    explora_extremidades = fields.Char(string='Extremidades')
-    explora_sis_nervioso = fields.Char(string='Sistema nervioso')
-    explora_examen_previo = fields.Text(string='Exámenes de laboratorio previos')
-    
-    # Integración diagnostica
-    integra_diag_1 = fields.Char(string='Diagnostico 1')
-    integra_diag_2 = fields.Char(string='Diagnostico 2')
-    integra_diag_3 = fields.Char(string='Diagnostico 3')
-    integra_diag_4 = fields.Char(string='Diagnostico 4')
-    integra_plan_estudio_1 = fields.Char(string='Plan de estudio 1')
-    integra_plan_estudio_2 = fields.Char(string='Plan de estudio 2')
-    integra_plan_estudio_3 = fields.Char(string='Plan de estudio 3')
-    integra_plan_estudio_4 = fields.Char(string='Plan de estudio 4')
-    integra_plan_manejo_1 = fields.Char(string='Plan de manejo 1')
-    integra_plan_manejo_2 = fields.Char(string='Plan de manejo 2')
-    integra_plan_manejo_3 = fields.Char(string='Plan de manejo 3')
-    integra_plan_manejo_4 = fields.Char(string='Plan de manejo 4')
-    integra_pronostico = fields.Text(string='Pronóstico')
-    integra_nombre_elaboro_historia = fields.Char(string='Nombre del médico que elaboró la historia')
-    integra_nombre_avala_historia = fields.Char(string='Nombre del médico que avala la historia')
-
+      
     # Observaciones / comentarios finales
-    observa_observa_comenta = fields.Text(string='Observaciones/Comentarios finales')
+    observa_observa_comenta = fields.Text(string='Observaciones')
     
     # Resultados del estudio socioeconómico
     res_se_folio = fields.Char(string="Folio")
