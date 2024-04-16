@@ -6,18 +6,22 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
-                <field name="category_id" position="replace">
+                	<field name="category_id" position="replace">
 					<field name="x_fecha_nacimiento"/>
 					<field name="x_edad_cumplida"/>
-                    <field name="x_paciente_medico" string="Categoría"/>
-                    <field name="x_medico_cedula" string="No. de Cédula" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_medico_universidad" string="Universidad" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_medico_adscrito_residente" widget="radio" string="Adscrito/Residente" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
-                    <field name="x_contacto_sexo" widget="radio" string="Sexo" attrs="{'invisible':[('x_paciente_medico', '!=', 'Paciente')]}"/>
-					<field name="x_eventos_abiertos" invisible="1" />
-                </field>
+			<field name="x_paciente_medico" string="Categoría"/>
+			<field name="curp"/>
+			<!-- <field name="matricula_expediente" readonly="1"/> -->
+			<field name="link_expediente" string="Expediente" widget="html"/>
+			<!-- <field name="url_expediente" widget="url" text_field="matricula_expediente" text="" string="Expediente" attrs="{'text' : 'matricula_expediente'}"/> -->
+			<field name="x_medico_cedula" string="No. de Cédula" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+			<field name="x_medico_universidad" string="Universidad" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+			<field name="x_medico_adscrito_residente" widget="radio" string="Adscrito/Residente" attrs="{'invisible':[('x_paciente_medico', '!=', 'Medico')]}"/>
+			<field name="x_contacto_sexo" widget="radio" string="Sexo" attrs="{'invisible':[('x_paciente_medico', '!=', 'Paciente')]}"/>
+			<field name="x_eventos_abiertos" invisible="1" />
+		</field>
 				<!-- Crear la ceja para ver los eventos médicos -->
-				<xpath expr="//page[@name='contact_addresses']" position="after">
+				<xpath expr="//page[@name='contact_addresses']" position="before">
 					<page name="x_eventos_medicos_ids" string="Eventos Médicos" attrs="{'invisible': [('is_company','=', True)]}">
 						<field name="x_eventos_medicos_ids" mode="kanban" context="{'eventos_abiertos': x_eventos_abiertos}">
 							<kanban>
@@ -46,9 +50,6 @@
 												<field name="fecha_termino" />
 											</div>
 											<div class="oe_kanban_details">
-												<field name="fam_responsable"/>
-											</div>
-											<div class="oe_kanban_details">
 												<field name="estatus"/>
 											</div>
 										</div>
@@ -56,324 +57,6 @@
 								</templates>
 							</kanban>
 						</field>
-					</page>
-				</xpath>
-				<!-- Crear la ceja para ver su expediente médico -->
-				<xpath expr="//page[@name='contact_addresses']" position="after">
-					<page name="Expediente Médico" string="Expediente Médico" attrs="{'invisible': [('x_paciente_medico','!=', 'Paciente')]}">
-						<group name="datos_generales_adicionales">
-							<group col="2" string="IDENTIFICACIÓN" >
-								<field name="x_identificacion_oficial_tipo"/>
-								<field name="x_identificacion_oficial"/>
-								<field name="x_seguridad_social"/>
-								<field name="x_edo_civil"/>
-							</group>
-							<group col="2" string="OTROS DATOS GENERALES" >
-								<field name="x_tipo_sangre"/>
-								<field name="x_escolaridad"/>
-								<field name="x_ocupacion"/>
-								<field name="x_religion"/>
-								<field name="x_capacidad_distinta"/>
-							</group>
-						</group>
-						<notebook>
-							<!--antececentes familiares-->
-							<page name="antecedentes_familiares" string="Antecedentes Familiares">
-								<!-- Diabetes e Hipertensión -->
-								<group name="antecedentes_1" col="4">
-									<group>
-										<field name="x_her_diabetes" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_her_diabetes_quien" style="width: 40%%" attrs="{'invisible':[('x_her_diabetes','=',False)]}" />
-									</group>
-									<group>
-										<field name="x_her_hipertension" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_her_hipertension_quien" style="width: 40%%" attrs="{'invisible':[('x_her_hipertension','=',False)]}" />
-									</group>
-								</group>
-								<!-- Cancer -->
-								<group name="antecedentes_2" col="3">
-									<group>
-										<field name="x_her_cancer" style="width: 10%%" />
-									</group>
-
-									<group>
-										<field name="x_her_cancer_quien" style="width: 40%%" attrs="{'invisible':[('x_her_cancer','=',False)]}" />
-									</group>
-									<group>
-										<field name="x_her_cancer_tipo" style="width: 40%%" attrs="{'invisible':[('x_her_cancer','=',False)]}" />
-									</group>
-								</group>
-								<!-- Cardiopatias, nefropatas -->
-								<group name="antecedentes_3" col="4">
-									<group>
-										<field name="x_her_cardiopatias" style="width: 10%%" />
-									</group>
-
-									<group>
-										<field name="x_her_cardiopatias_quien" style="width: 40%%" attrs="{'invisible':[('x_her_cardiopatias','=',False)]}" />
-									</group>
-
-									<group>
-										<field name="x_her_nefropatas" style="width: 10%%" />
-									</group>
-
-									<group>
-										<field name="x_her_nefropatas_quien" style="width: 40%%" attrs="{'invisible':[('x_her_nefropatas','=',False)]}" />
-									</group>
-								</group>
-								<!-- Malformaciones -->
-								<group name="antecedentes_5" col="3">
-									<group>
-										<field name="x_her_malformaciones" style="width: 10%%" />
-									</group>
-
-									<group>
-										<field name="x_her_malformaciones_quien" style="width: 40%%" attrs="{'invisible':[('x_her_malformaciones','=',False)]}" />
-									</group>
-
-									<group>
-										<field name="x_her_malformaciones_tipo" style="width: 40%%" attrs="{'invisible':[('x_her_malformaciones','=',False)]}" />
-									</group>
-								</group>
-								<!-- Otro -->
-								<group name="antecedentes_6" col="4">
-									<group>
-										<field name="x_her_otro" style="width: 10%%" />
-									</group>
-
-									<group>
-										<field name="x_her_otro_cual" style="width: 300%%" attrs="{'invisible':[('x_her_otro','=',False)]}" />
-									</group>
-
-								</group>
-							</page>
-							<!--antececentes No patologicos-->
-							<page name="antecedentes_no_patologicos" string="Antecedentes no patológicos">
-								<!-- Tabaquismo -->
-								<group name="No patologicos_1" col="4">
-									<group>
-										<field name="x_nopat_tabaquismo" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_tabaquismo_cuantos_dia" style="width: 20%%" attrs="{'invisible':[('x_nopat_tabaquismo','=',False)]}"/>
-									</group>
-									<group>
-										<field name="x_nopat_tabaquismo_anos_consumo" style="width: 20%%" attrs="{'invisible':[('x_nopat_tabaquismo','=',False)]}"/>
-									</group>
-									<group>
-										<field name="x_nopat_exfumador_o_pasivo" style="width: 10%%" />
-									</group>
-								</group>
-								<!-- Alcoholismo -->
-								<group name="No patologicos_2" col="4">
-									<group>
-										<field name="x_nopat_alcohol" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_alcohol_copas_semana" style="width: 20%%" attrs="{'invisible':[('x_nopat_alcohol','=',False)]}"/>
-									</group>
-
-									<group>
-										<field name="x_nopat_alcohol_anos_consumo" style="width: 20%%" attrs="{'invisible':[('x_nopat_alcohol','=',False)]}"/>
-									</group>
-
-									<group>
-										<field name="x_nopat_exalcoholico_u_ocacional" style="width: 10%%" />
-									</group>
-								</group>
-								<!-- Alergias -->
-								<group name="No patologicos_3" col="4">
-									<group>
-										<field name="x_nopat_alergias" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_alergias_tipo" style="width: 20%%"  attrs="{'invisible':[('x_nopat_alergias','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Alimentación y vivienda -->
-								<group name="No patologicos_5" col="4">
-									<group>
-										<field name="x_nopat_alimenta_adecuada" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_vivienda_servicios_basicos" style="width: 20%%" />
-									</group>
-								</group>
-								<!-- Drogadicción y otro -->
-								<group name="No patologicos_6" col="4">
-									<group>
-										<field name="x_nopat_droga" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_droga_tipo" style="width: 40%%" attrs="{'invisible':[('x_nopat_droga','=',False)]}"/>
-									</group>
-									<group>
-										<field name="x_nopat_droga_anos_consumo" style="width: 20%%" attrs="{'invisible':[('x_nopat_droga','=',False)]}" />
-									</group>
-									<group>
-										<field name="x_nopat_droga_ex" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_otro" style="width: 10%%" />
-									</group>
-									<group>
-										<field name="x_nopat_otro_desc" style="width: 300%%" attrs="{'invisible':[('x_nopat_otro','=',False)]}"/>
-									</group>
-								</group>
-							</page>
-							<!-- Antecedentes patológicos -->
-							<page name="antecedentes_patologicos" string="Antecedentes Patológicos">
-								<!-- Enfermedades de la infancia -->
-								<group name="Patologicos_1" col="2">
-									<group>
-										<field name="x_parc_enfer_infancia" style="width: 80%%"/>
-									</group>
-									<group>
-										<field name="x_parc_enfer_infancia_sec" style="width: 80%%" attrs="{'invisible':[('x_parc_enfer_infancia','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Hospitalazación previa -->
-								<group name="Patologicos_2" col="3">
-									<group>
-										<field name="x_parc_hosp_previa" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_hosp_previa_especificar" style="width: 100%%" attrs="{'invisible':[('x_parc_hosp_previa','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Antecedentes quirúrgicos -->
-								<group name="Patologicos_3" col="3">
-									<group>
-										<field name="x_parc_ante_quir" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_ante_quir_especificar" style="width: 100%%" attrs="{'invisible':[('x_parc_ante_quir','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Transfusiones previas -->
-								<group name="Patologicos_4" col="3">
-									<group>
-										<field name="x_parc_trans_previas" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_trans_previas_especificar" style="width: 100%%" attrs="{'invisible':[('x_parc_trans_previas','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Fracturas -->
-								<group name="Patologicos_5" col="3">
-									<group>
-										<field name="x_parc_fracturas" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_accidentes_traumatismos" style="width: 10%%" attrs="{'invisible':[('x_parc_fracturas','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Otras enfermedades -->
-								<group name="Patologicos_6" col="3">
-									<group>
-										<field name="x_parc_otra_enfermedad" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_otra_enfermedad_especificar" style="width: 100%%" attrs="{'invisible':[('x_parc_otra_enfermedad','=',False)]}"/>
-									</group>
-								</group>
-								<!-- Medicamentos actuales -->
-								<group name="Patologicos_7" col="3">
-									<group>
-										<field name="x_parc_med_actuales" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_parc_med_actuales_especificar" style="width: 100%%" attrs="{'invisible':[('x_parc_med_actuales','=',False)]}"/>
-									</group>
-								</group>
-							</page>
-							<!-- Antecedentes gineco-obstetra -->
-							<page name="antecedentes_ginecoobstétricos" string="Antecedentes Ginecoobstétricos" attrs="{'invisible': [('x_contacto_sexo','!=', 'Femenino')]}">
-								<!-- Gineco Menarca y ciclos -->
-								<group name="ginecoobstétricos_1" col="2">
-									<group>
-										<field name="x_gine_menarca" style="width: 50%%"/>
-									</group>
-									<group>
-										<field name="x_gine_ciclos_reg" style="width: 10%%"/>
-									</group>
-								</group>
-								<!-- Ritmo y última menstruación -->
-								<group name="ginecoobstétricos_2" col="2">
-									<group>
-										<field name="x_gine_ritmo" style="width: 50%%"/>
-									</group>
-									<group>
-										<field name="x_gine_ultima_menstruacion" style="width: 50%%"/>
-									</group>
-								</group>
-								<!-- Enfermedades y Varios -->
-								<group name="ginecoobstétricos_3" col="5">
-									<group>
-										<field name="x_gine_polimenorrea" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_gine_hipermenorrea" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_gine_dismenorrea_incapacitante" style="width: 10%%"/>
-									</group>
-									<group>
-										<field name="x_gine_ivsa" style="width: 30%%"/>
-									</group>
-									<group>
-										<field name="x_gine_parejas_sexuales" style="width: 30%%"/>
-									</group>
-								</group>
-								<!-- Gine G,P,A,C -->
-								<group name="ginecoobstétricos_4" col="4">
-									<group>
-										<field name="x_gine_g" style="width: 30%%"/>
-									</group>
-									<group>
-										<field name="x_gine_p" style="width: 30%%"/>
-									</group>
-									<group>
-										<field name="x_gine_a" style="width: 30%%"/>
-									</group>
-									<group>
-										<field name="x_gine_c" style="width: 30%%"/>
-									</group>
-								</group>
-								<!-- Fechas últimas citología -->
-								<group name="ginecoobstétricos_5" col="2">
-									<group>
-										<field name="x_gine_fech_ult_citologia" style="width: 40%%"/>
-									</group>
-									<group>
-										<field name="x_gine_fech_ult_citologia_resultado" style="width: 80%%"/>
-									</group>
-								</group>
-								<!-- Planificación familiar -->
-								<group name="ginecoobstétricos_6" col="2">
-									<group>
-										<field name="x_gine_met_plani_familiar" style="width: 50%%"/>
-									</group>
-								</group>
-							</page>
-							<!-- interrogatorio -->
-							<page name="interrogatorio" string="Interrogatorio Médico">
-								<group>
-									<field name="x_inter_res_cardio"/>
-									<field name="x_inter_digestivo"/>
-									<field name="x_inter_endocrino"/>
-									<field name="x_inter_musculo_esqueletico"/>
-									<field name="x_inter_genito_urirnario"/>
-									<field name="x_inter_hematopo_linfatico"/>
-									<field name="x_inter_piel_anexos"/>
-									<field name="x_inter_neuro_psiquiatrico"/>
-								</group>
-							</page>
-						</notebook>
 					</page>
 				</xpath>
             </field>

@@ -23,4 +23,5 @@ from . import pos_order_line
 from . import smm_presupuestos
 from . import smm_presupuestos_line
 from . import stock_move_line
+from . import patient_sync
 

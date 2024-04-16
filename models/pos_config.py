@@ -1,4 +1,8 @@
+import logging
+
 from odoo import models, fields
+
+_logger = logging.getLogger(__name__)
 
 # Clase que extende el modelo pos.order para agregar propiedades que se 
 # necesitan para las salidas de inventario
@@ -44,4 +48,35 @@ class PosConfigSmm(models.Model):
     def abre_sesion_con_turno(self, turno):
         self.turno_sel = turno
         return self.main_open_ui()
+    
+    def get_limited_partners_loading(self):
+        event_ids = self.env['smm_eventos_medicos'].search([
+                ('estatus', '=', 'abierto')
+        ])
+        partner_list = []
+        for event_id in event_ids:
+            partner_list.append(event_id.paciente_id.id)
+        _logger.info('POS Partners 1  ---->>  ' + str(len(partner_list)))
+
+        self.env.cr.execute("""
+            WITH pm AS
+            (
+                     SELECT   partner_id,
+                              Count(partner_id) order_count
+                     FROM     pos_order
+                     GROUP BY partner_id)
+            SELECT    id
+            FROM      res_partner AS partner
+            LEFT JOIN pm
+            ON        (
+                                partner.id = pm.partner_id)
+            WHERE (
+                partner.x_paciente_medico='Paciente' AND partner.id in %s
+            )
+            ORDER BY  COALESCE(pm.order_count, 0) DESC,
+                      NAME limit %s;
+        """, [tuple(partner_list), str(self.limited_partners_amount)])
+        result = self.env.cr.fetchall()
+        _logger.info('POS Partners  ---->>  ' + str(result))
+        return result       
         
