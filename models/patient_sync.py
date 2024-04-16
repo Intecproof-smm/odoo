@@ -33,6 +33,7 @@ class PatientSync(models.Model):
                             'name': record.get('NombrePaciente'),
                             'curp': record.get('CURP'),
                             'url_expediente': record.get('Perfil'),
+                            'x_paciente_medico': 'Paciente'
                             # Add other relevant fields
                         })
                         _logger.info(f"New contact created for record ID {matricula_expediente}")
