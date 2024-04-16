@@ -22,7 +22,7 @@ class PatientSync(models.Model):
             # Make an HTTP request to the REST web service
             response = requests.post('https://sistema.sirexe.com/api/1.1/wf/atenciones_abiertas', headers = { "authorization" : "Bearer 51afb1eb9906f51d259319e960caff80" })
             if response.status_code == 200:
-                patient_records = response.json()
+                patient_records = response.json(strict=False)
                 for record in patient_records:
                     matricula_expediente = record.get('Matricula')
                     contact = self.env['res.partner'].search([('matricula_expediente', '=', matricula_expediente)])
