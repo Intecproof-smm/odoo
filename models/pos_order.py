@@ -13,6 +13,7 @@ class PosOrder(models.Model):
             , ('cons', 'Consulta')
             , ('uci', 'UCI')
             , ('quir', 'Quirofano')
+            , ('ph', 'Prehospitalario')
             , ('tyo', 'T y O')
             , ('ane', 'Anestesio')
         ]

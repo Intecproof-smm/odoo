@@ -26,6 +26,7 @@
                             <option value="cons">Consulta</option>
                             <option value="uci">UCI</option>
                             <option value="quir">Quirofano</option>
+                            <option value="ph">Prehospitalario</option>
                             <option value="tyo">T y O</option>
                             <option value="ane">Anestesio</option>
                         </select>

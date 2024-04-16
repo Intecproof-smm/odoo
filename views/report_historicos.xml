@@ -27,11 +27,11 @@
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_move_line_tree"/>
         <field name="arch" type="xml">
-            <tree>
+            <xpath expr="//tree" position="inside">
                 <header>
-                  <button name="%(smm_intecproof.action_report_conteos)d" string="Generar Historial en PDF" type="action" class="btn btn-primary oe_highlight"/>
+                    <button name="%(smm_intecproof.action_report_conteos)d" string="Generar Historial en PDF" type="action" class="btn btn-primary oe_highlight"/>
                 </header>
-            </tree>
+            </xpath>
         </field>
     </record>
 

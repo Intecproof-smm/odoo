@@ -41,16 +41,12 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                     
                     if (confirmed) {
                         if (this.currentOrder().orderlines.some(line => line.get_product().tracking !== 'none' && !line.has_valid_product_lot()) && (this.env.pos.picking_type.use_create_lots || this.env.pos.picking_type.use_existing_lots)) {
-                            const { confirmed } = await this.showPopup('ConfirmPopup', {
+                            const { confirmed } = await this.showPopup('ErrorPopup', {
                             title: this.env._t('Some Serial/Lot Numbers are missing'),
                             body: this.env._t('You are trying to sell products with serial/lot numbers, but some of them are not set.\nWould you like to proceed anyway?'),
-                            confirmText: this.env._t('Yes'),
-                            cancelText: this.env._t('No')
+                            // confirmText: this.env._t('Yes'),
+                            // cancelText: this.env._t('No')
                         });
-                        if (confirmed) {
-                            this.fillData(payload);
-                            Gui.showScreen('PaymentScreen');
-                        }
                     } else {
                         this.fillData(payload);
                         Gui.showScreen('PaymentScreen');

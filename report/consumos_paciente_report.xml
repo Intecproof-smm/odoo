@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2024-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+<odoo>
+    <record id="action_report_consumos_paciente" model="ir.actions.report">
+        <field name="name">Reporte de consumos del paciente en el evento</field>
+        <field name="model">smm_eventos_medicos</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">smm_intecproof.consumos_paciente_report</field>
+        <field name="report_file">smm_intecproof.consumos_paciente_report</field>
+        <field name="binding_model_id" ref="model_smm_eventos_medicos"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="consumos_paciente_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="Reporte de consumos del paciente">
+                        <div class="text-center">
+                            <h1>Consumos del paciente</h1>
+                        </div>
+                    </div>
+                    <t t-set="lineas" t-value="docs.mapped(lambda z: (z.location_id.complete_name, z.date, z.location_dest_id.complete_name, z.product_id.name, z.lot_id.name_get()[0][1], z.qty_done))"/>
+                    <div class="body">
+                        <table class="table" style="border-spacing:10px">
+                            <thead>
+                                <tr class="o_report_header">
+                                    <th class="o_report_line_header">Desde</th>
+                                    <th class="o_report_line_header">Fecha</th>
+                                    <th class="o_report_line_header">Ubicación</th>
+                                    <th class="o_report_line_header">Producto</th>
+                                    <th class="o_report_line_header">Lote</th>
+                                    <th class="o_report_line_header">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lineas" t-as="linea">
+                                    <td><span t-esc="linea[0]"/></td>
+                                    <td><span t-esc="linea[1]"/></td>
+                                    <td><span t-esc="linea[2]"/></td>
+                                    <td><span t-esc="linea[3]"/></td>
+                                    <td><span t-esc="linea[4]"/></td>
+                                    <td><span t-esc="linea[5]"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer">
+                        <table class="firmas" border="0" width="100%" bordercolor="white" FRAME="void" RULES="rows">
+                            <tr valign="middle" align="center" border="0" width="100%" bordercolor="white" FRAME="void" RULES="rows">
+                                <td width="33%">Responsable de Conteo</td>
+                                <td width="33%">Visto Bueno</td>
+                                <td width="33%">Acta</td>
+                            </tr>
+                            <tr valign="middle" align="center" border="0" width="100%" bordercolor="white" FRAME="void" RULES="rows">
+                                <td width="33%"> </td>
+                                <td width="33%"> </td>
+                                <td width="33%"> </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

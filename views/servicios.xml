@@ -17,12 +17,16 @@
             <field name="arch" type="xml">
                 <form>
                     <group>
-                        <field name="cantidad" string="Cantidad"/>
                         <field name="fecha_servicio" string="Fecha"/>
+                        <field name="area_solicitud"/>
+                        <field name="turno"/>
+                        <field name="cantidad" string="Cantidad"/>
                         <field name="producto_id" string="Servicio/Procedimiento"
                                options="{'no_create': True}"
                                attrs="{'readonly': 0}"
                                required="1"/>
+                        <field name="rubro" attrs="{'readonly': 1}"/>
+                        <field name="total" widget="monetary" sum="Total" attrs="{'readonly': 1}"/>
                     </group>
                 </form>
             </field>
@@ -32,13 +36,17 @@
             <field name="name">smm_servicios_tree</field>
             <field name="model">smm_servicios</field>
             <field name="arch" type="xml">
-                <tree editable="bottom">
+                <tree editable="bottom" >
                     <control>
                         <create name="agregar_servicio_control" string="Agregar línea"/>
                     </control>
-                    <field name="cantidad" string="Cantidad"/>
                     <field name="fecha_servicio" string="Fecha"/>
+                    <field name="area_solicitud"/>
+                    <field name="turno"/>
+                    <field name="cantidad" string="Cantidad"/>
                     <field name="producto_id" string="Servicio / Procedimiento"/>
+                    <field name="rubro"/>
+                    <field name="total" widget="monetary" sum="Total"/>
                 </tree>
             </field>
         </record>

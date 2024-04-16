@@ -6,3 +6,7 @@ pos_vevent_message,pos.vevent.message,model_pos_vevent_message,base.group_user,1
 access_smm_pos_dialogbox,Acceso a Dialogbox,model_pos_dialogbox,base.group_user,1,1,1,1
 access_smm_rubros,Acceso a Rubros,model_smm_rubros,base.group_user,1,1,1,1
 access_smm_servicios,Acceso a servicios-procedimientos,model_smm_servicios,base.group_user,1,1,1,1
+access_smm_presupuestos,Acceso a presupuestos,model_smm_presupuestos,base.group_user,1,1,1,1
+access_smm_presupuestos_line,Acceso a detalle de presupuestos,model_smm_presupuestos_line,base.group_user,1,1,1,1
+access_smm_consulta_presupuestos,Acceso a consulta de presupuestos,model_smm_consulta_presupuestos,base.group_user,1,1,1,1
+access_smm_patient_sync,Acceso a sincronización de pacientes,model_patient_sync,base.group_user,1,1,1,1
