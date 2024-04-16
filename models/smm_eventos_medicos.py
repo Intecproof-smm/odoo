@@ -162,8 +162,9 @@ class SMMEventosMedicos(models.Model):
     def action_abrir_evento(self):
         self.estatus = 'abierto'
         
-    def action_generar_reporte_costos(self):
-        _logger.info("************ Generando el reporter de consumos del paciente ")
-        x = self
+    def action_generar_reporte_consumos(self):
+        ctx = dict(self.env.context)
+        _logger.info("************ Generando el reporter de consumos del paciente con el contexto : " + str(ctx))
+        self.env['smm_report_consumos_paciente']._get_report_values()
         
     
