@@ -46,8 +46,7 @@
         "views/presupuestos_line.xml",
         "views/stock_move_line.xml",
         "report/consumos_paciente_report.xml",
-        "views/patient_sync_view.xml",
-        "views/patient_sync_menu.xml",
+        "views/patient_sync.xml",
     ],
     'assets': {
         'web.assets_backend': [
