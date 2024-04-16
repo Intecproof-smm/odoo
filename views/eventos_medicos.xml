@@ -21,7 +21,7 @@
             </field>
         </record>
 
-        <record id="smm_evento_medico_form" model="ir.ui.view" >
+        <record id="smm_evento_medico_form" model="ir.ui.view">
             <field name="name">smm_evento_medico_form</field>
             <field name="model">smm_eventos_medicos</field>
             <field name="arch" type="xml">
@@ -34,9 +34,15 @@
                                 type="object" attrs="{'invisible': [('estatus', '=', 'cerrado')]}" />
                         <button id="abrir_evento" name="action_abrir_evento" string="Abrir evento" class="btn-primary"
                                 type="object" attrs="{'invisible': [('estatus', '=', 'abierto')]}"/>
-                        <button id="generar_reporte_costos" name="action_generar_reporte_costos"
+                        <button id="generar_reporte_consumos" name="action_generar_reporte_consumos"
                                 string="Generar reporte de costos" type="object"
-                                class="print btn-primary o_mail_send"/>
+                                class="print btn-primary o_mail_send"
+                                context="{
+                                    'fecha_inicio': fecha_inicio,
+                                    'fecha_termino': fecha_termino,
+                                    'stock_move_line_ids': stock_move_line_ids,
+                                    'servicios_ids': servicios_ids
+                                    }"/>
                         <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado"
                                attrs="{'readonly': [('estatus' ,'=', 'cerrado')]}" />
                     </header>
