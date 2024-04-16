@@ -42,19 +42,18 @@
                     </header>
                     <sheet>
                         <!-- Datos generales de la alta -->
-                        <group name="datos_para_alta" col="4" string="DATOS PARA DAR DE ALTA AL PACIENTE">
+                        <group>
+                            <field name="unidad_medica" />
+                        </group>
+                        <group col="2">
                             <field name="fecha_inicio" required="1"/>
                             <field name="fecha_termino" attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
-                            <group>
-                                <field name="fecha_inicio" required="1"/>
-                                <field name="fecha_termino" attrs="{'invisible':[('estatus' ,'=', 'abierto')]}"/>
-                            </group>
-                            <group>
-                                <field name="estudio_socioeconomico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
-                            </group>
-                        </group>           
+                        </group>
                         <group name="gobservafinales">
                             <field name="observa_observa_comenta" />
+                        </group>
+                        <group>
+                            <field name="estudio_socioeconomico" attrs="{'readonly': [('estatus', '!=', 'abierto')]}" />
                         </group>
                         <notebook>
                             <!-- Servicios / Procedimientos -->
