@@ -2,6 +2,16 @@
 <odoo>
 
     <template id="smm_stock_report_inventory" inherit_id="stock.report_inventory">
+        <xpath expr="//tr" position="inside">
+            <th class="text-end"><strong>Diferencia</strong></th>
+        </xpath>
+        <xpath expr="//tbody/t/tr[2]" position="inside">
+            <td class="text-end">
+                <t t-if="line.inventory_quantity == 0"><span/></t>
+                <t t-else=""><span t-field="line.inventory_diff_quantity"/></t>
+                <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+            </td>
+        </xpath>
         <xpath expr="//tbody" position="after">
             <tfooter>
                 <table class="table table-sm" border="0" cellpadding="0" style="padding-top: 25px; background-color: white; color: black; width: 100%; border-collapse:separate;">
