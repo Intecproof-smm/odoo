@@ -24,6 +24,6 @@ jobs:
           REMOTE_USER: root
           TARGET: /opt/odoo16/extra-addons/smm/smm_intecproof
           EXCLUDE: ""
-          SCRIPT_AFTER: su systemctl restart odoo16
+          SCRIPT_AFTER: systemctl restart odoo16
 
   
