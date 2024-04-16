@@ -44,9 +44,9 @@ class PatientSync(models.Model):
                         # Create new event if not found
                         contact = self.env['smm_eventos_medicos'].create({
                             'paciente_id': contact.id,
-                            'fecha_inicio' : fecha
+                            'fecha_inicio': fecha,
+                            'unidad_medica': record.get("Unidad")
                         })
-                    break
             else:
                 _logger.error(f"Failed to fetch patient records. Status code: {response.status_code}")
         except Exception as e:

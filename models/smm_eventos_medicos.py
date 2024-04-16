@@ -86,6 +86,7 @@ class SMMEventosMedicos(models.Model):
     )
     servicios_ids = fields.One2many('smm_servicios', 'evento_id', 'Servicios', readonly=True)
     estudio_socioeconomico = fields.Boolean('Se realizó estudio socioeconómico', tracking=True)
+    unidad_medica = fields.Char(string="Unidad médica")
       
     # Observaciones / comentarios finales
     observa_observa_comenta = fields.Text(string='Observaciones')
