@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<templates id="template" xml:space="preserve">
+    <t t-name="WkLSAlertPopUp" owl="1">
+        <div class="modal-dialog">
+            <div class="popup popup-alert">
+                <p class="title" style="font-size:30px;">
+                    <t t-esc="props.title || 'Alert' "/>
+                </p>
+                <p class="body text-center">
+                    <t t-esc=" props.body || 'Alert' "/>
+                </p>
+                <div class="footer">
+                    <div class="button cancel" t-on-click="cancel">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+  
+    <t t-name="EditListPopup" t-inherit="point_of_sale.EditListPopup" t-inherit-mode="extension" owl="1">
+        <xpath expr="//main[hasclass('list-lines')]" position="replace">
+          <div class="main">
+            <div class="packlot-holder">
+                <main class="list-lines" t-on-remove-item="removeItem"
+                      t-on-create-new-item="createNewItem">
+                    <t t-foreach="state.array" t-as="item" t-key="item._id">
+                        <EditListInput item="item" />
+                    </t>
+                </main>
+              </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('packlot-holder')]" position="after">
+            <div class="error-message">
+                <div class="lot-warning">Some of the lot/serial numbers do not exist!</div>
+                <div class="check-input">
+                    <div style="display:flex">
+                        <span id="check_content">Do you want to continue with the same?</span>
+                        <select class="select-input">
+                            <option name="no" value="no" class="selected_option">No</option>
+                            <option name="yes" value="yes" class="selected_option">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </t>
+    <t t-extend="PackLotLinePopupWidget">
+        <t t-jquery=".packlot-lines " t-operation="after">
+            <div class="selection-lot">
+                <div class='lot-holder'>
+                    <ul>
+                        <li>
+                            <span class='lot-name'></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </t>
+    </t>
+    <t t-name="LotHolder">
+        <div class="selection-lot">
+            <div class='lot-holder'>
+                <ul></ul>
+            </div>
+        </div>
+    </t>
+</templates>
