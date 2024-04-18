@@ -63,11 +63,11 @@
                         </group>
                         <notebook>
                             <!-- Servicios / Procedimientos -->
-                            <page name="servicios_procedimientos" string="Servicios/Procedimientos">
+                            <page name="servicios_procedimientos" string="Servicios / Procedimientos">
                                 <field name="servicios_ids" widget="one2many" mode="tree" attrs="{'readonly': [('estatus', '!=', 'abierto')]}"/>
                             </page>
                             <!-- Cálculo de costos -->
-                            <page name="calculo_costos" string="Cálculo de costos">
+                            <page name="calculo_costos" string="Consumibles / Medicamentos">
                                 <field name="stock_move_line_ids" widget="one2many" mode="tree" attrs="{'readonly': 1}">
                                     <tree>
                                         <field name="location_id" string="Ubicación"/>
@@ -87,6 +87,7 @@
                                 <group name="generales_resultado_estudio_se" string="Generales" col="4">
                                     <field name="res_se_folio" attrs="{'required': [('estudio_socioeconomico', '=', True)]}" />
                                     <field name="res_se_fecha" attrs="{'required': [('estudio_socioeconomico', '=', True)]}" />
+                                    <field name="res_se_descuento_autorizado"/>
                                 </group>
                                 <group name="resultados_estudio_socioeconomico" col="2" string="Resultados por sección">
                                     <field name="res_se_ocupacion" />

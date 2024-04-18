@@ -106,6 +106,11 @@ class SMMEventosMedicos(models.Model):
         store=False,
         compute='_calcular_resultado'
     )
+    res_se_descuento_autorizado = fields.Float(
+        string="% Descuento Autorizado",
+        group_operator="avg",
+        digits=(4, 2),
+    )
 
     @api.onchange(
         'res_se_ocupacion', 'res_se_vivienda', 'res_se_salud_familiar',
@@ -164,7 +169,7 @@ class SMMEventosMedicos(models.Model):
         
     def action_generar_reporte_consumos(self):
         ctx = dict(self.env.context)
-        _logger.info("************ Generando el reporter de consumos del paciente con el contexto : " + str(ctx))
-        self.env['smm_report_consumos_paciente']._get_report_values()
+        # _logger.info("************ Generando el reporter de consumos del paciente con el contexto : " + str(ctx))
+        return self.env.ref('smm_intecproof.action_report_consumos_paciente').report_action(self)
         
     
