@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="EditListPopup_inh" t-inherit="point_of_sale.EditListPopup" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-foreach='state.array']" position="replace">
+            <t t-if="props.lotNameList &amp;&amp; props.lotNameList.length > 0">
+                <t t-foreach="state.array" t-as="item" t-key="item._id">
+                    <t t-if="!props.lotNameList.includes(item.text)">
+                        <EditListInput item="item" product="lotList"/>
+                    </t>
+                    <t t-else="">
+                        <div>
+                            <input type="text" t-model="item.text" class="popup-input list-line-input"
+                                   placeholder="Serial/Lot Number" t-on-keyup="onKeyup" readonly="readonly" disabled="disabled"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-foreach="state.array" t-as="item" t-key="item._id">
+                    <EditListInput item="item" />
+                </t>
+            </t>
+
+        </xpath>
+
+        <xpath expr="//main/t" position="before">
+            <t t-if="props.lotList &amp;&amp; props.lotList.length > 0">
+                <table style="width:100%;">
+                    <tr>
+                        <th>Lot Nos</th>
+                        <th>Balance</th>
+                        <th>Expiry Date</th>
+                        <th>Qty</th>
+                    </tr>
+                    <t t-foreach="props.lotList" t-as="lot" t-key="lot.id">
+                        <t t-if="lot.qty > 0">
+                            <tr>
+                                <td><t t-esc="lot.label"/></td>
+                                <td><t t-esc="lot.qty"/></td>
+                                <td><t t-esc="lot.expiration_date"/></td>
+                                <td>
+                                    <t t-if="lot.is_expired">
+                                        Expired
+                                    </t>
+                                    <t t-else="">
+                                        <input type="text" class="popup-input list-line-input" t-att-lot-qty="lot.qty" t-att-lot-name="lot.label" t-on-change="addNewLotLine" t-att-value="lot.used_qty"
+                                        t-att-lot-id="lot.id"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </table>
+            </t>
+        </xpath>
+    </t>
+
+</templates>
