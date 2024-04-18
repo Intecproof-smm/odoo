@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - release/dev
+      - dev
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
           SOURCE: "/"
           REMOTE_HOST: 5.78.84.35
           REMOTE_USER: root
-          TARGET: /opt/odoo16/extra-addons/smm/smm_intecproof
+          TARGET: /opt/odoo16/extra-addons/smm
           EXCLUDE: ""
           SCRIPT_AFTER: systemctl restart odoo16
 
