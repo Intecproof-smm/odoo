@@ -10,7 +10,10 @@
     'description': """
     Using this module to auto select LOT/Serial in POS sorted by expiry date
 """,
-    'depends': ['point_of_sale','product_expiry'],
+    'depends': [
+        'point_of_sale',
+        'product_expiry',
+        'stock',],
     'data': [
         'views/pos.xml',
     ],

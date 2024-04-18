@@ -111,7 +111,7 @@
 		</div>
 	</t>
 
-	<!-- <t t-name="OrderLinesReceipt" t-inherit="point_of_sale.OrderLinesReceipt" t-inherit-mode="extension" owl="1">
+	<t t-name="OrderLinesReceipt" t-inherit="point_of_sale.OrderLinesReceipt" t-inherit-mode="extension" owl="1">
 			<xpath expr="//t[@t-if='line.pack_lot_lines']" position="replace">
 						<t t-if="line.pack_lot_lines">
 							<t t-if="env.pos.config.pos_lot_receipt">
@@ -123,13 +123,13 @@
 														<t t-esc="lot.lot_name"/>
 												</li>
 										</t>
-										 <t t-foreach="line.lot_details" t-as="pack_lot_id">
+										<!-- <t t-foreach="line.lot_details" t-as="pack_lot_id">
 											<t t-esc="pack_lot_id.lot_name"/>,
-										</t> 
+										</t> -->
 									</div>
 								</t>
 							</t>
 						</t>
 			</xpath>
-	</t> -->
+	</t>
 </templates>

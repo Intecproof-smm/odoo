@@ -49,7 +49,6 @@ odoo.define('pos_lot_auto_select.OrderWidget', function(require){
 
 				const isAllowOnlyOneLot = orderline.product.isAllowOnlyOneLot();
 				const packLotLinesToEdit = orderline.getPackLotLinesToEdit(isAllowOnlyOneLot);
-				console.log("HJGJHJK");
 
 				const { confirmed, payload } = await this.showPopup('EditListPopup1', {
 					title: this.env._t('Manual Lot/Serial Number Selection'),

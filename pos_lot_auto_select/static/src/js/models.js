@@ -20,7 +20,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
 		//@override
 		async _processData(loadedData) {
-
+			this.stock_quant = loadedData['stock.quant']
 			this.db.list_lot_num = loadedData['stock.lot']['list_lot_num']
 			this.list_lot_num_by_id = loadedData['stock.lot']['list_lot_num_by_id']
 			this.list_lot_num_by_product_id = loadedData['stock.lot']['list_lot_num_by_product_id']
@@ -153,6 +153,9 @@ odoo.define('pos_lot_auto_select.models', function(require){
 			var product_lot = [];
 			var lot_list = [];
 			var product_lots = this.pos.db.list_lot_num;
+			var stock_quants = this.pos.db.list_lot_num_by_product_id;
+
+			console.log('<<----   _autoSelectLot -- stock_quants    -->>> ' + stock_quants)
 
 			for(var i=0;i<product_lots.length;i++){
 				if(product_lots[i].product_id[0] == product.id && product_lots[i].total_available_qty > 0){

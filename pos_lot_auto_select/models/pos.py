@@ -4,6 +4,9 @@ from odoo.tools import float_is_zero, float_compare
 
 from itertools import groupby
 from datetime import datetime, date, timedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class pos_config(models.Model):
 	_inherit = 'pos.config'
@@ -46,31 +49,42 @@ class PosSession(models.Model):
 		return {'search_params': {'domain': domain, 'fields': fields}}
 
 	def _get_pos_ui_stock_lot(self,params):
+		_logger.warning('params ----  >>>  ' + str(params))
 		result  = self.env['stock.lot'].search_read(**params['search_params'])
+		_logger.warning('result --->>>>>' +  str(self.config_id.picking_type_id.default_location_src_id))
+		location_id = self.config_id.picking_type_id.default_location_src_id
 		list_lot_num = []
 		list_lot_num_by_id = {}
 		list_lot_num_by_product_id = {}
 		from_lot_expire_days = fields.Datetime.now() + timedelta(days = self.config_id.lot_expire_days)
+
 		for lot in result:
-			print(lot)
-			print(lot['product_id'][0])
+			# print(lot)
+			_logger.warning("lot['product_id'][0]  --->>>   " + str(lot['product_id'][0]))
+
+			stock_quants = self.env['stock.quant'].search(['&', ('product_id', '=', lot['product_id'][0]), ('location_id', '=', location_id.id )])
+			_logger.warning('stock_quants  --->>  ' + str(stock_quants))
+			_logger.warning('stock_quants  --->>  ' + str(lot))
+			_logger.warning('stock_quants  --->>  ' + str(from_lot_expire_days))
 			product = False
 			if lot['product_id']:
 				product = self.env['product.product'].browse(lot['product_id'][0])
-			print(product)
+			# print(product)
 
-			if product and product.use_expiration_date:
+			if product and product.use_expiration_date and stock_quants:
 				if not lot['expiration_date'] or lot['expiration_date']>from_lot_expire_days:
 					list_lot_num.append(lot)
 			else:
-				list_lot_num.append(lot)
+				if stock_quants:
+					list_lot_num.append(lot)
 			if lot['total_available_qty']>0:
 				list_lot_num_by_id[lot['id']] = lot
-				if lot['product_id'][0] in list_lot_num_by_product_id:
+				if lot['product_id'][0] in list_lot_num_by_product_id and stock_quants:
 					list_lot_num_by_product_id[lot['product_id'][0]].append(lot)
 				else:
-					list_lot_num_by_product_id[lot['product_id'][0]] = []
-					list_lot_num_by_product_id[lot['product_id'][0]].append(lot)
+					if stock_quants:
+						list_lot_num_by_product_id[lot['product_id'][0]] = []
+						list_lot_num_by_product_id[lot['product_id'][0]].append(lot)
 		final_result = {
 			'list_lot_num':list_lot_num,
 			'list_lot_num_by_id':list_lot_num_by_id,
@@ -123,3 +137,28 @@ class stock_lot(models.Model):
 					record.total_available_qty += rec.qty_done
 				else:
 					record.total_available_qty -= rec.qty_done
+
+class stock_quant(models.Model):
+	_inherit = "stock.quant"
+
+	@api.model
+	def valid_lot_by_location_pos(self, product_id, pos_id):
+		pos_config = self.env['pos.config'].browse(pos_id)
+
+		print ('My function --->>> ', product_id, pos_id, pos_config.warehouse_id.lot_stock_id, pos_config.picking_type_id )
+		valid = 0
+		if product_id != None:
+			location_id = pos_config.picking_type_id.default_location_src_id
+			stock_quants = self.env['stock.quant'].search(['&', ('location_id', '=', location_id.id), ('product_id', '=', product_id.get('product_id')[0])])
+			_logger.info('stock_quants --->>>  ' + str(len(stock_quants)) + '  -  ' + location_id.name)
+			for stock_quant in stock_quants:
+				_logger.info('stock_quant --->>>  ' + str(stock_quant.lot_id.name) + '  -  ' +  str(product_id.get('product_id')[0]))
+				_logger.info('stock_quant --->>>  ' + str(stock_quant) + '  -  ' +  str(product_id.get('product_id')[0]))
+				if stock_quant.lot_id.name == product_id.get('name'):
+					valid = 1
+				else:
+					valid = 0
+		return {
+				'product_qty': 10, 
+				'location_id': pos_config.warehouse_id.lot_stock_id, 
+				'valid': valid}
