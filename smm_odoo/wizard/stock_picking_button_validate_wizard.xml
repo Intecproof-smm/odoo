@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<odoo>
+    <record id="view_smm_stock_picking_button_validate_wizard" model="ir.ui.view">
+        <field name="name">view.smm.stock.picking.button.validate.wizard</field>
+        <field name="model">stock.picking.button.assign.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <span> Se perderá cualquier definición manual de cantidades hechas, una ves presionado el botón Comprobar Disponibilidad</span>
+
+                <footer>
+                    <button string="Confirm" name="confirm_action_assign" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

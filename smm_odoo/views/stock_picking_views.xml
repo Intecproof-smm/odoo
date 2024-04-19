@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+        <record id="view_smm_stock_picking_form_inherit" model="ir.ui.view">
+            <field name="name">smm.stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="x_area_solicitud"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])], 'readonly': [('state', 'in', ['cancel','done'])], 'required' :[('picking_type_code','=','outgoing')]}"
+                    />
+                    <field name="x_fecha_nacimiento" readonly="1"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])]}"/>
+                    <field name="x_solicitante" style="font-weight:bold;"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])], 'readonly': [('state', 'in', ['cancel','done'])], 'required' :[('picking_type_code','=','outgoing')]}"/>
+                </field>
+
+                <field name="backorder_id" position="after">
+                    <field name="x_turno"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])], 'readonly': [('state', 'in', ['cancel','done'])],'required' :[('picking_type_code','=','outgoing')]}"
+                    />
+
+                    <field name="has_controlled_product"
+                           attrs="{'readonly': [('state', 'in', ['cancel','done'])]}"
+                    />
+                </field>
+
+                <field name="owner_id" position="after">
+                    <field name="x_no_ambulancia"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])],  'readonly': [('state', 'in', ['cancel','done'])], 'required' :[('picking_type_code','=','outgoing')]}"
+                    />
+                    <field name="x_cama"
+                           attrs="{'invisible': [('picking_type_code', 'in', ['incoming','internal'])], 'readonly': [('state', 'in', ['cancel','done'])],  'required' :[('picking_type_code','=','outgoing')]}"
+                    />
+                    <field name="x_permiso_validar" invisible="1"/>
+                    <field name="x_branches_pk" invisible="1"/>
+                </field>
+
+                <xpath expr="//form/sheet/group/group/div/label[1]" position="attributes">
+                    <attribute name="string">Paciente</attribute>
+                </xpath>
+
+                <field name="location_id" position="attributes">
+                    <attribute name="domain">[('x_stock_location', '=', True), ('x_branch', 'in', x_branches_pk)]
+                    </attribute>
+                </field>
+
+                <field name="location_dest_id" position="attributes">
+                    <attribute name="domain">[('x_stock_location', '=', True), ('x_branch', 'in', x_branches_pk)]
+                    </attribute>
+                </field>
+
+                <xpath expr="//field[@name='picking_type_id']" position="replace">
+                    <field name="picking_type_id"
+                           attrs="{'invisible': [('hide_picking_type', '=', True)], 'readonly': [('state', '!=', 'draft')]}"
+                    />
+                </xpath>
+
+                <xpath expr="//button[@name='button_validate'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['&amp;',('x_permiso_validar','=',False),'|','|',('state',
+                        'in', ('waiting','confirmed','done','cancel')),('picking_type_code', '=', 'outgoing'),
+                        ('show_validate', '=', False) ]}
+                    </attribute>
+                    />
+                </xpath>
+
+                <xpath expr="//button[@name='button_scrap']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '&amp;', ('picking_type_code', 'in',
+                        ['incoming','outgoing','internal']), ('state', '!=', 'draft'), '&amp;', ('picking_type_code',
+                        '=', 'outgoing'), ('state', '=', 'done')]}
+                    </attribute>
+                    />
+                </xpath>
+
+                <xpath expr="//button[@name='action_toggle_is_locked'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('state', 'in',
+                        ('draft','cancel','done','confirmed','waiting','assigned')), ('is_locked', '=', False)]}
+                    </attribute>
+                    />
+                </xpath>
+
+                <!-- <xpath expr="//field[@name='origin']" position="replace">
+                    <field name="origin" readonly="1"   />
+                </xpath> -->
+
+                <xpath expr="//field[@name='product_id'][1]" position="after">
+                    <field name="is_controlled_product"/>
+                </xpath>
+
+                <xpath expr="//field[@name='product_id'][1]" position="attributes">
+                    <attribute name="domain">
+                        [('is_controlled_product','=',parent.has_controlled_product)]
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem
+            name="Solicitudes Internas"
+            id="stock.solicitudes_internas"
+            parent="stock.menu_stock_root"
+            action="stock.action_picking_tree_all"
+            sequence="3"
+        />
+    </data>
+</odoo>

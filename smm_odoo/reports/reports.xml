@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_smm_reporte_entrega" model="ir.actions.report">
+            <field name="name">SMM: Recibo Entrega</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">smm_odoo.smm_reporte_entrega</field>
+            <field name="report_file">smm_odoo.smm_reporte_entrega</field>
+            <field name="print_report_name">'SMM recibo entrega - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_stock_picking"/>
+            <field name="binding_type">report</field>
+        </record>
+
+         <record id="action_smm_reporte_entrega_ubicaciones" model="ir.actions.report">
+            <field name="name">SMM: Recibo Entrega Ubicaciones</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">smm_odoo.smm_reporte_entrega_ubicaciones</field>
+            <field name="report_file">smm_odoo.smm_reporte_entrega_ubicaciones</field>
+            <field name="print_report_name">'SMM recibo entrega - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_stock_picking"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+   <record id="view_smm_stock_move_line_operation_tree_inherit" model="ir.ui.view">
+        <field name="name">smm.stock.move.line.operation.tree.inherit</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+        <field name="arch" type="xml">
+            <field name="lot_id" position="attributes">
+                <attribute name="domain">picking_type_id_domain</attribute>
+            </field>
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="picking_type_id_domain" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_smm_stock_move_line_detailed_operation_tree_inherit" model="ir.ui.view">
+        <field name="name">smm.stock.move.line.detailed.operation.tree.inherit</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <field name="lot_id" position="attributes">                
+                <attribute name="domain">picking_type_id_domain</attribute>
+            </field>
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="picking_type_id_domain" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+
+
