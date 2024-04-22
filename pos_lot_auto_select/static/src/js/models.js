@@ -20,7 +20,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
 		//@override
 		async _processData(loadedData) {
-			this.stock_quant = loadedData['stock.quant']
+			this.db.stock_quant = loadedData['stock.quant']['list_lot_stock_quant']
 			this.db.list_lot_num = loadedData['stock.lot']['list_lot_num']
 			this.list_lot_num_by_id = loadedData['stock.lot']['list_lot_num_by_id']
 			this.list_lot_num_by_product_id = loadedData['stock.lot']['list_lot_num_by_product_id']
@@ -106,7 +106,10 @@ odoo.define('pos_lot_auto_select.models', function(require){
 		add_product(product, options){
 
 			if (this.pos.config.allow_pos_lot && this.pos.config.allow_auto_select_lot && ['serial', 'lot'].includes(product.tracking) && (this.pos.picking_type.use_create_lots || this.pos.picking_type.use_existing_lots)) {
+
+				
 				const payload = this._autoSelectLot(product,options);
+
 
 				if (payload.length>0) {
 					// console.log('confirmed',confirmed);
@@ -139,6 +142,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
     	}
 		_autoSelectLot(product,options) {
+			console.log('##  _autoSelectLot  -->>  ' + product.id );			
 			var self = this;
 			let order = this.pos.get_order();
 			let orderline = order.selected_orderline;
@@ -153,58 +157,76 @@ odoo.define('pos_lot_auto_select.models', function(require){
 			var product_lot = [];
 			var lot_list = [];
 			var product_lots = this.pos.db.list_lot_num;
-			var stock_quants = this.pos.db.list_lot_num_by_product_id;
 
-			console.log('<<----   _autoSelectLot -- stock_quants    -->>> ' + stock_quants)
+			var product_lot_stock_quant = this.pos.db.stock_quant;
+			var pos_location_id = product_lot_stock_quant[0].location_id[0]
 
 			for(var i=0;i<product_lots.length;i++){
-				if(product_lots[i].product_id[0] == product.id && product_lots[i].total_available_qty > 0){
-					// lot_list[i]['temp_qty'] =  lot_list[i].product_qty
-					product_lots[i]['temp_qty'] =  product_lots[i].total_available_qty
+				// console.log('##  product_lots first  -->>  ' + product_lots[i].product_id[0] + ' - ' + product_lots[i].name);			
+				if(product_lots[i].product_id[0] == product.id){
+
 					if (!product_lots[i]['expiration_date']) {
 							var lot_expire_year = moment(new Date()).add(999,'y').format("YYYY-MM-DD HH:mm:ss");
 							product_lots[i]['expiration_date'] = lot_expire_year;
 					}
-					lot_list.push(product_lots[i]);
+
+					for(var m=0;m<product_lot_stock_quant.length;m++){
+						console.log('##  product_lot_stock_quant 1 -->>  ' + product_lot_stock_quant[m].lot_id[0] + '  -  ' + product_lots[i].id);	
+						
+						if(product_lot_stock_quant[m].location_id[0] == pos_location_id && product_lot_stock_quant[m].lot_id[0] == product_lots[i].id){
+							product_lots[i]['temp_qty'] =  product_lot_stock_quant[m].quantity
+							console.log('##  add_product  1a -->>  ' + product_lot_stock_quant[m].location_id[0] + ' - ' + m + ' - ' + product_lots[i].name);			
+							lot_list.push(product_lots[i]);
+						}
+					}
+					console.log('##  add_product  1b -->>  ' + lot_list.length + ' - ' + product_lots[i].name );			
 				}
 			}
 
 			lot_list.sort((a, b) => (a.expiration_date > b.expiration_date) ? 1 : -1)
-
-
-
+			console.log('##  lot_list  1c -->>  ' + lot_list.length);			
+			for(var m=0;m<lot_list.length;m++){
+				console.log('##  lot_list  1d -->>  ' + lot_list[m].name);			
+			}
 
 			if (options.refunded_orderline_id) {
-
-
-
 				var newPackLotLines = [];
 				if (self.pos.db.pos_pack_lot_by_line_id[options.refunded_orderline_id]) {
 					self.pos.db.pos_pack_lot_by_line_id[options.refunded_orderline_id].forEach(function(pack_lot){
 						let obj = { lot_name: pack_lot.lot_name  , prod_qty : -1};
-						newPackLotLines.push(obj);
+						for(var m=0;m<product_lot_stock_quant.length;m++){
+							console.log('##  add_product   2 -->>  ' + product_lot_stock_quant[m].location_id[0]);			
+							if(product_lot_stock_quant[m].location_id[0] == pos_location_id){
+								newPackLotLines.push(obj);
+							}
+						}						
+						
 					});
 				}else {
 					alert("You can`t refund order from same session");
 
 				}
-
-
 				return newPackLotLines;
-
 			}else {
+				console.log('##  add_product  3a -->>  ' + lot_list.length);
+				
 				for(var i=0;i<lot_list.length;i++){
-					if(lot_list[i].product_id[0] == product.id && lot_list[i].total_available_qty > 0){
-						// lot_list[i]['temp_qty'] =  lot_list[i].product_qty
-						lot_list[i]['temp_qty'] =  lot_list[i].total_available_qty
-						product_lot.push(lot_list[i]);
+					console.log('##  add_product  3b -->>  ' + lot_list[i].name + '  +  ' + lot_list[i].product_id[1]  + ' -  ' + lot_list[i].temp_qty  );			
+					if(lot_list[i].product_id[0] == product.id){
+						for(var m=0;m<product_lot_stock_quant.length;m++){
+							if(product_lot_stock_quant[m].location_id[0] == pos_location_id && product_lot_stock_quant[m].product_id[0] == lot_list[i].product_id[0] && product_lot_stock_quant[m].lot_id[0] == lot_list[i].id){
+								lot_list[i]['temp_qty'] =  product_lot_stock_quant[m].quantity
+								product_lot.push(lot_list[i]);
+
+							}
+						}						
 					}
 				}
 				product_lot.sort((a, b) => (a.expiration_date > b.expiration_date) ? 1 : -1);
 
 				let selected_lots = [];
+				console.log('##  add_product 3d product_lot -->>  ' + product_lot.length);							
 				if (product_lot.length>0) {
-					// product_lot[0]['temp_qty']-=1;
 					var qty_temp = qty;
 					var i =0;
 
@@ -233,25 +255,25 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					for (var j = 0; j < selected_lots.length; j++) {
 						for(var i=0;i<lot_list.length;i++){
 							if(lot_list[i].id == selected_lots[j].id ){
-								// lot_list[i]['temp_qty'] =  lot_list[i].product_qty
 								lot_list[i]['temp_qty'] -=selected_lots[j].qty
 							}
 						}
 					}
-
+					console.log('##  add_product 4a selected_lots -->>  ' + selected_lots.length);							
 					var newPackLotLines = [];
 					for (var j = 0; j < selected_lots.length; j++) {
 						for (var i = 0; i < selected_lots[j].qty; i++) {
-
 							let obj = { lot_name: selected_lots[j].name  , prod_qty : 1};
+							console.log('##  add_product 4b -->>  ' + selected_lots[j].name);
 							newPackLotLines.push(obj);
+							
 						}
 					}
 
 					return newPackLotLines;
 				}
 				else {
-					alert("Not enough qty");
+					alert("Not enough qty !!");
 				}
 			}
 
