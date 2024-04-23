@@ -3,7 +3,7 @@
    <t t-name="CustomDashBoard">
        <div class="smm_dashboards" style="margin-top: 30px; margin-left: 40px;">
            <div class="container-fluid o_pj_dashboard">
-               <h1><a style="margin-left: 50px;">Tablero de control de vencimiento de Lotes de medicamentos</a></h1>
+               <h1><a style="margin-left: 50px;">Tablero de control de vencimiento de Lotes de medicamentos y consumibles</a></h1>
            </div>
        </div>
    </t>
