@@ -42,6 +42,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
+			    'context': "{'group_by':'x_categoria', 'group_expand':'True'}",
 			    'domain': [
 			            ['product_id.categ_id.name', '=', 'Medicamentos'],
 			            ['expiration_date','<', hoy],
@@ -90,8 +91,8 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
+			    'context': "{'group_by':'x_categoria'}",
 			    'domain': [
-			            ['product_id.categ_id.name', '=', 'Medicamentos'],
 			            ['quant_ids.quantity', '>', '0'],
 			            ['expiration_date','>', hoy],
 			            ['expiration_date','<', hasta],
