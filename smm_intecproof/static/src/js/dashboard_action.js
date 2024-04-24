@@ -42,9 +42,8 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'context': "{'group_by':'x_categoria', 'group_expand':'True'}",
+			    'context': "{'group_by':'x_categoria'}",
 			    'domain': [
-			            ['product_id.categ_id.name', '=', 'Medicamentos'],
 			            ['expiration_date','<', hoy],
 			            ['quant_ids.quantity','>',0],
 			            ['quant_ids.location_id', '=', location]
@@ -62,12 +61,12 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
                 method: 'traer_location_data'
             });
             var action = {
-    			'name': 'Lotes expirados/vencidos',
+    			'name': 'Lotes que vencen el día de hoy',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
+			    'context': "{'group_by':'x_categoria'}",
 			    'domain': [
-			            ['product_id.categ_id.name', '=', 'Medicamentos'],
 			            ['quant_ids.quantity', '>', '0'],
 			            ['expiration_date','=', hoy],
 			            ['quant_ids.location_id', '=', location]
@@ -87,7 +86,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
                 method: 'traer_location_data'
             });
             var action = {
-    			'name': 'Lotes expirados/vencidos',
+    			'name': 'Lotes próximos a vencer',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],

@@ -47,6 +47,7 @@
         "views/stock_move_line.xml",
         "report/consumos_paciente_report.xml",
         "views/patient_sync.xml",
+        "views/stock_lot.xml",
     ],
     'assets': {
         'web.assets_backend': [

@@ -59,9 +59,14 @@ class ExtendStock_lot(models.Model):
 		location = self.env['stock.location'].search([('x_branch', '=', self.env.user.branch_id.id)])
 		_logger.info("El resultado de location.id es : " + str(location.id))
 		return location.id
-
+	
 	# ----------------------------------------------------------
 	# Basea de datos
 	# ----------------------------------------------------------
 	x_categoria = fields.Char(related='product_id.categ_id.name', string='Categoría', store=True)
+	x_ubicacion = fields.Char(compute='traer_ubicacion_stock_move', string='Ubicación', store=False)
 	
+	@api.model
+	def traer_ubicacion_stock_move(self):
+		for rec in self:
+			rec.x_ubicacion = self.env['res.branch'].search([('id', '=', self.env.user.branch_id.id)]).name
