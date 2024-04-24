@@ -21,6 +21,9 @@
             <xpath expr="//field[@name='expiration_date']" position="attributes">
                 <attribute name="optional">show</attribute>
             </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
         </field>
     </record>
 </odoo>
