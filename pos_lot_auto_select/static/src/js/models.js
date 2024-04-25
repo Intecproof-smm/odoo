@@ -1,7 +1,10 @@
 odoo.define('pos_lot_auto_select.models', function(require){
+	"use strict";
 	// var screens = require('point_of_sale.screens');
 	var core = require('web.core');
+	var session = require('web.session');
 	// var gui = require('point_of_sale.gui');
+	var { Gui } = require('point_of_sale.Gui');
 	var models = require('point_of_sale.models');
 	// var PopupWidget = require('point_of_sale.popups');
 	var QWeb = core.qweb;
@@ -103,27 +106,18 @@ odoo.define('pos_lot_auto_select.models', function(require){
 	}
 	Registries.Model.extend(Orderline, PosOrderline);
 	const PosOrder = (Order) => class PosOrder extends Order {
-		add_product(product, options){
+		async add_product(product, options){
 
 			if (this.pos.config.allow_pos_lot && this.pos.config.allow_auto_select_lot && ['serial', 'lot'].includes(product.tracking) && (this.pos.picking_type.use_create_lots || this.pos.picking_type.use_existing_lots)) {
 
-				
-				const payload = this._autoSelectLot(product,options);
-
+				const payload = await this._autoSelectLot(product,options);
+				console.log('payload 1', payload );
+				console.log('payload 2', payload.length );
+				console.log('payload 3', Object.keys(payload));
 
 				if (payload.length>0) {
 					// console.log('confirmed',confirmed);
-					// console.log('payload',payload);
-					// Segregate the old and new packlot lines
-					// const modifiedPackLotLines = Object.fromEntries(
-					// 	payload.newArray.filter(item => item.id).map(item => [item.id, item.text])
-					// );
-					// console.log("modifiedPackLotLines");
-					// console.log(modifiedPackLotLines);
-					// const newPackLotLines = payload.newArray
-					// 	.filter(item => !item.id)
-					// 	.map(item => ({ lot_name: item.text  , prod_qty : item.qty}));
-
+					console.log('payload 4',payload);
 
 					const newPackLotLines = payload;
 					const modifiedPackLotLines = [];
@@ -141,18 +135,18 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
 
     	}
-		_autoSelectLot(product,options) {
+		async _autoSelectLot(product,options) {
 			console.log('##  _autoSelectLot  -->>  ' + product.id );			
 			var self = this;
 			let order = this.pos.get_order();
 			let orderline = order.selected_orderline;
 
-			// var qty  =  orderline.get_quantity() || 1;
+			const args = {};
+
 			var qty  =  options.quantity || 1;
 			if (orderline && orderline.product.id == product.id) {
 				qty = orderline.get_quantity()+1;
 			}
-
 
 			var product_lot = [];
 			var lot_list = [];
@@ -171,24 +165,45 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					}
 
 					for(var m=0;m<product_lot_stock_quant.length;m++){
-						console.log('##  product_lot_stock_quant 1 -->>  ' + product_lot_stock_quant[m].lot_id[0] + '  -  ' + product_lots[i].id);	
 						
 						if(product_lot_stock_quant[m].location_id[0] == pos_location_id && product_lot_stock_quant[m].lot_id[0] == product_lots[i].id){
 							product_lots[i]['temp_qty'] =  product_lot_stock_quant[m].quantity
 							console.log('##  add_product  1a -->>  ' + product_lot_stock_quant[m].location_id[0] + ' - ' + m + ' - ' + product_lots[i].name);			
 							lot_list.push(product_lots[i]);
 						}
+						console.log('##  add_product  1b -->>  ' + lot_list.length + ' - ' + product_lots[i].name );									
 					}
-					console.log('##  add_product  1b -->>  ' + lot_list.length + ' - ' + product_lots[i].name );			
 				}
 			}
 
 			lot_list.sort((a, b) => (a.expiration_date > b.expiration_date) ? 1 : -1)
-			console.log('##  lot_list  1c -->>  ' + lot_list.length);			
-			for(var m=0;m<lot_list.length;m++){
-				console.log('##  lot_list  1d -->>  ' + lot_list[m].name);			
-			}
 
+			if (product.is_controlled_product && (lot_list.length > 0)) {
+				const LotListSelect = lot_list.map((product_id) => ({
+					id: product_id.id,
+					label: product_id.name,
+					item: product_id,
+				}));		
+				
+				console.log("LotListSelect:")
+				console.log(LotListSelect);
+
+				const { confirmed, payload: selectedlot } =  await Gui.showPopup('SelectionPopup', {
+					title: ('Seleccione el numero de Lote'),
+					list: LotListSelect ,
+				});		
+				if (confirmed) {
+					args['product'] = selectedlot;
+					console.log('Is Controlled  3 ' + Object.keys(selectedlot));	
+					lot_list = []
+					lot_list.push(args['product'])					
+				}else{
+					return false;
+				}
+			}
+			if (product_lot.length>0){
+				console.log('################       lot_list  2 -->>  ' + lot_list[0].name + ' - ' + lot_list[0].total_available_qty);
+			}
 			if (options.refunded_orderline_id) {
 				var newPackLotLines = [];
 				if (self.pos.db.pos_pack_lot_by_line_id[options.refunded_orderline_id]) {
@@ -216,6 +231,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 						for(var m=0;m<product_lot_stock_quant.length;m++){
 							if(product_lot_stock_quant[m].location_id[0] == pos_location_id && product_lot_stock_quant[m].product_id[0] == lot_list[i].product_id[0] && product_lot_stock_quant[m].lot_id[0] == lot_list[i].id){
 								lot_list[i]['temp_qty'] =  product_lot_stock_quant[m].quantity
+								console.log('##  add_product  3c -->>  ' + product_lot_stock_quant[m].quantity );			
 								product_lot.push(lot_list[i]);
 
 							}
@@ -226,6 +242,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
 				let selected_lots = [];
 				console.log('##  add_product 3d product_lot -->>  ' + product_lot.length);							
+				
 				if (product_lot.length>0) {
 					var qty_temp = qty;
 					var i =0;
@@ -254,11 +271,16 @@ odoo.define('pos_lot_auto_select.models', function(require){
 
 					for (var j = 0; j < selected_lots.length; j++) {
 						for(var i=0;i<lot_list.length;i++){
-							if(lot_list[i].id == selected_lots[j].id ){
+							if(lot_list[i].id == selected_lots[j].id){
+								if (lot_list[i]['temp_qty'] <= 0) {
+									alert("Not enough qty !!");
+								}
 								lot_list[i]['temp_qty'] -=selected_lots[j].qty
+								console.log('##  temp_qty selected_lots -->>  ' + lot_list[i]['temp_qty']);
 							}
 						}
 					}
+
 					console.log('##  add_product 4a selected_lots -->>  ' + selected_lots.length);							
 					var newPackLotLines = [];
 					for (var j = 0; j < selected_lots.length; j++) {
@@ -271,6 +293,57 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					}
 
 					return newPackLotLines;
+				}
+				else if (product_lot.length>0 && product.is_controlled_product){
+					var qty_temp = qty;
+					var i =0;
+
+
+					while (qty_temp>0  ) {
+						if (product_lot.length<= i) {
+							alert("Not enough Lot");
+							break;
+						}
+						let obj = {};
+
+						if(product_lot[i]['temp_qty'] >= qty_temp){
+							// lot_list[i]['temp_qty'] =  lot_list[i].product_qty
+							// obj[product_lot[i].id] = qty_temp;
+							obj = {id: product_lot[i].id ,name:product_lot[i].name ,qty : qty_temp}
+							qty_temp =0;
+						}else if (product_lot[i]['temp_qty']<qty_temp) {
+							obj = {id: product_lot[i].id ,name:product_lot[i].name ,qty : product_lot[i]['temp_qty']}
+							qty_temp -=product_lot[i]['temp_qty'];
+							// obj[product_lot[i].id] = product_lot[i]['temp_qty'];
+						}
+						i+=1;
+						selected_lots.push(obj);
+					}
+
+					for (var j = 0; j < selected_lots.length; j++) {
+						for(var i=0;i<lot_list.length;i++){
+							if(lot_list[i].id == selected_lots[j].id){
+								if (lot_list[i]['temp_qty'] <= 0) {
+									alert("Not enough qty !!");
+								}
+								lot_list[i]['temp_qty'] -=selected_lots[j].qty
+								console.log('##  temp_qty selected_lots -->>  ' + lot_list[i]['temp_qty']);
+							}
+						}
+					}
+
+					console.log('##  add_product 4a selected_lots -->>  ' + selected_lots.length);							
+					var newPackLotLines = [];
+					for (var j = 0; j < selected_lots.length; j++) {
+						for (var i = 0; i < selected_lots[j].qty; i++) {
+							let obj = { lot_name: selected_lots[j].name  , prod_qty : 1};
+							console.log('##  add_product 4b -->>  ' + selected_lots[j].name);
+							newPackLotLines.push(obj);
+							
+						}
+					}
+
+					return newPackLotLines;					
 				}
 				else {
 					alert("Not enough qty !!");
