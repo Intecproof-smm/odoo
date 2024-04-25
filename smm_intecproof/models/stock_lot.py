@@ -65,8 +65,16 @@ class ExtendStock_lot(models.Model):
 	# ----------------------------------------------------------
 	x_categoria = fields.Char(related='product_id.categ_id.name', string='Categoría', store=True)
 	x_ubicacion = fields.Char(compute='traer_ubicacion_stock_move', string='Ubicación', store=False)
+	x_product_qty = fields.Float('Quantity', compute='_x_product_qty')
 	
 	@api.model
 	def traer_ubicacion_stock_move(self):
 		for rec in self:
 			rec.x_ubicacion = self.env['res.branch'].search([('id', '=', self.env.user.branch_id.id)]).name
+
+	@api.depends('quant_ids', 'quant_ids.quantity')
+	def _x_product_qty(self):
+		for lot in self:
+			# We only care for the quants in internal or transit locations.
+			quants = lot.quant_ids.filtered(lambda q: q.location_id.id == self.traer_location_data())
+			lot.x_product_qty = sum(quants.mapped('quantity'))

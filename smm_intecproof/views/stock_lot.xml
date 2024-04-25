@@ -15,9 +15,6 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='create_date']" position="before">
-                <field name="x_ubicacion"/>
-            </xpath>
             <xpath expr="//field[@name='expiration_date']" position="attributes">
                 <attribute name="optional">show</attribute>
             </xpath>
@@ -26,4 +23,20 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Crear la lista para los dashboards -->
+    <record id="view_stock_lot_tree_smm" model="ir.ui.view">
+        <field name="name">stock.lot.tree.smm</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="x_product_qty"/>
+                <field name="x_ubicacion"/>
+                <field name="expiration_date"/>
+            </tree>
+        </field>
+    </record>
+
 </odoo>
