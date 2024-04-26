@@ -5,14 +5,12 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 */
 
-var kekrpc;
 
 odoo.define("pos_vevent_terminal.payment", function (require) {
     "use strict";
 
     var core = require("web.core");
     var rpc = require("web.rpc")
-    kekrpc = rpc;
 
     var PaymentInterface = require("point_of_sale.PaymentInterface");
     const {Gui} = require("point_of_sale.Gui");
@@ -29,14 +27,26 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
             return this._vevent_payment_terminal_pay();
         },
 
-        send_payment_cancel: function () {
-            this._super.apply(this, arguments);
-            this._show_error(
-                _t(
-                    "Utilice la terminal para cancelar la orden."
-                )
-            );
-            return Promise.reject();
+        send_payment_cancel: async function (order) {
+            console.log("send_payment_cancel")
+            await this._delete_current_messages(order);
+            return true;
+        },
+
+        _delete_current_messages: async function(order) {
+            console.log("delete_current_messages " + order.pos.config.name);
+            var currentMessages = await rpc.query({
+                model: 'pos.vevent.message',
+                method: 'search',
+                args: [[["pos_name", "=", order.pos.config.name]]]
+            })
+
+            await rpc.query({
+                model: 'pos.vevent.message',
+                method: 'unlink',
+                args: [currentMessages]
+            })
+            return true;
         },
 
         _vevent_payment_terminal_pay: async function () {
@@ -61,17 +71,7 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
             pay_line.transaction_id = Date.now();
             pay_line.card_type = 'Vevent';
                       
-            var currentMessages = await rpc.query({
-                model: 'pos.vevent.message',
-                method: 'search',
-                args: [[["pos_name", "=", order.pos.config.name]]]
-            })
-
-            await rpc.query({
-                model: 'pos.vevent.message',
-                method: 'unlink',
-                args: [currentMessages]
-            })
+            await this._delete_current_messages(order);
 
             var newMessage = await rpc.query({
                 model: 'pos.vevent.message',
