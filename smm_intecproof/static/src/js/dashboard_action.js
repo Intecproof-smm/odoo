@@ -31,23 +31,27 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 
         _onClic_vencidos: async function () {
             console.log('*********** Entré al botón vencidos' )
-            var hoy = new Date();
             var location_id = 0;
             var location = await this._rpc({
                 model: 'stock.lot',
                 method: 'traer_location_data'
+            });
+            var dominio = [];
+            var contexto = {};
+            var dominios = await this._rpc({
+                model: 'stock.lot',
+                method: 'get_medicamentos_data'
+            }).then(function(result){
+                dominio = result.dominio_vencidos;
+                contexto = result.context;
             });
             var action = {
     			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'context': "{'group_by':'x_categoria'}",
-			    'domain': [
-			            ['expiration_date','<', hoy],
-			            ['quant_ids.quantity','>',0],
-			            ['quant_ids.location_id', '=', location]
-                ],
+			    'context': contexto,
+			    'domain': dominio,
                 'target': 'current'
             };
             return this.do_action(action);
@@ -55,22 +59,27 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 
         _onClic_vencen_hoy: async function () {
             console.log('*********** Entré al botón vencen hoy' )
-            var hoy = new Date();
+            var location_id = 0;
             var location = await this._rpc({
                 model: 'stock.lot',
                 method: 'traer_location_data'
             });
+            var dominio = [];
+            var contexto = {};
+            var dominios = await this._rpc({
+                model: 'stock.lot',
+                method: 'get_medicamentos_data'
+            }).then(function(result){
+                dominio = result.dominio_hoy;
+                contexto = result.context;
+            });
             var action = {
-    			'name': 'Lotes que vencen el día de hoy',
+    			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'context': "{'group_by':'x_categoria'}",
-			    'domain': [
-			            ['quant_ids.quantity', '>', '0'],
-			            ['expiration_date','=', hoy],
-			            ['quant_ids.location_id', '=', location]
-			    ],
+			    'context': contexto,
+			    'domain': dominio,
                 'target': 'current'
             };
             return this.do_action(action);
@@ -78,25 +87,27 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 
         _onClic_proximos_a_vencer: async function () {
             console.log('*********** Entré al botón Próximos a Vencer' )
-            var hoy = new Date();
-            var proximos30dias =  (60 * 60 * 24 * 1000 * 30);
-            var hasta = new Date(hoy.getTime() + proximos30dias)
+            var location_id = 0;
             var location = await this._rpc({
                 model: 'stock.lot',
                 method: 'traer_location_data'
             });
+            var dominio = [];
+            var contexto = {};
+            var dominios = await this._rpc({
+                model: 'stock.lot',
+                method: 'get_medicamentos_data'
+            }).then(function(result){
+                dominio = result.dominio_proximos;
+                contexto = result.context;
+            });
             var action = {
-    			'name': 'Lotes próximos a vencer',
+    			'name': 'Lotes expirados/vencidos',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
-			    'context': "{'group_by':'x_categoria'}",
-			    'domain': [
-			            ['quant_ids.quantity', '>', '0'],
-			            ['expiration_date','>', hoy],
-			            ['expiration_date','<', hasta],
-			            ['quant_ids.location_id', '=', location]
-                ],
+			    'context': contexto,
+			    'domain': dominio,
                 'target': 'current'
             };
             return this.do_action(action);
@@ -105,9 +116,6 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
         willStart: function() {
             var self = this;
             return this._super()
-            // return $.when(ajax.loadLibs(this), this._super()).then(function() {
-            //    return self.fetch_data();
-            //});
         },
 
         render_dashboards: function(){
@@ -134,8 +142,6 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
 
         abrirVista() {
             console.log('*********** Para ver si entra al botón ');
-            //var self = this;
-            //self.ensure_one()
             return {
                 'name': 'Prueba',
                 'view_mode': 'tree',
