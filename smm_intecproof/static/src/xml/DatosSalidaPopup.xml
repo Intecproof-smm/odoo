@@ -6,6 +6,7 @@
                 <t t-esc="props.title" />
             </header>
             <main class="body">
+                <div t-if="state.isInvalid" style="padding: 10px"><strong style="color:red">Llene los datos requeridos</strong></div>
                 <div t-attf-class="#{ (props.es_controlado===true) ? 'izquierda' : '' }">
                     <div>
                         <label>Cama:</label>
@@ -35,6 +36,11 @@
                 <t t-if="props.es_controlado===true">
                     <div class="derecha">
                         <div>
+                            <label>Receta:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_receta" placeholder="Receta" />
+                        </div>
+                        <!-- <div>
                             <label>Expediente:</label>
                             <br />
                             <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_expediente" placeholder="Expediente" />
@@ -57,7 +63,7 @@
                                 <option value="sc">SC</option>
                                 <option value="im">IM</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div>
                             <label>Indicación:</label>
                             <br />
@@ -65,6 +71,7 @@
                         </div>
                     </div>
                 </t>
+                <div style="clear:both; height: 0px" />
             </main>
             <footer class="footer">
                 <!-- Aprendizaje: para que los botones funcionen tienen que llevar la propiedad "t-on-click" -->

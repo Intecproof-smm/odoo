@@ -28,6 +28,17 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                     });
                     continuar = false;
                 }
+
+                if (this.esOrdenConControlados()) {
+                    if (this.currentOrder().orderlines.length > 1) {
+                        this.showPopup("ErrorPopup", {
+                            title: "Acción No Válida",
+                            body: "Solamente puede existir un medicamento controlado en la orden y no puede combinarse con otros productos.",
+                        });
+                        continuar = false;
+                    }
+                }
+
                 
                 if (continuar) {
                     // Desplegamos el pop-up que va a capturar los datos para dar salida
@@ -67,6 +78,7 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                     , payload.ds_dosis_aplicada
                     , payload.ds_via_aplicacion
                     , payload.ds_indicacion
+                    , payload.ds_receta
                 );
             }
 

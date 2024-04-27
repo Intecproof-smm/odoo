@@ -64,6 +64,8 @@ class PosOrder(models.Model):
 
     x_indicacion = fields.Char(string = 'Indicación', store = True)
 
+    x_receta = fields.Char(string = 'Receta', store = True)
+
     @api.model
     def _order_fields(self, ui_order):
         order = super()._order_fields(ui_order)
@@ -79,6 +81,7 @@ class PosOrder(models.Model):
         order['x_dosis_aplicada'] = ui_order['x_dosis_aplicada']
         order['x_via_aplicacion'] = ui_order['x_via_aplicacion']
         order['x_indicacion'] = ui_order['x_indicacion']
+        order['x_receta'] = ui_order['x_receta']
         return order
     
     def _create_order_picking(self):
@@ -107,6 +110,8 @@ class PosOrder(models.Model):
                     , 'no_ambulancia': self.x_no_ambulancia
                     , 'solicitante': self.x_solicitante
                     , 'turno': self.x_turno
+                    , 'receta': self.x_receta
+                    , 'indicacion': self.x_indicacion
                     , 'has_controlled_product': has_controlled_product
                 }
 

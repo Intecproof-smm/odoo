@@ -60,6 +60,8 @@ class stock_pickin_anade_opciones(models.Model):
             , 'x_no_ambulancia': datos_salida['no_ambulancia']
             , 'x_solicitante': datos_salida['solicitante'].id if datos_salida['solicitante'] else False
             , 'x_turno': datos_salida['turno']
+            , 'x_receta': datos_salida['receta']
+            , 'x_indicacion': datos_salida['indicacion']
             , 'has_controlled_product': datos_salida['has_controlled_product']
         }
 

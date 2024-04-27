@@ -31,6 +31,8 @@ class StockPicking(models.Model):
     )
     x_no_ambulancia = fields.Char(string = 'Ambulancia', store = True)
     x_solicitante = fields.Many2one('res.partner', string = 'Solicitante', store = True)
+    x_receta = fields.Char(string = 'Receta', store = True)
+    x_indicacion = fields.Char(string = 'Indicación', store = True)
 
     x_turno = fields.Selection(
         selection = [
