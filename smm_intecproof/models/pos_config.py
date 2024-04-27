@@ -71,7 +71,7 @@ class PosConfigSmm(models.Model):
             ON        (
                                 partner.id = pm.partner_id)
             WHERE (
-                partner.x_paciente_medico='Paciente' AND partner.id in %s
+                partner.x_paciente_medico='Paciente' AND cast(partner.id as int) in %s
             )
             ORDER BY  COALESCE(pm.order_count, 0) DESC,
                       NAME limit %s;
