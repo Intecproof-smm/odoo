@@ -55,7 +55,8 @@ class PosConfigSmm(models.Model):
         ])
         partner_list = []
         for event_id in event_ids:
-            partner_list.append(event_id.paciente_id.id)
+            if event_id.paciente_id:
+                partner_list.append(event_id.paciente_id.id)
         _logger.info('POS Partners 1  ---->>  ' + str(len(partner_list)))
 
         self.env.cr.execute("""
