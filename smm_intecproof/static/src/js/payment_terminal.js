@@ -105,7 +105,7 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
                         console.log(currentMessages[0])
                         var data = JSON.parse(currentMessages[0].json_response)
                         if(data.Success){
-                            order.x_solicitante = { "id" : data.Contact.id }
+                            order.x_solicitante = data.Contact.id;
                             pay_line.set_receipt_info(
                                 "Paciente: " + order.partner.name + 
                                 "\nÁrea: " + order.x_area_solicitud + 

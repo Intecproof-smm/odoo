@@ -72,7 +72,7 @@ class PosOrder(models.Model):
         order['x_fecha_nacimiento'] = self.partner_id.x_fecha_nacimiento
         order['x_no_ambulancia'] = ui_order['x_no_ambulancia']
         # El solicitante se va a capturar mediante la tarjeta
-        # order['x_solicitante'] = ui_order['x_solicitante']['id'] or False
+        order['x_solicitante'] = ui_order['x_solicitante'] or False
         order['x_turno'] = ui_order['x_turno']
         order['x_expediente'] = ui_order['x_expediente']
         order['x_diagnostico'] = ui_order['x_diagnostico']
