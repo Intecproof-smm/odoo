@@ -65,7 +65,7 @@ class PosSession(models.Model):
 		for stock_quant in stock_quant_ids:
 			stock_product_list.append(stock_quant.lot_id.id)
 
-		fields = ['id','name','product_id','product_qty','total_available_qty','product_uom_id','expiration_date']
+		fields = ['id','name','product_id','product_qty','product_uom_id','expiration_date']
 		domain = [('id','=',0)]
 		if self.config_id.allow_pos_lot:
 			domain = [('id', 'in', stock_product_list)]
@@ -77,25 +77,10 @@ class PosSession(models.Model):
 		list_lot_num = []
 		list_lot_num_by_id = {}
 		list_lot_num_by_product_id = {}
-		from_lot_expire_days = fields.Datetime.now() + timedelta(days = self.config_id.lot_expire_days)
 
 		for lot in result:
-			product = False
-			if lot['product_id']:
-				product = self.env['product.product'].browse(lot['product_id'][0])
+			list_lot_num.append(lot)
 
-			if product and product.use_expiration_date:
-				if not lot['expiration_date'] or lot['expiration_date']>from_lot_expire_days:
-					list_lot_num.append(lot)
-			else:
-					list_lot_num.append(lot)
-			if lot['total_available_qty']>0:
-				list_lot_num_by_id[lot['id']] = lot
-				if lot['product_id'][0] in list_lot_num_by_product_id:
-					list_lot_num_by_product_id[lot['product_id'][0]].append(lot)
-				else:
-					list_lot_num_by_product_id[lot['product_id'][0]] = []
-					list_lot_num_by_product_id[lot['product_id'][0]].append(lot)
 		final_result = {
 			'list_lot_num':list_lot_num,
 			'list_lot_num_by_id':list_lot_num_by_id,
@@ -134,23 +119,6 @@ class pos_order(models.Model):
 			'pos_lot_ids' : [(6, 0, order_line.pack_lot_ids.ids)],
 		})
 		return res
-
-
-class stock_lot(models.Model):
-	_inherit = "stock.lot"
-
-	total_available_qty = fields.Float("Total Qty", compute="_computeTotalAvailableQty")
-
-	def _computeTotalAvailableQty(self):
-		for record in self:
-			move_line = self.env['stock.move.line'].search([('lot_id','=',record.id)])
-			record.total_available_qty = 0.0
-			for rec in move_line:
-				if rec.location_dest_id.usage in ['internal', 'transit']:
-					record.total_available_qty += rec.qty_done
-				else:
-					record.total_available_qty -= rec.qty_done
-
 
 class pos_stock_quant(models.Model):
 	_name = "pos.stock.quant"
