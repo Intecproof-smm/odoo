@@ -183,10 +183,7 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					id: product_id.id,
 					label: product_id.name,
 					item: product_id,
-				}));		
-				
-				console.log("LotListSelect:")
-				console.log(LotListSelect);
+				}));					
 
 				const { confirmed, payload: selectedlot } =  await Gui.showPopup('SelectionPopup', {
 					title: ('Seleccione el numero de Lote'),

@@ -59,14 +59,21 @@ class PosSession(models.Model):
 		return final_result		
 
 	def _loader_params_stock_lot(self):
+		stock_product_list = []
+		location_id = self.config_id.picking_type_id.default_location_src_id
+		stock_quant_ids  = self.env['stock.quant'].search([('location_id', '=', location_id.id), ('quantity', '>', 0)])
+		for stock_quant in stock_quant_ids:
+			stock_product_list.append(stock_quant.lot_id.id)
+
 		fields = ['id','name','product_id','product_qty','total_available_qty','product_uom_id','expiration_date']
 		domain = [('id','=',0)]
 		if self.config_id.allow_pos_lot:
-			domain = []
+			domain = [('id', 'in', stock_product_list)]
 		return {'search_params': {'domain': domain, 'fields': fields}}
 
 	def _get_pos_ui_stock_lot(self,params):
 		result  = self.env['stock.lot'].search_read(**params['search_params'])
+
 		list_lot_num = []
 		list_lot_num_by_id = {}
 		list_lot_num_by_product_id = {}
