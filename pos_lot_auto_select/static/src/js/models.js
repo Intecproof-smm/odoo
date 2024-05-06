@@ -120,12 +120,15 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					console.log('payload 4',payload);
 
 					const newPackLotLines = payload;
+					console.info('###  add_product  --->>  newPackLotLines 1  -->> ' + Object.keys(newPackLotLines))	
+					for(var g=0;g<newPackLotLines.length;g++){
+						console.info('###  add_product  --->>  newPackLotLines 2  -->> ' + newPackLotLines[g].lot_name)	
+					} 
+
 					const modifiedPackLotLines = [];
 					options.draftPackLotLines = { modifiedPackLotLines, newPackLotLines };
-
-					// draftPackLotLines = { payload };
 				} else {
-					// We don't proceed on adding product.
+
 					return;
 				}
 			}
@@ -146,6 +149,10 @@ odoo.define('pos_lot_auto_select.models', function(require){
 			var qty  =  options.quantity || 1;
 			if (orderline && orderline.product.id == product.id) {
 				qty = orderline.get_quantity()+1;
+				console.info('_autoSelectLot  orderline --->>>   ' + Object.keys(orderline.product) )
+				console.info('_autoSelectLot  orderline --->>>   ' + orderline.pack_lot_lines.length )
+				console.info('_autoSelectLot  orderline --->>>   ' + orderline.has_product_lot )
+				console.info('_autoSelectLot  orderline --->>>   ' + Object.keys(orderline.pack_lot_lines) )
 			}
 
 			var product_lot = [];
@@ -156,7 +163,6 @@ odoo.define('pos_lot_auto_select.models', function(require){
 			var pos_location_id = product_lot_stock_quant[0].location_id[0]
 
 			for(var i=0;i<product_lots.length;i++){
-				// console.log('##  product_lots first  -->>  ' + product_lots[i].product_id[0] + ' - ' + product_lots[i].name);			
 				if(product_lots[i].product_id[0] == product.id){
 
 					if (!product_lots[i]['expiration_date']) {
@@ -244,7 +250,6 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					var qty_temp = qty;
 					var i =0;
 
-
 					while (qty_temp>0  ) {
 						if (product_lot.length<= i) {
 							alert("Not enough Lot");
@@ -278,17 +283,26 @@ odoo.define('pos_lot_auto_select.models', function(require){
 						}
 					}
 
-					console.log('##  add_product 4a selected_lots -->>  ' + selected_lots.length);							
+					console.log('##  add_product 4a selected_lots -->>  ' + selected_lots[0].qty);							
 					var newPackLotLines = [];
-					for (var j = 0; j < selected_lots.length; j++) {
-						for (var i = 0; i < selected_lots[j].qty; i++) {
-							let obj = { lot_name: selected_lots[j].name  , prod_qty : 1};
-							console.log('##  add_product 4b -->>  ' + selected_lots[j].name);
-							newPackLotLines.push(obj);
-							
-						}
-					}
 
+					if (orderline && orderline.product.id == product.id) {
+						for (var h = 0; h < orderline.pack_lot_lines.length; h++) {
+							console.log('##  add_product 4b - orderline.pack_lot_lines[h]  -->>  ' + orderline.pack_lot_lines[h].lot_name);
+							let obj = { lot_name: orderline.pack_lot_lines[h].lot_name  , prod_qty : 1};
+							newPackLotLines.push(obj);
+						}														
+					}
+					for (var j = 0; j < selected_lots.length; j++) {
+						let obj = { lot_name: selected_lots[j].name  , prod_qty : 1};
+						console.log('##  add_product 4f -->>  ' + selected_lots[j].name);
+						newPackLotLines.push(obj);
+					}					
+
+					console.log('##  add_product 5a - newPackLotLines  -->>  ' + newPackLotLines);
+					for (var j = 0; j < newPackLotLines.length; j++) {
+						console.log('##  add_product 5b - newPackLotLines  -->>  ' + ' ' + j + '  ' + newPackLotLines[j].lot_name);
+					}
 					return newPackLotLines;
 				}
 				else if (product_lot.length>0 && product.is_controlled_product){
@@ -334,9 +348,8 @@ odoo.define('pos_lot_auto_select.models', function(require){
 					for (var j = 0; j < selected_lots.length; j++) {
 						for (var i = 0; i < selected_lots[j].qty; i++) {
 							let obj = { lot_name: selected_lots[j].name  , prod_qty : 1};
-							console.log('##  add_product 4b -->>  ' + selected_lots[j].name);
+							console.log('##  add_product else 4d -->>  ' + selected_lots[j].name);
 							newPackLotLines.push(obj);
-							
 						}
 					}
 
