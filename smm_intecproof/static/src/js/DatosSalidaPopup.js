@@ -29,6 +29,7 @@ odoo.define('smm_pos.DatosSalidaPopup', function(require) {
                     , ds_via: this.props.ds_via
                     , ds_indicacion: this.props.ds_indicacion
                     , ds_receta: this.props.ds_receta
+                    , ds_medico: this.props.ds_medico
                     , isInvalid: false
                     , es_controlado: this.props.es_controlado
                 });
@@ -41,7 +42,7 @@ odoo.define('smm_pos.DatosSalidaPopup', function(require) {
 
         async confirm() {
             if(!this.state.ds_cama || !this.state.ds_no_ambulancia || !this.state.ds_area 
-                || (this.state.es_controlado && (!this.state.ds_receta || !this.state.ds_indicacion))) {
+                || (this.state.es_controlado && (!this.state.ds_receta || !this.state.ds_indicacion || !this.state.ds_medico))) {
                 this.state.isInvalid = true;
             } else {
                 this.state.isInvalid = false;

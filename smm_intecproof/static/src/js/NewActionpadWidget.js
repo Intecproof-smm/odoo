@@ -79,6 +79,7 @@ odoo.define('smm_pos.NewActionPadWidget', function(require) {
                     , payload.ds_via_aplicacion
                     , payload.ds_indicacion
                     , payload.ds_receta
+                    , payload.ds_medico
                 );
             }
 

@@ -46,7 +46,7 @@
                             <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_expediente" placeholder="Expediente" />
                         </div>
                         <div>
-                            <label>Diagnóstico:</label>
+                            <label>Diagnóstico:</label> 
                             <br />
                             <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_diagnostico" placeholder="Diagnóstico" />
                         </div>
@@ -64,6 +64,11 @@
                                 <option value="im">IM</option>
                             </select>
                         </div> -->
+                        <div>
+                            <label>Médico:</label>
+                            <br />
+                            <input type="text" class="popup-input list-line-input" required="1" t-model="state.ds_medico" placeholder="Nombre del médico" />
+                        </div>
                         <div>
                             <label>Indicación:</label>
                             <br />

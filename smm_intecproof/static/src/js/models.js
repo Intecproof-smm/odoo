@@ -20,9 +20,10 @@ odoo.define("smm_pos.models", function(require) {
                 this.x_dosis_aplicada = this.x_dosis_aplicada || null;
                 this.x_via_aplicacion = this.x_via_aplicacion || null;
                 this.x_indicacion = this.x_indicacion || null;
+                this.x_medico = this.x_medico || null;
             }
 
-            save_datos_adicionales(area_solicitud, cama, no_ambulancia, turno, expediente, diagnostico, dosis_aplicada, via_aplicacion, indicacion, receta) {
+            save_datos_adicionales(area_solicitud, cama, no_ambulancia, turno, expediente, diagnostico, dosis_aplicada, via_aplicacion, indicacion, receta, medico) {
                 this.x_area_solicitud = area_solicitud || null;
                 this.x_cama = cama || null;
                 this.x_no_ambulancia = no_ambulancia || null;
@@ -32,6 +33,7 @@ odoo.define("smm_pos.models", function(require) {
                 this.x_dosis_aplicada = dosis_aplicada || null;
                 this.x_via_aplicacion = via_aplicacion || null;
                 this.x_indicacion = indicacion || null;
+                this.x_medico = medico || null;
                 this.x_receta = receta || null;
             }
 
@@ -49,6 +51,7 @@ odoo.define("smm_pos.models", function(require) {
                 data.x_via_aplicacion = this.x_via_aplicacion;
                 data.x_indicacion = this.x_indicacion;
                 data.x_receta = this.x_receta;
+                data.x_medico = this.x_medico;
                 return data;
             }
 
@@ -65,6 +68,7 @@ odoo.define("smm_pos.models", function(require) {
                 this.x_via_aplicacion = json.x_via_aplicacion;
                 this.x_indicacion = json.x_indicacion;
                 this.x_receta = json.x_receta;
+                this.x_medico = json.x_medico;
                 super.init_from_JSON.call(this, json);
             }
 
