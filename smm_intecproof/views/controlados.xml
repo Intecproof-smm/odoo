@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (c) 2024-today Juan Carlos Flores.
+
+    This file is part of SMM_Intecproof module
+
+    This program is not a free software
+
+-->
+
+<odoo>
+    <data>
+        <!-- Creamos la vista tree para el reporte de controlados -->
+        <record id="movimientos_de_controlados_tree" model="ir.ui.view">
+            <field name="name">Movimientos de controlados</field>
+            <field name="model">stock.move.line</field>
+            <field name="arch" type="xml">
+                <tree default_order="product_id,date" create="0" decoration-danger="location_usage == 'internal'"
+                      decoration-success="location_usage == 'supplier'">
+                    <field name="location_usage" invisible="1"/>
+                    <field name="location_dest_usage" invisible="1"/>
+                    <field name="product_id"/>
+                    <field name="date"/>
+                    <field name="reference"/>
+                    <field name="location_id"/>
+                    <field name="x_receta"/>
+                    <field name="x_indicacion"/>
+                    <field name="x_medico"/>
+                    <field name="qty_done"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Creamos la acción correspondiente al reporte de controlados -->
+        <record id="smm_controlados_action" model="ir.actions.act_window" >
+            <field name="name">Reporte de controlados</field>
+            <field name="res_model">stock.move.line</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">
+                [("state", "=", "done"), ("product_id.is_controlled_product", "=", True), "|",
+                ("location_id", "ilike", "SMM"), ("location_dest_id", "ilike", "SMM"), "|",
+                ("picking_id.picking_type_id.code", "=", "internal"),
+                ("picking_id.picking_type_id.code", "=", "incoming")]
+            </field>
+            <field name="context">
+                {
+                    'tree_view_ref':'smm_intecproof.movimientos_de_controlados_tree',
+                    'group_by':'product_id',
+                }
+            </field>
+        </record>
+
+        <!-- Creamos el item del menú en inventarios/reportes -->
+        <menuitem id="menu_controlados"
+                  name="Controlados"
+                  action="smm_intecproof.smm_controlados_action"
+                  parent="stock.menu_warehouse_report"
+        />
+
+    </data>
+</odoo>

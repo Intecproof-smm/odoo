@@ -48,6 +48,7 @@
         "report/consumos_paciente_report.xml",
         "views/patient_sync.xml",
         "views/stock_lot.xml",
+        "views/controlados.xml",
     ],
     'assets': {
         'web.assets_backend': [
