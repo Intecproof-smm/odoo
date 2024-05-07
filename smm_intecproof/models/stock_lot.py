@@ -35,17 +35,18 @@ class ExtendStock_lot(models.Model):
 		]
 		dominio_hoy = [
 			('expiration_date', '>=', fields.date.today().strftime('%Y-%m-%d 00:00:00')),
-			('expiration_date', '<=', fields.date.today().strftime('%Y-%m-%d 23:59:59'))
+			('expiration_date', '<=', fields.date.today() + relativedelta(days=15))
 		]
 		dominio_proximos = [
-			('expiration_date', '>=', fields.date.today() + relativedelta(days=1)),
-			('expiration_date', '<=', fields.date.today() + relativedelta(months=1))
+			('expiration_date', '>=', fields.date.today() + relativedelta(days=16)),
+			('expiration_date', '<=', fields.date.today() + relativedelta(days=30))
 		]
 		dominio_ok = [
-			('expiration_date', '>', fields.date.today() + relativedelta(months=1))
+			('expiration_date', '>=', fields.date.today() + relativedelta(days=61)),
+			('expiration_date', '<=', fields.date.today() + relativedelta(days=90))
 		]
 		# ToDo ----- Aquí tenemos que poner el campo agrupador de la ubicación -----
-		contexto = "{'group_by': ['x_categoria']}"
+		contexto = "{'group_by':'x_categoria', 'order':'expiration_date'}"
 		dominio_vencidos += dominio_comun
 		dominio_hoy += dominio_comun
 		dominio_proximos += dominio_comun

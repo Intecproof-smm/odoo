@@ -27,7 +27,7 @@
            <div class="col-md-2" >
                <div class="card text-white bg-warning mb-3" style="max-width: 22rem; font-size:6rem;">
                   <div class="card-header" style="text-align:center;"><i class="fa fa-exclamation-triangle"/></div>
-                  <div class="card-body" style="font-size:2rem; text-align:center;">Hoy vencen
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Vencen en 15 días
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_hoy_vencen"/></h5>
                       <button  class="btn btn-link medicamentos_vencen_hoy">
                           <div id="medicamentos_vencen_hoy"/>
@@ -38,7 +38,7 @@
            <div class="col-md-2" >
                <div class="card text-white bg-success mb-3" style="max-width: 22rem; font-size:6rem;">
                   <div class="card-header" style="text-align:center;"><i class="fa fa-check-circle-o"/></div>
-                  <div class="card-body" style="font-size:2rem; text-align:center;">Próximos a vencer
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Vencen en 30 días
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_proximos_a_vencer"/></h5>
                       <button class="btn btn-link medicamentos_proximos_a_vencer">
                           <div id="medicamentos_proximos_a_vencer"/>
@@ -49,7 +49,7 @@
            <div class="col-md-2" >
                <div class="card text-white bg-info mb-3" style="max-width: 22rem; font-size:6rem;">
                   <div class="card-header" style="text-align:center;"><i class="fa fa-thumbs-o-up"/></div>
-                  <div class="card-body" style="font-size:2rem; text-align:center;">Vigentes
+                  <div class="card-body" style="font-size:2rem; text-align:center;">Vencen en 90 días
                     <h5 class="card-title" style="font-size:2rem; text-align:center"><t t-esc="widget.total_medicamentos_ok"/></h5>
                       <button class="btn btn-link medicamentos_ok">
                           <div id="medicamentos_ok"/>

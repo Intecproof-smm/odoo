@@ -12,7 +12,8 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
         events: {
             'click .medicamentos_vencidos': '_onClic_vencidos',
             'click .medicamentos_vencen_hoy': '_onClic_vencen_hoy',
-            'click .medicamentos_proximos_a_vencer': '_onClic_proximos_a_vencer'
+            'click .medicamentos_proximos_a_vencer': '_onClic_proximos_a_vencer',
+            'click .medicamentos_ok': '_onClic_proximos_a_vencer90'
         },
 
         template: 'CustomDashBoard',
@@ -74,7 +75,7 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
                 contexto = result.context;
             });
             var action = {
-    			'name': 'Lotes expirados/vencidos',
+    			'name': 'Lotes expirados/vencidos que vencen en los próximos 15 días',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
@@ -102,7 +103,35 @@ odoo.define('smm_intecproof.dashboard_action', function (require){
                 contexto = result.context;
             });
             var action = {
-    			'name': 'Lotes expirados/vencidos',
+    			'name': 'Lotes expirados/vencidos que vencen en los próximos 30 días',
+	    		'type': 'ir.actions.act_window',
+		    	'res_model': 'stock.lot',
+			    'views': [[false, 'tree']],
+			    'context': contexto,
+			    'domain': dominio,
+                'target': 'current'
+            };
+            return this.do_action(action);
+        },
+
+        _onClic_proximos_a_vencer90: async function () {
+            console.log('*********** Entré al botón Próximos a Vencer 90 días' )
+            var location_id = 0;
+            var location = await this._rpc({
+                model: 'stock.lot',
+                method: 'traer_location_data'
+            });
+            var dominio = [];
+            var contexto = {};
+            var dominios = await this._rpc({
+                model: 'stock.lot',
+                method: 'get_medicamentos_data'
+            }).then(function(result){
+                dominio = result.dominio_ok;
+                contexto = result.context;
+            });
+            var action = {
+    			'name': 'Lotes expirados/vencidos que vencen en los próximos 90 días',
 	    		'type': 'ir.actions.act_window',
 		    	'res_model': 'stock.lot',
 			    'views': [[false, 'tree']],
