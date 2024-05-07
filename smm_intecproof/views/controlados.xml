@@ -20,13 +20,13 @@
                       decoration-success="location_usage == 'supplier'">
                     <field name="location_usage" invisible="1"/>
                     <field name="location_dest_usage" invisible="1"/>
-                    <field name="x_receta"/>
-                    <field name="x_indicacion"/>
-                    <field name="x_medico"/>
                     <field name="product_id"/>
                     <field name="date"/>
                     <field name="reference"/>
                     <field name="location_id"/>
+                    <field name="x_receta"/>
+                    <field name="x_indicacion"/>
+                    <field name="x_medico"/>
                     <field name="qty_done"
                     />
                 </tree>

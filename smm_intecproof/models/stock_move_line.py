@@ -33,7 +33,7 @@ class StockMoveLineExtended(models.Model):
 	x_subtotal = fields.Float(compute='_calcular_subtotal', readonly=True, store=False)
 	x_receta = fields.Char(related='picking_id.x_receta', readonly=True, store=True)
 	x_indicacion = fields.Char(realted='picking_id.x_indicacion', readonly=True, store=True)
-	x_medico = fields.Char(related='picking_id.x_doctor', readonly=True, store=True)
+	x_medico = fields.Char(related='picking_id.x_medico', readonly=True, store=True)
 
 	@api.onchange('qty_done', 'x_price_unit')
 	def _calcular_subtotal(self):
