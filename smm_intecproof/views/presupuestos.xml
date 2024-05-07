@@ -94,7 +94,11 @@
         </record>
 
         <!-- Creamos el menú principal del módulo -->
-        <menuitem id="menu_presupuestos" name="Presupuestos" action="smm_intecproof.smm_presupuestos_action"/>
+        <menuitem id="menu_presupuestos"
+                  name="Presupuestos"
+                  action="smm_intecproof.smm_presupuestos_action"
+                  parent="stock.menu_stock_root"
+        />
 		<!-- Creamos el menú dentro del módulo -->
 		<menuitem id="presupuestos_menu_option"
                   name="Presupuestos"
