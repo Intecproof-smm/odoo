@@ -10,4 +10,7 @@ from . import stock_return_picking
 from . import product
 from . import stock_quant
 from . import purchase_order
+from . import purchase_order_line
 from . import purchase_report
+from . import purchase_order_budget
+from . import purchase_order_budget_line

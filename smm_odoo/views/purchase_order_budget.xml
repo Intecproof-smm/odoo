@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_order_budget_tree_view" model="ir.ui.view">
+            <field name="name">purchase.order.budget.tree.view</field>
+            <field name="model">purchase.order.budget</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="picking_type_id"/>
+                    <field name="picking_type_complete_name"/>
+                    <field name="category"/>
+                    <field name="initial_date"/>
+                    <field name="final_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase_order_budget_form_view" model="ir.ui.view">
+            <field name="name">purchase.order.budget.form.view</field>
+            <field name="model">purchase.order.budget</field>
+            <field name="arch" type="xml">
+                <form string="Presupuestos">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" attrs="{'invisible':[('name', '=', 'Sin datos completos')]}" placeholder="Draft"/>
+                            </h1>
+                        </div>
+                        <group string="Datos del presupuesto">
+                            <group id="left_group">
+                                <field name="picking_type_id"/>
+                            </group>
+                            <group id="right_group">
+                                <field name="category"/>
+                            </group>
+                        </group>
+                        <group string="Periodo del presupuesto">
+                            <group string="Desde">
+                                <field name="initial_month"/>
+                                <field name="initial_year"/>
+                            </group>
+                            <group string="Hasta">
+                                <field name="final_month"/>
+                                <field name="final_year"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas" name="lineas">
+                                <field name="line_ids" widget="one2many" mode="tree"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+<!--        <record id="purchase_order_budget_line_tree_view" model="ir.ui.view">-->
+<!--            <field name="name">purchase_order_budget_line_tree_view</field>-->
+<!--            <field name="model">purchase.order.budget.line</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree editable="bottom">-->
+<!--                    <field name="product_id"/>-->
+<!--                    <field name="quantity"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="smm_purchase_order_budget_action" model="ir.actions.act_window" >
+            <field name="name">Presupuestos</field>
+            <field name="res_model">purchase.order.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Sin presupuestos, ¡Vamos a dar uno de alta!
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="purchase_order_budget_menu_option"
+                  name="Presupuestos"
+                  parent="smm_odoo.purchase_order_budget_sub_menu_option"
+                  action="smm_purchase_order_budget_action"
+                  sequence="99"/>
+    </data>
+</odoo>

@@ -5,19 +5,15 @@ from odoo.exceptions import UserError
 from itertools import groupby
 from collections import Counter
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class StockPicking(models.Model):
     _inherit='stock.picking'
 
-
-
     def _create_move_from_pos_order_lines(self, lines):
-        print("SALDASKLDJWQ")
-        print("SALDAsfadsfsdfsdfsfSKLDJWQ")
-        print("SALDASdfsgfdgfsgKLDJWQ")
-        print("SALDASdfsgfdgfsgKLDJWQ")
-        print("SALDASdfsgfdgfsgKLDJWQ")
-        print("SALDASKLDJWQ")
         self.ensure_one()
         lines_by_product = groupby(sorted(lines, key=lambda l: (l.product_id.id,l.product_uom_id.id)), key=lambda l: (l.product_id.id,l.product_uom_id.id))
         for product, lines in lines_by_product:
@@ -37,13 +33,11 @@ class StockPicking(models.Model):
                             print(line.pack_lot_ids.filtered(lambda l: l.lot_name))
                             pack_lots = []
                             for value in line.pack_lot_ids.filtered(lambda l: l.lot_name):
-                                print(value.lot_name)
+                                _logger.info('_create_move_from_pos_order_lines  --->>>   ' + value.lot_name )
                                 pack_lots.append(value.lot_name)
-                            print(Counter(pack_lots))
                             # pack_lots = set(pack_lots)
                             # for lot in line.pack_lot_ids.filtered(lambda l: l.lot_name):
                             for lot in Counter(pack_lots):
-                                print(lot)
                                 # if line.product_id.tracking == 'serial':
                                 #     qty = 1
                                 # else:
@@ -69,8 +63,6 @@ class StockPicking(models.Model):
                                     ml_vals.update({
                                         'lot_name': lot,
                                     })
-                                print("ml_vals here")
-                                print(ml_vals)
                                 self.env['stock.move.line'].create(ml_vals)
                                 sum_of_lots += abs(Counter(pack_lots)[lot])
                             if abs(line.qty) != sum_of_lots:
@@ -79,13 +71,9 @@ class StockPicking(models.Model):
                                 if line.product_id.tracking == 'serial':
                                     ml_vals.update({'qty_done': 1})
                                     for i in range(int(difference_qty)):
-                                        print("ooi")
-                                        print(ml_vals)
                                         self.env['stock.move.line'].create(ml_vals)
                                 else:
                                     ml_vals.update({'qty_done': difference_qty})
-                                    print("hgjh  -")
-                                    print(ml_vals)
                                     self.env['stock.move.line'].create(ml_vals)
                     else:
                         move._action_assign()
@@ -97,8 +85,6 @@ class StockPicking(models.Model):
                             remaining_qty = move.product_uom_qty - move.quantity_done
                             ml_vals = move._prepare_move_line_vals()
                             ml_vals.update({'qty_done':remaining_qty})
-                            print("guiyuy")
-                            print(ml_vals)
                             self.env['stock.move.line'].create(ml_vals)
 
                 else:

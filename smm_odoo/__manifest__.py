@@ -20,12 +20,16 @@
         , 'views/stock_warehouse_views.xml'
         , 'views/stock_location_views.xml'
         , 'views/stock_return_picking_view.xml'
+        , 'views/purchase_order_line.xml'
         , 'wizard/stock_picking_button_validate_wizard.xml'
+        , 'wizard/purchase_order_budget_wizard.xml'
         , 'security/ir_rule_stock_ping.xml'
         , 'views/product_product_views.xml'
         , 'reports/reports.xml'
         , 'reports/smm_reporte_entrega.xml'
         , 'reports/smm_reporte_entrega_ubicaciones.xml'
+        , 'views/purchase_order_budget.xml'
+        , 'views/purchase_order_budget_line.xml'
     ]
     , 'application': False
     , 'auto_install': False

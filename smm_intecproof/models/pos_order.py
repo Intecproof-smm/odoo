@@ -64,6 +64,10 @@ class PosOrder(models.Model):
 
     x_indicacion = fields.Char(string = 'Indicación', store = True)
 
+    x_receta = fields.Char(string = 'Receta', store = True)
+
+    x_medico = fields.Char(string = 'Médico', store = True)
+
     @api.model
     def _order_fields(self, ui_order):
         order = super()._order_fields(ui_order)
@@ -72,13 +76,15 @@ class PosOrder(models.Model):
         order['x_fecha_nacimiento'] = self.partner_id.x_fecha_nacimiento
         order['x_no_ambulancia'] = ui_order['x_no_ambulancia']
         # El solicitante se va a capturar mediante la tarjeta
-        # order['x_solicitante'] = ui_order['x_solicitante']['id'] or False
+        order['x_solicitante'] = ui_order['x_solicitante'] or False
         order['x_turno'] = ui_order['x_turno']
         order['x_expediente'] = ui_order['x_expediente']
         order['x_diagnostico'] = ui_order['x_diagnostico']
         order['x_dosis_aplicada'] = ui_order['x_dosis_aplicada']
         order['x_via_aplicacion'] = ui_order['x_via_aplicacion']
         order['x_indicacion'] = ui_order['x_indicacion']
+        order['x_receta'] = ui_order['x_receta']
+        order['x_medico'] = ui_order['x_medico']
         return order
     
     def _create_order_picking(self):
@@ -107,6 +113,9 @@ class PosOrder(models.Model):
                     , 'no_ambulancia': self.x_no_ambulancia
                     , 'solicitante': self.x_solicitante
                     , 'turno': self.x_turno
+                    , 'receta': self.x_receta
+                    , 'indicacion': self.x_indicacion
+                    , 'medico': self.x_medico
                     , 'has_controlled_product': has_controlled_product
                 }
 

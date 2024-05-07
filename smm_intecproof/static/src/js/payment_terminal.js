@@ -5,14 +5,12 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 */
 
-var kekrpc;
 
 odoo.define("pos_vevent_terminal.payment", function (require) {
     "use strict";
 
     var core = require("web.core");
     var rpc = require("web.rpc")
-    kekrpc = rpc;
 
     var PaymentInterface = require("point_of_sale.PaymentInterface");
     const {Gui} = require("point_of_sale.Gui");
@@ -29,14 +27,26 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
             return this._vevent_payment_terminal_pay();
         },
 
-        send_payment_cancel: function () {
-            this._super.apply(this, arguments);
-            this._show_error(
-                _t(
-                    "Utilice la terminal para cancelar la orden."
-                )
-            );
-            return Promise.reject();
+        send_payment_cancel: async function (order) {
+            console.log("send_payment_cancel")
+            await this._delete_current_messages(order);
+            return true;
+        },
+
+        _delete_current_messages: async function(order) {
+            console.log("delete_current_messages " + order.pos.config.name);
+            var currentMessages = await rpc.query({
+                model: 'pos.vevent.message',
+                method: 'search',
+                args: [[["pos_name", "=", order.pos.config.name]]]
+            })
+
+            await rpc.query({
+                model: 'pos.vevent.message',
+                method: 'unlink',
+                args: [currentMessages]
+            })
+            return true;
         },
 
         _vevent_payment_terminal_pay: async function () {
@@ -61,17 +71,7 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
             pay_line.transaction_id = Date.now();
             pay_line.card_type = 'Vevent';
                       
-            var currentMessages = await rpc.query({
-                model: 'pos.vevent.message',
-                method: 'search',
-                args: [[["pos_name", "=", order.pos.config.name]]]
-            })
-
-            await rpc.query({
-                model: 'pos.vevent.message',
-                method: 'unlink',
-                args: [currentMessages]
-            })
+            await this._delete_current_messages(order);
 
             var newMessage = await rpc.query({
                 model: 'pos.vevent.message',
@@ -105,14 +105,23 @@ odoo.define("pos_vevent_terminal.payment", function (require) {
                         console.log(currentMessages[0])
                         var data = JSON.parse(currentMessages[0].json_response)
                         if(data.Success){
-                            order.x_solicitante = { "id" : data.Contact.id }
-                            pay_line.set_receipt_info(
+                            order.x_solicitante = data.Contact.id;
+                            var receipt_info = 
                                 "Paciente: " + order.partner.name + 
-                                "\nÁrea: " + order.x_area_solicitud + 
-                                "\nCama: " + order.x_cama + 
-                                " Ambulancia: " + order.x_no_ambulancia + 
+                                "\nÁrea: " + order.x_area_solicitud
+                            if(order.x_receta)
+                                receipt_info += "\nReceta: " + order.x_receta
+                            if(order.x_indicacion)
+                                receipt_info += "\nIndicación: " + order.x_indicacion
+                            if(order.x_cama && order.x_cama != "0")
+                                receipt_info += "\nCama: " + order.x_cama
+                            if(order.x_no_ambulancia && order.x_no_ambulancia != "0") 
+                                receipt_info += "\nAmbulancia: " + order.x_no_ambulancia
+                            receipt_info +=
                                 "\nRecibe: " + data.Contact.name + 
-                                "\nTurno: " + order.x_turno)
+                                "\nTurno: " + order.x_turno;
+                            
+                            pay_line.set_receipt_info(receipt_info)
                             pay_line.cardholder_name = data.Contact.name;
                             pay_line.set_payment_status("done");
                             resolve(true);    

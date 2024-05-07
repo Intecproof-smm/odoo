@@ -14,26 +14,40 @@ odoo.define('smm_pos.DatosSalidaPopup', function(require) {
     class DatosSalidaPopup extends AbstractAwaitablePopup {
         constructor() {
             super(...arguments);
-            this.state = useState(
-                { 
-                    c_cama: this.props.ds_cama
-                    , c_ambulancia: this.props.ds_no_ambulancia
-                    , c_area: this.props.ds_area 
-                    , c_expediente: this.props.ds_expediente
-                    , c_diagnostico: this.props.ds_diagnostico
-                    , c_dosis: this.props.ds_dosis
-                    , c_via: this.props.ds_via
-                    , c_indicacion: this.props.ds_indicacion
-                });
         }
 
         setup() {
             super.setup();
+            this.state = useState(
+                { 
+                    ds_cama: this.props.ds_cama
+                    , ds_no_ambulancia: this.props.ds_no_ambulancia
+                    , ds_area: this.props.ds_area 
+                    , ds_expediente: this.props.ds_expediente
+                    , ds_diagnostico: this.props.ds_diagnostico
+                    , ds_dosis: this.props.ds_dosis
+                    , ds_via: this.props.ds_via
+                    , ds_indicacion: this.props.ds_indicacion
+                    , ds_receta: this.props.ds_receta
+                    , ds_medico: this.props.ds_medico
+                    , isInvalid: false
+                    , es_controlado: this.props.es_controlado
+                });
             console.log("DatosSalidaPopup.setup()")
         }
 
         getPayload() {
             return this.state;
+        }
+
+        async confirm() {
+            if(!this.state.ds_cama || !this.state.ds_no_ambulancia || !this.state.ds_area 
+                || (this.state.es_controlado && (!this.state.ds_receta || !this.state.ds_indicacion || !this.state.ds_medico))) {
+                this.state.isInvalid = true;
+            } else {
+                this.state.isInvalid = false;
+                super.confirm();
+            }
         }
     }
 

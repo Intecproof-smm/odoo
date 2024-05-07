@@ -1,8 +1,9 @@
 import logging
 
-from odoo import models, fields, api
+from odoo import _, models, fields, api
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
@@ -294,13 +295,112 @@ class StockPicking(models.Model):
         # , with expired ones as the last option.
         if self.picking_type_id.code == 'internal':
             if self.location_id != self.location_dest_id:
-                stock_picking_button_assign_wizard = self.env['stock.picking.button.assign.wizard'].create(
-                    {
-                        'stock_picking_id': self.id
-                    }
-                )
+                current_user = self.env['res.users'].browse(self.env.user.id)
+                _logger.info('Marcar como por realizar - ' + str(current_user.login))
 
-                return stock_picking_button_assign_wizard.confirm_action_assign()
+                for line in self.move_line_ids_without_package:
+                    line.unlink()
+
+                for line in self.move_ids_without_package:
+                    cantidad_restante = line.product_uom_qty
+                    inventarios = self.env['stock.quant'].search(
+                        [('product_id', '=', line.product_id.id),
+                         ('location_id', '=', self.location_id.id)]
+                    )
+                    lotes_inventarios = []
+                    for inventario in inventarios:
+                        if inventario.available_quantity > 0:
+                            lotes_inventarios.append(inventario.lot_id.id)
+                    lotes_sin_expirar = self.env['stock.lot'].search(
+                        [('product_id', '=', line.product_id.id), ('expiration_date', '>=', datetime.now()),
+                         ('id', 'in', lotes_inventarios)],
+                        order = 'expiration_date asc'
+                    )
+                    for lote in lotes_sin_expirar:
+                        for inventario in inventarios:
+                            if inventario.lot_id.id == lote.id:
+                                if inventario.available_quantity >= cantidad_restante:
+                                    nueva_linea = {
+                                        'picking_id':       self.id,
+                                        'move_id':          line.id,
+                                        'company_id':       self.company_id.id,
+                                        'product_id':       line.product_id.id,
+                                        'location_id':      self.location_id.id,
+                                        'location_dest_id': self.location_dest_id.id,
+                                        'lot_id':           lote.id,
+                                        'reserved_uom_qty': 0,
+                                        'qty_done':         cantidad_restante,
+                                        'product_uom_id':   line.product_id.uom_id.id,
+                                        'state': 'confirmed'
+                                    }
+                                    ml = self.env['stock.move.line'].create(nueva_linea)
+                                    cantidad_restante = 0
+                                else:
+                                    nueva_linea = {
+                                        'picking_id':       self.id,
+                                        'move_id':          line.id,
+                                        'company_id':       self.company_id.id,
+                                        'product_id':       line.product_id.id,
+                                        'location_id':      self.location_id.id,
+                                        'location_dest_id': self.location_dest_id.id,
+                                        'lot_id':           lote.id,
+                                        'reserved_uom_qty': 0,
+                                        'qty_done':         inventario.available_quantity,
+                                        'product_uom_id':   line.product_id.uom_id.id,
+                                        'state': 'confirmed'
+                                    }
+                                    ml = self.env['stock.move.line'].create(nueva_linea)
+                                    cantidad_restante = cantidad_restante - inventario.available_quantity
+                        if cantidad_restante == 0:
+                            break
+                    if cantidad_restante > 0:
+                        lotes_expirados = self.env['stock.lot'].search(
+                            [('product_id', '=', line.product_id.id), ('expiration_date', '<', datetime.now()),
+                             ('id', 'in', lotes_inventarios)],
+                            order = 'expiration_date desc'
+                        )
+                        for lote in lotes_expirados:
+                            for inventario in inventarios:
+                                if inventario.lot_id.id == lote.id:
+                                    if inventario.available_quantity >= cantidad_restante:
+                                        nueva_linea = {
+                                            'picking_id':       self.id,
+                                            'move_id':          line.id,
+                                            'company_id':       self.company_id.id,
+                                            'product_id':       line.product_id.id,
+                                            'location_id':      self.location_id.id,
+                                            'location_dest_id': self.location_dest_id.id,
+                                            'lot_id':           lote.id,
+                                            'reserved_uom_qty': 0,
+                                            'qty_done':         cantidad_restante,
+                                            'product_uom_id':   line.product_id.uom_id.id,
+                                            'state': 'confirmed'
+                                        }
+                                        ml = self.env['stock.move.line'].create(nueva_linea)
+                                        cantidad_restante = 0
+                                    else:
+                                        nueva_linea = {
+                                            'picking_id':       self.id,
+                                            'move_id':          line.id,
+                                            'company_id':       self.company_id.id,
+                                            'product_id':       line.product_id.id,
+                                            'location_id':      self.location_id.id,
+                                            'location_dest_id': self.location_dest_id.id,
+                                            'lot_id':           lote.id,
+                                            'reserved_uom_qty': 0,
+                                            'qty_done':         inventario.available_quantity,
+                                            'product_uom_id':   line.product_id.uom_id.id,
+                                            'state': 'confirmed'
+                                        }
+                                        ml = self.env['stock.move.line'].create(nueva_linea)
+                                        cantidad_restante = cantidad_restante - inventario.available_quantity
+                            if cantidad_restante == 0:
+                                break
+
+                self.state = 'confirmed'
+
+                moves = self.mapped('move_ids')
+                moves.write({'state': 'confirmed'})
 
         return res
 

@@ -55,7 +55,8 @@ class PosConfigSmm(models.Model):
         ])
         partner_list = []
         for event_id in event_ids:
-            partner_list.append(event_id.paciente_id.id)
+            if event_id.paciente_id:
+                partner_list.append(event_id.paciente_id.id)
         _logger.info('POS Partners 1  ---->>  ' + str(len(partner_list)))
 
         self.env.cr.execute("""
@@ -71,7 +72,7 @@ class PosConfigSmm(models.Model):
             ON        (
                                 partner.id = pm.partner_id)
             WHERE (
-                partner.x_paciente_medico='Paciente' AND partner.id in %s
+                partner.x_paciente_medico='Paciente' AND cast(partner.id as int) in %s
             )
             ORDER BY  COALESCE(pm.order_count, 0) DESC,
                       NAME limit %s;

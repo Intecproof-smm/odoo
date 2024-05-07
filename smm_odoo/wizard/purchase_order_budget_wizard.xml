@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+         <record id="purchase_order_budget_wizard" model="ir.ui.view">
+             <field name="name">purchase.order.budget.wizard</field>
+             <field name="model">purchase.order.budget.wizard</field>
+             <field name="arch" type="xml">
+                <form string="Presupuestos" create="0">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                Datos para la consulta
+                            </h1>
+                        </div>
+                        <group string="Datos del presupuesto">
+                            <group id="left_group">
+                                <field name="picking_type_id"/>
+                            </group>
+                            <group id="right_group">
+                                <field name="category_id"/>
+                            </group>
+                        </group>
+                        <group string="Periodo del presupuesto">
+                            <group string="Desde">
+                                <field name="initial_month"/>
+                                <field name="initial_year"/>
+                            </group>
+                            <group string="Hasta">
+                                <field name="final_month"/>
+                                <field name="final_year"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Traer los datos" name="traer_datos_consulta" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+             </field>
+         </record>
+
+        <record id="smm_purchase_order_budget_wizard_action" model="ir.actions.act_window" >
+            <field name="name">Consulta Presupuesto</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.budget.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="purchase_order_budget_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="purchase_order_budget_sub_menu_option"
+                  name="Presupuestos"
+                  parent="purchase.menu_procurement_management"
+                  sequence="99"/>
+
+        <menuitem id="purchase_order_budget_wizard_menu_option"
+                  name="Calcular Presupuesto"
+                  parent="purchase_order_budget_sub_menu_option"
+                  action="smm_purchase_order_budget_wizard_action"
+                  sequence="99"/>
+    </data>
+</odoo>

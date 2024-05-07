@@ -13,7 +13,8 @@
     'depends': [
         'point_of_sale',
         'product_expiry',
-        'stock',],
+        'stock',
+        ],
     'data': [
         'views/pos.xml',
     ],

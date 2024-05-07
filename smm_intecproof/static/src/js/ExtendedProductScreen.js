@@ -18,14 +18,14 @@ odoo.define('smm_pos.ExtendedProductScreen', function(require) {
                     const product = event.detail;
                     if(product.is_controlled_product) {
                         if(this.currentOrder.orderlines.length != 0) {
-                            errorMessage = "Solamente puede existir un medicamento controlado en la orden."
+                            errorMessage = "Solamente puede existir un medicamento controlado en la orden y no puede combinarse con otros productos."
                             addProduct = false;
                         }
                     }
                     else {
                         this.currentOrder.orderlines.forEach(line => {
                             if(line.product.is_controlled_product) {
-                                errorMessage = "Los medicamentos controlados no se pueden agregar en una orden que tiene medicamentos no controlados."
+                                errorMessage = "No se pueden combinar medicamentos controlados con otros productos."
                                 addProduct = false;
                             }
                         });

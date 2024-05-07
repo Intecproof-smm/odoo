@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record id="purchase_order_budget_line_tree_view" model="ir.ui.view">
+            <field name="name">purchase.order.budget.line.tree.view</field>
+            <field name="model">purchase.order.budget.line</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="product_id" context="{'producto_id': product_id}"/>
+                    <field name="quantity"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal"/>
+                    <field name="quantity_consumed_period"/>
+                    <field name="quantity_consumed_previous_period"/>
+                    <field name="quantity_consumed_last_year"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

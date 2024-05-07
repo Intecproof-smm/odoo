@@ -46,6 +46,10 @@ class stock_pickin_anade_opciones(models.Model):
         , store=True
     )
 
+    x_receta = fields.Char(string = 'Receta', store = True)
+    x_indicacion = fields.Char(string = 'Indicación', store = True)
+    x_medico = fields.Char(string = 'Médico', store = True)
+
     def _prepare_picking_vals(self, partner, picking_type, location_id, location_dest_id, datos_salida):
         return {
             'partner_id': partner.id if partner else False
@@ -60,6 +64,9 @@ class stock_pickin_anade_opciones(models.Model):
             , 'x_no_ambulancia': datos_salida['no_ambulancia']
             , 'x_solicitante': datos_salida['solicitante'].id if datos_salida['solicitante'] else False
             , 'x_turno': datos_salida['turno']
+            , 'x_receta': datos_salida['receta']
+            , 'x_indicacion': datos_salida['indicacion']
+            , 'x_medico': datos_salida['medico']
             , 'has_controlled_product': datos_salida['has_controlled_product']
         }
 
