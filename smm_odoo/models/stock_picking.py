@@ -396,8 +396,8 @@ class StockPicking(models.Model):
                                         cantidad_restante = cantidad_restante - inventario.available_quantity
                             if cantidad_restante == 0:
                                 break
-
-                self.state = 'confirmed'
+                
+                #self.state = 'confirmed'
 
                 moves = self.mapped('move_ids')
                 moves.write({'state': 'confirmed'})
