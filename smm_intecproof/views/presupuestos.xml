@@ -106,7 +106,7 @@
                   action="smm_presupuestos_action"
                   sequence="1"/>
 		<menuitem id="consulta_presupuestos_menu_option"
-                  name="Consulta"
+                  name="Calcular Presupuesto"
                   parent="menu_presupuestos"
                   action="smm_consulta_presupuestos_action"
                   sequence="2"/>

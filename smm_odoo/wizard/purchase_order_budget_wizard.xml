@@ -49,14 +49,13 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="purchase_order_budget_sub_menu_option"
-                  name="Presupuestos"
-                  parent="purchase.menu_procurement_management"
-                  sequence="99"/>
+        <menuitem id="menu_presupuestos"
+                name="Presupuestos"
+                parent="purchase.menu_purchase_root"/>
 
         <menuitem id="purchase_order_budget_wizard_menu_option"
                   name="Calcular Presupuesto"
-                  parent="purchase_order_budget_sub_menu_option"
+                  parent="menu_presupuestos"
                   action="smm_purchase_order_budget_wizard_action"
                   sequence="99"/>
     </data>

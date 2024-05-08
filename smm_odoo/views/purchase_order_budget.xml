@@ -84,7 +84,7 @@
 
         <menuitem id="purchase_order_budget_menu_option"
                   name="Presupuestos"
-                  parent="smm_odoo.purchase_order_budget_sub_menu_option"
+                  parent="smm_odoo.menu_presupuestos"
                   action="smm_purchase_order_budget_action"
                   sequence="99"/>
     </data>
