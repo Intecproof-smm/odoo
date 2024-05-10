@@ -48,20 +48,29 @@ class StockMoveLineExtended(models.Model):
 			if rec.product_id and rec.x_price_unit and rec.qty_done:
 				rec.x_subtotal = rec.x_price_unit * rec.qty_done
 
+	@api.model
+	def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None, **read_kwargs):
+		context = self._context
+		if 'ignorar_regla_branches' in context and context['ignorar_regla_branches']:
+			res = super(StockMoveLineExtended, self.sudo()).search_read(domain, fields, offset, limit, order)
+		else:
+			res = super(StockMoveLineExtended, self).search_read(domain, fields, offset, limit, order)
+		return res
+
 	def llamar_lista_controlados(self):
+		branches = self.env.user.branch_ids.ids
+		_logger.info("*********** Branches permitidos : " + str(branches))
+		ubicaciones = self.env['stock.location'].search([('x_branch', 'in', branches)])
 		# dominio = [
-		# 		('state', '=', 'done'), ('product_id.is_controlled_product', '=', True),
-		# 		('location_dest_id', 'in', self.env.user.branch_ids.ids), '|',
-		# 		('picking_id.picking_type_id.code', '=', 'internal'),
-		# 		('picking_id.picking_type_id.code', '=', 'incoming')
-		# 	]
+		# 	"&", ("state", "=", "done"), "&", ("product_id.is_controlled_product", "=", True), "&", "|",
+		# 	("picking_id.picking_type_id.code", "=", "internal"), "|", ("picking_id.picking_type_id.code", "=", "incoming"),
+		# 	("picking_id.picking_type_id.code", "=", "outgoing"), "|", ("location_id", "in", ubicaciones.ids),
+		# 	("location_dest_id", "in", ubicaciones.ids)]
 		dominio = [
-				('state', '=', 'done'), ('product_id.is_controlled_product', '=', True), '|',
-				(('branch_id', 'in', self.env.user.branch_ids.ids), ('picking_id.picking_type_id.code', '=', 'internal')), '|',
-				(('branch_id', 'in', [1]), ('picking_id.picking_type_id.code', '=', 'incoming'))
-			]
+			"&", ("state", "=", "done"), "&", ("product_id.is_controlled_product", "=", True), "|",
+			("location_id", "in", ubicaciones.ids), ("location_dest_id", "in", ubicaciones.ids)
+		]
 		_logger.info("*********** El dominio para controlados es: " + str(dominio))
-		
 		return {
 			'type': 'ir.actions.act_window',
 			'name': ' Reporte de controlados 2',
@@ -70,5 +79,9 @@ class StockMoveLineExtended(models.Model):
 			'res_model': 'stock.move.line',
 			'domain': dominio,
 			'target': 'current',
-			'context': {'tree_view_ref': 'smm_intecproof.movimientos_de_controlados_tree', 'group_by': 'product_id'},
+			'context': {
+				'tree_view_ref': 'smm_intecproof.movimientos_de_controlados_tree',
+				'group_by': 'product_id',
+				'ignorar_regla_branches': True,
+			},
 		}
