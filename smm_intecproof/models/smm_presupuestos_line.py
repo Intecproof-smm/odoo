@@ -8,8 +8,6 @@
 #    This program is NOT a free software
 #
 ###################################################################################
-import pkg_resources
-
 from odoo import models, fields, api
 from dateutil import relativedelta
 import dateutil
@@ -57,9 +55,8 @@ class PresupuestosDetalle(models.Model):
 
 	@api.model
 	def _traer_cantidad_consumida(self):
-		# Traer la ubicación del almacén General
-		ubicacion = self.env['stock.location'].search([('complete_name', '=', 'SMM-G/Existencias')], limit=1)
 		# Traer los datos de la partida para regresar el consumo
+		filtro = []
 		for rec in self:
 			filtro = [
 				('date', '>=', rec.presupuesto_id.fecha_inicial),
@@ -67,17 +64,18 @@ class PresupuestosDetalle(models.Model):
 				('product_category_name', '=', rec.presupuesto_id.categoria.complete_name),
 				('product_id', '=', rec.product_id.id),
 				('state', '=', 'done'),
-				('location_id', '=', ubicacion.id),
-				('location_dest_id', '=', rec.presupuesto_id.ubicacion_id.id)
+				('location_id', '=', rec.presupuesto_id.ubicacion_id.id)
 			]
 			cantidad = 0
-			partidas = self.env['stock.move.line'].search(filtro)
+			partidas = self.sudo().env['stock.move.line'].search(filtro)
 			for p in partidas:
 				cantidad += p.qty_done
 			rec.cantidad_consumida_periodo = cantidad
-
+		_logger.info("*********** Filtro para consumos periodo actual : " + str(filtro))
+	
 	@api.model
 	def _traer_cantidad_consumida_anterior(self):
+		filtro = []
 		for rec in self:
 			if rec.presupuesto_id.mes_inicial and rec.presupuesto_id.mes_final and \
 				rec.presupuesto_id.ano_inicial and rec.presupuesto_id.ano_final:
@@ -108,8 +106,6 @@ class PresupuestosDetalle(models.Model):
 				fecha_temporal = datetime(ano_final, mes_final, 1)
 				fecha_final = fecha_temporal + \
 					dateutil.relativedelta.relativedelta(months=1) + dateutil.relativedelta.relativedelta(days=-1)
-				# Traer la ubicación del almacén General
-				ubicacion = self.env['stock.location'].search([('complete_name', '=', 'SMM-G/Existencias')], limit=1)
 				# Traer los datos de la partida para regresar el consumo
 				filtro = [
 					('date', '>=', fecha_inicial),
@@ -117,20 +113,21 @@ class PresupuestosDetalle(models.Model):
 					('product_category_name', '=', rec.presupuesto_id.categoria.complete_name),
 					('product_id', '=', rec.product_id.id),
 					('state', '=', 'done'),
-					('location_id', '=', ubicacion.id),
-					('location_dest_id', '=', rec.presupuesto_id.ubicacion_id.id)
+					('location_id', '=', rec.presupuesto_id.ubicacion_id.id)
 				]
 				cantidad = 0
-				partidas = self.env['stock.move.line'].search(filtro)
+				partidas = self.sudo().env['stock.move.line'].search(filtro)
 				for p in partidas:
 					cantidad += p.qty_done
 				rec.cantidad_consumida_periodo_anterior = cantidad
 			else:
 				rec.cantidad_consumida_periodo_anterior = 0
-			
+		_logger.info("*********** Filtro para consumos periodo anterior : " + str(filtro))
+
 	@api.model
 	def _traer_cantidad_consumida_ano_anterior(self):
 		# Calcular la fecha incial del año anterior
+		filtro = []
 		for rec in self:
 			if rec.presupuesto_id.mes_inicial and rec.presupuesto_id.mes_final and \
 				rec.presupuesto_id.ano_inicial and rec.presupuesto_id.ano_final:
@@ -139,8 +136,6 @@ class PresupuestosDetalle(models.Model):
 				fecha_temporal = datetime(rec.presupuesto_id.ano_final-1, int(rec.presupuesto_id.mes_final), 1)
 				fecha_final = fecha_temporal + \
 					dateutil.relativedelta.relativedelta(months=1) + dateutil.relativedelta.relativedelta(days=-1)
-				# Traer la ubicación del almacén General
-				ubicacion = self.env['stock.location'].search([('complete_name', '=', 'SMM-G/Existencias')], limit=1)
 				# Traer los datos de la partida para regresar el consumo
 				filtro = [
 					('date', '>=', fecha_inicial),
@@ -148,13 +143,13 @@ class PresupuestosDetalle(models.Model):
 					('product_category_name', '=', rec.presupuesto_id.categoria.complete_name),
 					('product_id', '=', rec.product_id.id),
 					('state', '=', 'done'),
-					('location_id', '=', ubicacion.id),
-					('location_dest_id', '=', rec.presupuesto_id.ubicacion_id.id)
+					('location_id', '=', rec.presupuesto_id.ubicacion_id.id)
 				]
 				cantidad = 0
-				partidas = self.env['stock.move.line'].search(filtro)
+				partidas = self.sudo().env['stock.move.line'].search(filtro)
 				for p in partidas:
 					cantidad += p.qty_done
 				rec.cantidad_consumida_ano_anterior = cantidad
 			else:
 				rec.cantidad_consumida_ano_anterior = 0
+		_logger.info("*********** Filtro para consumos año anterior : " + str(filtro))

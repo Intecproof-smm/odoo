@@ -16,45 +16,31 @@
             <field name="name">Movimientos de controlados</field>
             <field name="model">stock.move.line</field>
             <field name="arch" type="xml">
-                <tree default_order="product_id,date" create="0" decoration-danger="location_usage == 'internal' and location_id not in [8]"
-                      decoration-success="location_usage == 'supplier' or location_id in [8]">
+                <tree default_order="product_id,date" create="0"
+                      decoration-warning="location_id == 8"
+                      decoration-danger="location_id != location_dest_id and location_id != 8"
+                      decoration-success="location_id == location_dest_id">
                     <field name="location_usage" optional="hide"/>
                     <field name="location_dest_usage" optional="hide"/>
                     <field name="product_id"/>
                     <field name="date"/>
                     <field name="reference"/>
+                    <field name="origin"/>
                     <field name="location_id"/>
                     <field name="location_dest_id"/>
                     <field name="x_receta"/>
                     <field name="x_indicacion"/>
                     <field name="x_medico"/>
                     <field name="qty_done"/>
+                    <field name="x_solicitante"/>
                     <field name="x_branches" optional="hide"/>
                 </tree>
             </field>
         </record>
 
         <!-- Creamos la acción correspondiente al reporte de controlados -->
-        <record id="smm_controlados_action" model="ir.actions.act_window" >
+        <record id="smm_controlados_action" model="ir.actions.server">
             <field name="name">Reporte de controlados</field>
-            <field name="res_model">stock.move.line</field>
-            <field name="view_mode">tree</field>
-            <field name="domain">
-                [('state', '=', 'done'), ('product_id.is_controlled_product', '=', True), '|',
-                ('location_id', 'ilike', 'SMM'), ('location_dest_id', 'ilike', 'SMM'), '|',
-                ('picking_id.picking_type_id.code', '=', 'internal'),
-                ('picking_id.picking_type_id.code', '=', 'incoming')]
-            </field>
-            <field name="context">
-                {
-                    'tree_view_ref':'smm_intecproof.movimientos_de_controlados_tree',
-                    'group_by':'product_id',
-                }
-            </field>
-        </record>
-
-        <record id="smm_controlados_action2" model="ir.actions.server">
-            <field name="name">Reporte de controlados 2</field>
             <field name="model_id" ref="stock.model_stock_move_line"/>
             <field name="binding_model_id" ref="stock.model_stock_move_line"/>
             <field name="state">code</field>
@@ -65,12 +51,6 @@
         <menuitem id="menu_controlados"
                   name="Controlados"
                   action="smm_intecproof.smm_controlados_action"
-                  parent="stock.menu_warehouse_report"
-        />
-
-        <menuitem id="menu_controlados2"
-                  name="Controlados 2"
-                  action="smm_intecproof.smm_controlados_action2"
                   parent="stock.menu_warehouse_report"
         />
 
