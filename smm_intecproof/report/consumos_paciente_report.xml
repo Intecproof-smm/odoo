@@ -19,6 +19,16 @@
         <field name="binding_type">report</field>
     </record>
 
+    <record id="action_ticket_consumos_paciente" model="ir.actions.report">
+        <field name="name">Reporte de consumos del paciente en el evento</field>
+        <field name="model">smm_eventos_medicos</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">smm_intecproof.consumos_paciente_ticket</field>
+        <field name="report_file">smm_intecproof.consumos_paciente_ticket</field>
+        <field name="binding_model_id" ref="model_smm_eventos_medicos"/>
+        <field name="binding_type">report</field>
+    </record>
+
     <template id="consumos_paciente_report">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
@@ -188,4 +198,176 @@
             </t>
         </t>
     </template>
+
+    <template id="consumos_paciente_ticket">
+        <style>
+            *, body, p, td { font-size: 0.7em !important }
+        </style>
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="header">
+                            <div class="text-center">
+                                <h1>Ticket de consumos del paciente</h1>
+                            </div>
+                        </div>
+                        <h2 style="text-align:center">Ticket de consumos del evento </h2>
+                        <p>Paciente : <span t-field="o.paciente_id.name"/></p>
+                        <p>Unidad médica : <span t-field="o.unidad_medica"/></p>
+                        <p>Fecha de ingreso: <span t-field="o.fecha_inicio"/></p>
+                        <t t-if="o.fecha_termino">
+                            <p>Fecha de alta: <span t-field="o.fecha_termino"/></p>
+                        </t>
+                        <t t-else="">
+                            <p>Fecha de alta: Paciente sin ser dado de alta</p>
+                        </t>
+                        <p>Observaciones : <span t-field="o.observa_observa_comenta"/></p>
+
+                        <div class="body">
+                            <!-- Sección de Consumos / Medicamentos -->
+                            <table class="table" style="border-spacing:10px">
+                                <thead>
+                                    <h2>
+                                        Consumos / Medicamentos
+                                    </h2>
+                                    <tr class="o_report_header">
+                                        <th class="o_report_line_header">Ubicación</th>
+                                        <th class="o_report_line_header">Referencia</th>
+                                        <th class="o_report_line_header">Fecha</th>
+                                        <th class="o_report_line_header">Producto</th>
+                                        <th class="o_report_line_header">Rubro</th>
+                                        <th class="o_report_line_header">Cantidad</th>
+                                        <th class="o_report_line_header">P.U.</th>
+                                        <th class="o_report_line_header">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="SubTotalConsumos" t-value="0"/>
+                                    <tr t-foreach="o.stock_move_line_ids" t-as="linea">
+                                        <td><span t-esc="linea.date" t-options='{"widget": "date"}'/></td>
+                                        <td><span t-esc="linea.product_id.name"/></td>
+                                        <td><span t-esc="linea.x_rubro.name"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done))"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.x_price_unit))"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done * linea.x_price_unit))"/></td>
+                                        <t t-set="SubTotalConsumos" t-value="SubTotalConsumos+(linea.qty_done * linea.x_price_unit)"/>
+                                    </tr>
+                                </tbody>
+
+                                <div class="row" name="total">
+                                    <div class="col-xs-4 pull-right">
+                                        <table class="table table-condensed">
+                                            <tr class="border-black">
+                                                <td align="right"><strong>Total:</strong>
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalConsumos))"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- <t t-esc="sum([l.x_price_unit*l.qty_done] for l in o.stock_move_line_ids.filtered(lambda x: x.id in stock_move_line_ids))" /> -->
+                            </table>
+                            <!-- Sección de servicios / Procedimientos -->
+                            <table class="table" style="border-spacing:10px">
+                                <thead>
+                                    <h2>
+                                        Servicios / Procedimientos
+                                    </h2>
+                                    <tr class="o_report_header">
+                                        <th class="o_report_line_header">Fecha</th>
+                                        <th class="o_report_line_header">Area Solicitante</th>
+                                        <th class="o_report_line_header">Turno</th>
+                                        <th class="o_report_line_header">Servicio / Procedimiento</th>
+                                        <th class="o_report_line_header">Rubro</th>
+                                        <th class="o_report_line_header">Cantidad</th>
+                                        <th class="o_report_line_header">P.U.</th>
+                                        <th class="o_report_line_header">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="SubTotalServicios" t-value="0"/>
+                                    <tr t-foreach="o.servicios_ids" t-as="linea">
+                                        <td><span t-esc="linea.fecha_servicio" t-options='{"widget": "date"}'/></td>
+                                        <td><span t-esc="linea.area_solicitud"/></td>
+                                        <td><span t-esc="linea.turno"/></td>
+                                        <td><span t-esc="linea.producto_id.name"/></td>
+                                        <td><span t-esc="linea.rubro.name"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.cantidad))"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.producto_id.list_price))"/></td>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.total))"/></td>
+                                        <t t-set="SubTotalServicios" t-value="SubTotalServicios+linea.total"/>
+                                    </tr>
+                                </tbody>
+                                <div class="row" name="total">
+                                    <div class="col-xs-4 pull-right">
+                                        <table class="table table-condensed">
+                                            <tr class="border-black">
+                                                <td align="right"><strong>Total:</strong>
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalServicios))"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </table>
+                            <!-- Sección de Totales -->
+                            <table class="table" style="border-spacing:10px">
+                                <div class="row" name="totales">
+                                    <div class="col-xs-4 pull-right">
+                                        <table class="table table-condensed">
+                                            <tr class="border-none">
+                                                <td align="right"><strong>Total Medicamentos:</strong>
+                                                </td>
+                                                <td align="right">
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalConsumos))"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-none">
+                                                <td align="right"><strong>Total Servicios:</strong>
+                                                </td>
+                                                <td align="right">
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalServicios))"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-none">
+                                                <td align="right"><strong>SubTotal:</strong>
+                                                </td>
+                                                <td align="right">
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalConsumos+SubTotalServicios))"/>
+                                                </td>
+                                            </tr>
+                                            <t t-set="TotalDescuento"
+                                               t-value="(SubTotalConsumos+SubTotalServicios)*(o.res_se_descuento_autorizado/100)"/>
+                                            <tr class="border-none">
+                                                <td align="right">
+                                                    <strong>
+                                                    Descuento Autorizado:
+                                                        <t t-esc="'{0:,.2f}'.format(int(o.res_se_descuento_autorizado))"/> %
+                                                    </strong>
+                                                </td>
+                                                <td align="right">
+                                                    <t t-esc="'{0:,.2f}'.format(int(TotalDescuento))"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-none">
+                                                <td align="right"><strong>Total a pagar:</strong>
+                                                </td>
+                                                <td align="right">
+                                                    <t t-esc="'{0:,.2f}'.format(int(SubTotalConsumos+SubTotalServicios-TotalDescuento))"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
 </odoo>
