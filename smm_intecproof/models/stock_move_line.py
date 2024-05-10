@@ -39,6 +39,7 @@ class StockMoveLineExtended(models.Model):
 	x_indicacion = fields.Char(realted='picking_id.x_indicacion', readonly=True, store=True)
 	x_medico = fields.Char(related='picking_id.x_medico', readonly=True, store=True)
 	x_branches = fields.Many2many('res.branch', compute='_calcular_branches_permitidos', readonly=True, store=False)
+	x_solicitante = fields.Char(related='picking_id.x_solicitante.name', readonly=True, store=True)
 
 	@api.onchange('qty_done', 'x_price_unit')
 	def _calcular_subtotal(self):
@@ -61,11 +62,6 @@ class StockMoveLineExtended(models.Model):
 		branches = self.env.user.branch_ids.ids
 		_logger.info("*********** Branches permitidos : " + str(branches))
 		ubicaciones = self.env['stock.location'].search([('x_branch', 'in', branches)])
-		# dominio = [
-		# 	"&", ("state", "=", "done"), "&", ("product_id.is_controlled_product", "=", True), "&", "|",
-		# 	("picking_id.picking_type_id.code", "=", "internal"), "|", ("picking_id.picking_type_id.code", "=", "incoming"),
-		# 	("picking_id.picking_type_id.code", "=", "outgoing"), "|", ("location_id", "in", ubicaciones.ids),
-		# 	("location_dest_id", "in", ubicaciones.ids)]
 		dominio = [
 			"&", ("state", "=", "done"), "&", ("product_id.is_controlled_product", "=", True), "|",
 			("location_id", "in", ubicaciones.ids), ("location_dest_id", "in", ubicaciones.ids)
