@@ -9,6 +9,22 @@
 
 -->
 <odoo>
+    <record id="paperformat_ticket_consumos" model="report.paperformat">
+        <field name="name">Papel para ticket</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">270</field>
+        <field name="page_width">80</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20.00</field>
+        <field name="margin_bottom">3.00</field>
+        <field name="margin_left">1.0</field>
+        <field name="margin_right">1.0</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
     <record id="action_report_consumos_paciente" model="ir.actions.report">
         <field name="name">Reporte de consumos del paciente en el evento</field>
         <field name="model">smm_eventos_medicos</field>
@@ -22,7 +38,8 @@
     <record id="action_ticket_consumos_paciente" model="ir.actions.report">
         <field name="name">Reporte de consumos del paciente en el evento</field>
         <field name="model">smm_eventos_medicos</field>
-        <field name="report_type">qweb-html</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="smm_intecproof.paperformat_ticket_consumos" />
         <field name="report_name">smm_intecproof.consumos_paciente_ticket</field>
         <field name="report_file">smm_intecproof.consumos_paciente_ticket</field>
         <field name="binding_model_id" ref="model_smm_eventos_medicos"/>
@@ -201,18 +218,16 @@
 
     <template id="consumos_paciente_ticket">
         <style>
-            *, body, p, td { font-size: 0.7em !important }
+            *, body, p, td { font-size: 0.5em !important }
         </style>
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
                         <div class="header">
-                            <div class="text-center">
-                                <h1>Ticket de consumos del paciente</h1>
-                            </div>
+                            <div class="text-center"></div>
                         </div>
-                        <h2 style="text-align:center">Ticket de consumos del evento </h2>
+                        <h2 style="text-align:center">Ticket de consumos</h2>
                         <p>Paciente : <span t-field="o.paciente_id.name"/></p>
                         <p>Unidad médica : <span t-field="o.unidad_medica"/></p>
                         <p>Fecha de ingreso: <span t-field="o.fecha_inicio"/></p>
@@ -232,8 +247,6 @@
                                         Consumos / Medicamentos
                                     </h2>
                                     <tr class="o_report_header">
-                                        <th class="o_report_line_header">Ubicación</th>
-                                        <th class="o_report_line_header">Referencia</th>
                                         <th class="o_report_line_header">Fecha</th>
                                         <th class="o_report_line_header">Producto</th>
                                         <th class="o_report_line_header">Rubro</th>
@@ -277,9 +290,7 @@
                                     </h2>
                                     <tr class="o_report_header">
                                         <th class="o_report_line_header">Fecha</th>
-                                        <th class="o_report_line_header">Area Solicitante</th>
-                                        <th class="o_report_line_header">Turno</th>
-                                        <th class="o_report_line_header">Servicio / Procedimiento</th>
+                                        <th class="o_report_line_header">Servicio</th>
                                         <th class="o_report_line_header">Rubro</th>
                                         <th class="o_report_line_header">Cantidad</th>
                                         <th class="o_report_line_header">P.U.</th>
@@ -290,8 +301,6 @@
                                     <t t-set="SubTotalServicios" t-value="0"/>
                                     <tr t-foreach="o.servicios_ids" t-as="linea">
                                         <td><span t-esc="linea.fecha_servicio" t-options='{"widget": "date"}'/></td>
-                                        <td><span t-esc="linea.area_solicitud"/></td>
-                                        <td><span t-esc="linea.turno"/></td>
                                         <td><span t-esc="linea.producto_id.name"/></td>
                                         <td><span t-esc="linea.rubro.name"/></td>
                                         <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.cantidad))"/></td>
