@@ -172,4 +172,9 @@ class SMMEventosMedicos(models.Model):
         # _logger.info("************ Generando el reporter de consumos del paciente con el contexto : " + str(ctx))
         return self.env.ref('smm_intecproof.action_report_consumos_paciente').report_action(self)
         
+    def action_imprimir_ticket_consumos(self):
+        ctx = dict(self.env.context)
+        # _logger.info("************ Generando el reporter de consumos del paciente con el contexto : " + str(ctx))
+        return self.env.ref('smm_intecproof.action_ticket_consumos_paciente').report_action(self)
+
     

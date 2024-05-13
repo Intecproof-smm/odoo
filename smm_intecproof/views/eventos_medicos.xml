@@ -43,6 +43,15 @@
                                     'stock_move_line_ids': stock_move_line_ids,
                                     'servicios_ids': servicios_ids
                                     }"/>
+                        <button id="imprimir_ticket_consumos" name="action_imprimir_ticket_consumos"
+                                string="Imprimir ticket de consumos" type="object"
+                                class="print btn-primary o_mail_send"
+                                context="{
+                                    'fecha_inicio': fecha_inicio,
+                                    'fecha_termino': fecha_termino,
+                                    'stock_move_line_ids': stock_move_line_ids,
+                                    'servicios_ids': servicios_ids
+                                    }"/>
                         <field name="estatus" widget="statusbar" statusbar_visible="abierto,cerrado"
                                attrs="{'readonly': [('estatus' ,'=', 'cerrado')]}" />
                     </header>
