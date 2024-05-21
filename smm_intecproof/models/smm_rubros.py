@@ -22,5 +22,6 @@ class Rubros(models.Model):
 	# Base de datos
 	# ----------------------------------------------------------
 	name = fields.Char(required=True, store=True, string='Rubro')
-	descripcion = fields.Char()
-	
+	descripcion = fields.Char(string = 'Descripción')
+	categoria = fields.Char(string = 'Categoría')
+	precio = fields.Monetary(string = 'Precio', digits='Product Price')
