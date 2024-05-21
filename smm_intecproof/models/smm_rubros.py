@@ -24,4 +24,4 @@ class Rubros(models.Model):
 	name = fields.Char(required=True, store=True, string='Rubro')
 	descripcion = fields.Char(string = 'Descripción')
 	categoria = fields.Char(string = 'Categoría')
-	precio = fields.Monetary(string = 'Precio', digits='Product Price')
+	precio = fields.Float(string = 'Precio', digits='Product Price')
