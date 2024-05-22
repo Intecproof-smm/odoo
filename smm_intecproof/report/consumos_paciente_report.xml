@@ -218,7 +218,7 @@
 
     <template id="consumos_paciente_ticket">
         <style>
-            *, body, p, td { font-size: 0.5em !important }
+            *, body, p, td { font-size: 0.4em !important }
         </style>
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
