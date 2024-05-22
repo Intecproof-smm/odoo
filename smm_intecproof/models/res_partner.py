@@ -32,7 +32,11 @@ class ExtendResPartner(models.Model):
     # Base de datos
     # ----------------------------------------------------------
     x_paciente_medico = fields.Selection([
-        ('Medico', 'Medico'), ('Paciente', 'Paciente'), ('Otro', 'Otro')
+        ('Medico', 'Medico'),
+        ('Paciente', 'Paciente'),
+        ('Enfermera(o)', 'Enfermera(o)'),
+        ('Paramédica(o)', 'Paramédica(o)'),
+        ('Otro', 'Otro')
     ], string='Categoría', default='Paciente', tracking=True)
     x_medico_cedula = fields.Char(string='Cédula', tracking=True)
     x_medico_universidad = fields.Char(string='Universidad', tracking=True)
