@@ -78,7 +78,7 @@
                             <!-- Cálculo de costos -->
                             <page name="calculo_costos" string="Consumibles / Medicamentos">
                                 <field name="stock_move_line_ids" widget="one2many" mode="tree" attrs="{'readonly': 1}">
-                                    <tree>
+                                    <tree decoration-danger="location_id == 5">
                                         <field name="location_id" string="Ubicación"/>
                                         <field name="reference"/>
                                         <field name="date" widget="date" string="Fecha"/>
@@ -86,7 +86,7 @@
                                         <field name="x_rubro"/>
                                         <field name="qty_done" string="Cantidad"/>
                                         <field name="x_price_unit" widget="monetary" string="P.U."/>
-                                        <field name="x_subtotal" sum="SubTotal" widget="monetary" string="Total"/>
+                                        <field name="x_subtotal" widget="monetary" string="Total"/>
                                     </tree>
                                 </field>
                             </page>
