@@ -67,10 +67,10 @@
                             <p>Fecha de alta: Paciente sin ser dado de alta</p>
                         </t>
                         <p>Observaciones : <span t-field="o.observa_observa_comenta"/></p>
-
                         <div class="body">
                             <!-- Sección de Consumos / Medicamentos -->
                             <table class="table" style="border-spacing:10px">
+                                <!-- Impresión del encabezado Sección de Consumos / Medicamentos-->
                                 <thead>
                                     <h2>
                                         Consumos / Medicamentos
@@ -86,6 +86,7 @@
                                         <th class="o_report_line_header">Total</th>
                                     </tr>
                                 </thead>
+                                <!-- Impresión del detalle Sección de Consumos / Medicamentos-->
                                 <tbody>
                                     <t t-set="SubTotalConsumos" t-value="0"/>
                                     <tr t-foreach="o.stock_move_line_ids" t-as="linea">
@@ -94,13 +95,20 @@
                                         <td><span t-esc="linea.date" t-options='{"widget": "date"}'/></td>
                                         <td><span t-esc="linea.product_id.name"/></td>
                                         <td><span t-esc="linea.x_rubro.name"/></td>
-                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done))"/></td>
+                                        <!-- Validar si es una devolución (Si la fuente es Partner/Customer) -->
+                                        <t t-if="linea.location_id.id == 5">
+                                            <t t-set="cantidad" t-value="linea.qty_done * -1"/>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-set="cantidad" t-value="linea.qty_done"/>
+                                        </t>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(cantidad))"/></td>
                                         <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.x_price_unit))"/></td>
-                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done * linea.x_price_unit))"/></td>
-                                        <t t-set="SubTotalConsumos" t-value="SubTotalConsumos+(linea.qty_done * linea.x_price_unit)"/>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(cantidad * linea.x_price_unit))"/></td>
+                                        <t t-set="SubTotalConsumos" t-value="SubTotalConsumos+(cantidad * linea.x_price_unit)"/>
                                     </tr>
                                 </tbody>
-
+                                <!-- Impresión de totales Sección de Consumos / Medicamentos-->
                                 <div class="row" name="total">
                                     <div class="col-xs-4 pull-right">
                                         <table class="table table-condensed">
@@ -112,7 +120,6 @@
                                         </table>
                                     </div>
                                 </div>
-
                                 <!-- <t t-esc="sum([l.x_price_unit*l.qty_done] for l in o.stock_move_line_ids.filtered(lambda x: x.id in stock_move_line_ids))" /> -->
                             </table>
                             <!-- Sección de servicios / Procedimientos -->
@@ -225,7 +232,7 @@
                 <t t-call="web.external_layout">
                     <div class="page">
                         <div class="header">
-                            <div class="text-center"></div>
+                            <div class="text-center"> </div>
                         </div>
                         <h2 style="text-align:center">Ticket de consumos</h2>
                         <p>Paciente : <span t-field="o.paciente_id.name"/></p>
@@ -242,6 +249,7 @@
                         <div class="body">
                             <!-- Sección de Consumos / Medicamentos -->
                             <table class="table" style="border-spacing:10px">
+                                <!-- Impresión del encabezado Sección de Consumos / Medicamentos-->
                                 <thead>
                                     <h2>
                                         Consumos / Medicamentos
@@ -255,19 +263,27 @@
                                         <th class="o_report_line_header">Total</th>
                                     </tr>
                                 </thead>
+                                <!-- Impresión del detalle Sección de Consumos / Medicamentos-->
                                 <tbody>
                                     <t t-set="SubTotalConsumos" t-value="0"/>
                                     <tr t-foreach="o.stock_move_line_ids" t-as="linea">
                                         <td><span t-esc="linea.date" t-options='{"widget": "date"}'/></td>
                                         <td><span t-esc="linea.product_id.name"/></td>
                                         <td><span t-esc="linea.x_rubro.name"/></td>
-                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done))"/></td>
+                                        <!-- Validar si es una devolución (Si la fuente es Partner/Customer) -->
+                                        <t t-if="linea.location_id.id == 5">
+                                            <t t-set="cantidad" t-value="linea.qty_done * -1"/>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-set="cantidad" t-value="linea.qty_done"/>
+                                        </t>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(cantidad))"/></td>
                                         <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.x_price_unit))"/></td>
-                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(linea.qty_done * linea.x_price_unit))"/></td>
-                                        <t t-set="SubTotalConsumos" t-value="SubTotalConsumos+(linea.qty_done * linea.x_price_unit)"/>
+                                        <td align="right"><span t-esc="'{0:,.2f}'.format(int(cantidad * linea.x_price_unit))"/></td>
+                                        <t t-set="SubTotalConsumos" t-value="SubTotalConsumos+(cantidad * linea.x_price_unit)"/>
                                     </tr>
                                 </tbody>
-
+                                <!-- Impresión del total Sección de Consumos / Medicamentos-->
                                 <div class="row" name="total">
                                     <div class="col-xs-4 pull-right">
                                         <table class="table table-condensed">
@@ -279,7 +295,6 @@
                                         </table>
                                     </div>
                                 </div>
-
                                 <!-- <t t-esc="sum([l.x_price_unit*l.qty_done] for l in o.stock_move_line_ids.filtered(lambda x: x.id in stock_move_line_ids))" /> -->
                             </table>
                             <!-- Sección de servicios / Procedimientos -->
