@@ -92,3 +92,6 @@ button.mode-button {
   .derecha {
 	margin-left: 50%;
   }
+  .button.new-customer {
+      display: none;
+  }
