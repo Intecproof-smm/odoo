@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+		<record id="res_partner_tree_extend" model="ir.ui.view">
+            <field name="name">res_partner_tree_extend</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+				<!-- Crear el botón para llamar la función de agrupar_similares -->
+				<xpath expr="//tree" position="inside">
+					<header>
+						<button name="agrupar_similares" string="Agrupar similares" class="btn-danger" type="object"/>
+					</header>
+				</xpath>
+			</field>
+		</record>
+
 		<record id="res_partner_form_extend" model="ir.ui.view">
             <field name="name">res_partner_form_extend</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
-				<!-- Crear el botón para llamar la función de agrupar_similares -->
-				<xpath expr="//header" position="inside">
-					<button name="%(smm_intecproof.agrupar_similares)d" string="Action" object="action"/>
-				</xpath>
 				<field name="category_id" position="replace">
 					<field name="x_fecha_nacimiento"/>
 					<field name="x_edad_cumplida"/>
