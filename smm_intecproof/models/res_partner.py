@@ -113,3 +113,22 @@ class ExtendResPartner(models.Model):
         ])
         self.x_eventos_abiertos = len(eventos_abiertos)
 
+    def agrupar_similares(self):
+        selected_ids = self.env.context.get('active_ids', [])
+        selected_records = self.env['res.partner'].browse(selected_ids)
+        # Traer el primer valor de la lista para que todas las pos_orders sean cambiadas a ese paciente
+        id_contacto = selected_records[0].id
+        for partner in selected_records:
+            # Traer todas las órdenes de POS del paciente
+            pos_orders = self.env['pos.order'].search([('partner_id', '=', partner.id)])
+            for pos_order in pos_orders:
+                pos_order.update({"partner_id": id_contacto})
+            # Traer todos los movimientos en stock_move del paciente para actualizarlas
+            stock_moves = self.env['stock.move'].search([('partner_id', '=', partner.id)])
+            for stock_move in stock_moves:
+                stock_move.update([{"partner_id": id_contacto}])
+            # Traer todos los movimientos en Stock_picking del paciente para actualizarlos
+            stock_picks = self.env['stock.picking'].search([('partner_id', '=', partner.id)])
+            for stock_pick in stock_picks:
+                stock_pick.update({"partner_id": id_contacto})
+            

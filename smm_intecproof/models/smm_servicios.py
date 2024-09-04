@@ -33,6 +33,7 @@ class SMMServicios(models.Model):
 		auto_join=True,
 		string='Servicio/procedimiento',
 		domain=[('detailed_type', '=', 'service')],
+		ondelete='restict',
 		readonly=False
 	)
 	cantidad = fields.Float(
@@ -75,5 +76,7 @@ class SMMServicios(models.Model):
 			# Traer el servicio seleccionado para poder calcular el costo
 			if rec.producto_id:
 				prod = self.env['product.template'].search([('id', '=', rec.producto_id.id)])
-				rec.total = prod.list_price * rec.cantidad
-			
+				if prod:
+					rec.total = prod.list_price * rec.cantidad
+				else:
+					rec.total = 0

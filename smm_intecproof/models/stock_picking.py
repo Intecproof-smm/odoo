@@ -27,7 +27,7 @@ class stock_pickin_anade_opciones(models.Model):
             , ('quir', 'Quirofano')
             , ('ph', 'Prehospitalario')
             , ('tyo', 'T y O')
-            , ('anes', 'Anestesio')
+            , ('ane', 'Anestesio')
         ]
         , string='Área que solicita'
         , store=True
