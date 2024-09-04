@@ -33,7 +33,7 @@ class SMMServicios(models.Model):
 		auto_join=True,
 		string='Servicio/procedimiento',
 		domain=[('detailed_type', '=', 'service')],
-		ondelete='restict',
+		ondelete='restrict',
 		readonly=False
 	)
 	cantidad = fields.Float(

@@ -115,20 +115,27 @@ class ExtendResPartner(models.Model):
 
     def agrupar_similares(self):
         selected_ids = self.env.context.get('active_ids', [])
+        _logger.info("********* Selected_ids : "+str(selected_ids))
         selected_records = self.env['res.partner'].browse(selected_ids)
+        _logger.info("********* Selected_records : "+str(selected_records))
         # Traer el primer valor de la lista para que todas las pos_orders sean cambiadas a ese paciente
         id_contacto = selected_records[0].id
+        _logger.info("********* id_contacto : " + str(id_contacto))
         for partner in selected_records:
-            # Traer todas las órdenes de POS del paciente
-            pos_orders = self.env['pos.order'].search([('partner_id', '=', partner.id)])
-            for pos_order in pos_orders:
-                pos_order.update({"partner_id": id_contacto})
-            # Traer todos los movimientos en stock_move del paciente para actualizarlas
-            stock_moves = self.env['stock.move'].search([('partner_id', '=', partner.id)])
-            for stock_move in stock_moves:
-                stock_move.update([{"partner_id": id_contacto}])
-            # Traer todos los movimientos en Stock_picking del paciente para actualizarlos
-            stock_picks = self.env['stock.picking'].search([('partner_id', '=', partner.id)])
-            for stock_pick in stock_picks:
-                stock_pick.update({"partner_id": id_contacto})
+            if partner.id != id_contacto:
+                # Traer todas las órdenes de POS del paciente
+                pos_orders = self.env['pos.order'].browse([('partner_id', '=', partner.id)])
+                for pos_order in pos_orders:
+                    _logger.info("************** pos_order : " + str(pos_order) + " id : " + str(pos_order.id))
+                    pos_order.update({"partner_id": id_contacto})
+                # Traer todos los movimientos en stock_move del paciente para actualizarlas
+                stock_moves = self.env['stock.move'].browse([('partner_id', '=', partner.id)])
+                for stock_move in stock_moves:
+                    _logger.info("************** stock_move : " + str(stock_move) + " id : " + str(stock_move.id))
+                    stock_move.update([{"partner_id": id_contacto}])
+                # Traer todos los movimientos en Stock_picking del paciente para actualizarlos
+                stock_picks = self.env['stock.picking'].browse([('partner_id', '=', partner.id)])
+                for stock_pick in stock_picks:
+                    _logger.info("************** stock_pick : " + str(stock_pick) + " id : " + str(stock_pick.id))
+                    stock_pick.update({"partner_id": id_contacto})
             
